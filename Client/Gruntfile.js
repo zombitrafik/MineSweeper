@@ -1,24 +1,50 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
-        /*jshint: {
-            files: ['Gruntfile.js', 'src/!**!/!*.js', 'test/!**!/!*.js'],
+
+        mineSweeper: {
+            app: require('./bower.json').appPath || 'app',
+            dist: 'dist'
+        },
+
+        connect: {
             options: {
-                globals: {
-                    jQuery: true
+                port: 9000,
+                // Change this to '0.0.0.0' to access the server from outside.
+                hostname: 'localhost',
+                livereload: 35729,
+                base: 'app'
+            },
+            livereload: {
+                options: {
+                    open: true
                 }
             }
         },
+
         watch: {
-            files: ['<%= jshint.files %>'],
-            tasks: ['jshint']
-        }*/
+            gruntfile: {
+                files: ['Gruntfile.js']
+            },
+            livereload: {
+                options: {
+                    livereload: '<%= connect.options.livereload %>'
+                },
+                files: [
+                    '<%= mineSweeper.app %>/{,*/}*.html'
+                ]
+            }
+        }
     });
 
-    //grunt.loadNpmTasks('grunt-contrib-jshint');
-    //grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-livereload');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
-    //grunt.registerTask('default', ['jshint'])
-
-    grunt.registerTask('serve', []);
+    grunt.registerTask('serve', 'Compile then start a connect web server', function () {
+        grunt.task.run([
+            'connect:livereload',
+            'watch'
+        ]);
+    });
 };

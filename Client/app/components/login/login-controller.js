@@ -1,8 +1,11 @@
-var LoginController = function () {
+var LoginController = function (LoginService, $state) {
     this.login = function () {
-        alert('123');
-    }
+        $state.go('lobby');
+    };
+    this.register = function () {
+        $state.go('register')
+    };
 };
 
-LoginController.$inject = [];
+LoginController.$inject = ['LoginService', '$state'];
 app.controller('LoginController', LoginController);

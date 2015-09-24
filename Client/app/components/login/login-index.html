@@ -1,5 +1,10 @@
-<div ng-controller="LoginController as controller">
-    <input type="text" ng-model="controller.model.username" placeholder="username" />
-    <input type="password" ng-model="controller.model.password" placeholder="password" />
-    <button ng-click="controller.login()">LOGIN</button>
+<div class="login-page" ng-controller="LoginController as controller">
+    <div class="form-group">
+        <input type="text" ng-model="controller.model.username" placeholder="username" />
+        <input type="password" ng-model="controller.model.password" placeholder="password" />
+    </div>
+    <div class="form-actions">
+        <button class="login" ng-click="controller.login()">LOGIN</button>
+        <button class="register" ng-click="controller.register()">REGISTER</button>
+    </div>
 </div>

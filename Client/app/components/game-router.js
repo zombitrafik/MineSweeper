@@ -23,4 +23,24 @@ app.config(function ($urlRouterProvider, $stateProvider) {
                 }
             }
         })
+
+        .state({
+            name: 'register',
+            url: '/register',
+            views: {
+                'mainView' : {
+                    templateUrl: 'components/register/register-index.html'
+                }
+            }
+        })
+
+        .state({
+            name: 'lobby',
+            url: '/lobby',
+            views: {
+                'mainView' : {
+                    templateUrl: 'components/lobby/lobby-index.html'
+                }
+            }
+        })
 });

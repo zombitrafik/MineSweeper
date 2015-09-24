@@ -1,31 +1,59 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
 <head>
-  <meta charset="utf-8">
-  <title>My AngularJS App</title>
+    <meta charset="utf-8">
+    <title>Mine Sweeper</title>
+    <link rel="stylesheet" href="styles/main.css"/>
+    <link rel="stylesheet" href="styles/header.css"/>
+    <link rel="stylesheet" href="styles/footer.css"/>
+    <link rel="stylesheet" href="styles/login.css"/>
 </head>
 <body>
-  <div ng-include="'components/header/header-index.html'"></div>
-  <div ui-view="mainView"></div>
-  <div ng-include="'components/footer/footer-index.html'"></div>
-
+    <div class="mainView">
+        <div ng-include="'components/header/header-index.html'"></div>
+        <div ui-view="mainView"></div>
+        <div ng-include="'components/footer/footer-index.html'"></div>
+    </div>
 </body>
 
-<!-- Components -->
-<script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-<script type="text/javascript" src="app.js"></script>
+    <!-- Components -->
 
-<!-- Routers -->
-<script type="text/javascript" src="components/game-router.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
+    <script type="text/javascript" src="bower_components/restangular/dist/restangular.min.js"></script>
+    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
 
-<!-- Controllers -->
-<script type="text/javascript" src="components/game/game-controller.js"></script>
-<script type="text/javascript" src="components/login/login-controller.js"></script>
+    <!-- Routers -->
 
-<!-- Services -->
-<script type="text/javascript" src="components/game/game-service.js"></script>
-<script type="text/javascript" src="components/game/game-config-service.js"></script>
+    <script type="text/javascript" src="components/game-router.js"></script>
+
+    <!-- Controllers -->
+
+    <!-- Login -->
+    <script type="text/javascript" src="components/login/login-controller.js"></script>
+    <!-- Register -->
+    <script type="text/javascript" src="components/register/register-controller.js"></script>
+    <!-- Lobby -->
+    <script type="text/javascript" src="components/lobby/lobby-controller.js"></script>
+    <!-- Game -->
+    <script type="text/javascript" src="components/game/game-controller.js"></script>
+
+    <!-- Services -->
+
+    <!-- Login -->
+    <script type="text/javascript" src="components/login/login-service.js"></script>
+    <script type="text/javascript" src="components/login/login-api-service.js"></script>
+    <!-- Register -->
+    <script type="text/javascript" src="components/register/register-service.js"></script>
+    <script type="text/javascript" src="components/register/register-api-service.js"></script>
+    <!-- Lobby -->
+    <script type="text/javascript" src="components/lobby/lobby-service.js"></script>
+    <script type="text/javascript" src="components/lobby/lobby-api-service.js"></script>
+    <!-- Game -->
+    <script type="text/javascript" src="components/game/game-service.js"></script>
+    <script type="text/javascript" src="components/game/game-config-service.js"></script>
+    <script type="text/javascript" src="components/game/game-api-service.js"></script>
 
 </html>

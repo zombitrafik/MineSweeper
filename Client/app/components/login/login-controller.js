@@ -3,7 +3,7 @@ var LoginController = function (LoginService, $state) {
         $state.go('lobby');
     };
     this.register = function () {
-        $state.go('register')
+        $state.go('register');
     };
 };
 

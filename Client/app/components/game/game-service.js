@@ -1,6 +1,6 @@
 var GameService = function (GameConfigService) {
 
-    var config = GameConfigService.CONFIG
+    var config = GameConfigService.CONFIG;
     var self = this;
 
     this.init = function (config) {

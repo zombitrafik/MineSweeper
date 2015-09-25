@@ -1,5 +1,3 @@
-'use strict';
-
 var GameController = function (GameService, GameConfigService) {
 
     var config = GameConfigService.CONFIG,

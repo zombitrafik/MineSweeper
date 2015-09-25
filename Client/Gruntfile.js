@@ -34,12 +34,21 @@ module.exports = function(grunt) {
                     '<%= mineSweeper.app %>/{,*/}*.html'
                 ]
             }
+        },
+
+        jshint: {
+            all: {
+                src: [
+                    '<%= mineSweeper.app %>/components/**/*.js'
+                ]
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-livereload');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.registerTask('serve', 'Compile then start a connect web server', function () {
         grunt.task.run([

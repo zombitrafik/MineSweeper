@@ -1,5 +1,3 @@
-'use strict';
-
 app.config(function ($urlRouterProvider, $stateProvider) {
     $urlRouterProvider.otherwise('/login');
 
@@ -42,5 +40,5 @@ app.config(function ($urlRouterProvider, $stateProvider) {
                     templateUrl: 'components/lobby/lobby-index.html'
                 }
             }
-        })
+        });
 });

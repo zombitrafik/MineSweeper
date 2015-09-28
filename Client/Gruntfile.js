@@ -37,6 +37,10 @@ module.exports = function(grunt) {
         },
 
         jshint: {
+            options: {
+                node: true,
+                jshintrc: '.jshintrc'
+            },
             all: {
                 src: [
                     '<%= mineSweeper.app %>/components/**/*.js'

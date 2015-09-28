@@ -7,6 +7,20 @@ var GameService = function (GameConfigService) {
         for(var k in config) {
             this[k] = config[k];
         }
+
+        var sock = new SockJS('http://localhost:9000/');
+        sock.onopen = function() {
+            console.log('open');
+        };
+        sock.onmessage = function(e) {
+            console.log('message', e.data);
+        };
+        sock.onclose = function() {
+            console.log('close');
+        };
+
+        sock.send('test');
+        sock.close();
     };
 
     this.draw = function (n, m) {

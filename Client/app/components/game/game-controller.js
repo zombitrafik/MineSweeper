@@ -5,8 +5,6 @@ var GameController = function (GameService, GameConfigService) {
         m = 10;
     this.draw = function () {
 
-
-
         var svg = d3.select('#game')
             .append('svg')
             .attr('width', GameConfigService.getWidth(n))

@@ -24,9 +24,10 @@
                     refreshRooms(JSON.parse(rooms.body));
                 });
                 
-                stompClient.subscribe("/user/connect", function(rooms){
+                stompClient.subscribe("/user/broker/connect", function(rooms){
                     refreshRooms(JSON.parse(rooms.body));
                 });
+
                 stompClient.send("/test/connect", {},"");
                 /*
                 stompClient.subscribe('/chat/messages', function(message){

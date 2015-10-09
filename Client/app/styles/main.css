@@ -5,3 +5,46 @@
 .mainView {
 
 }
+
+.rect {
+    stroke: silver;
+    rx: 3;
+    ry: 3;
+}
+.opened {
+    fill: #eee;
+}
+.closed {
+    fill: gray;
+}
+.flag {
+    fill: #bbb;
+}
+.cell_text {
+    font-weight: bold;
+    font-family: Arial;
+}
+.cell_text_1 {
+    fill: blue;
+}
+.cell_text_2 {
+    fill: green;
+}
+.cell_text_3 {
+    fill: red;
+}
+.cell_text_4 {
+    fill: purple;
+}
+.cell_text_5 {
+    fill: maroon;
+}
+.cell_text_6 {
+    fill: turquoise;
+}
+.cell_text_7 {
+    fill: black;
+}
+.cell_text_8 {
+    fill: gray;
+}

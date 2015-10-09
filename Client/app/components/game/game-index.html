@@ -1,4 +1,4 @@
-<div ng-controller="GameController as controller">
-    <div id="game"></div>
-    <button ng-click="controller.draw()">Draw</button>
+<div>
+    <field data="vm.getMap()" selector="vm.selector"></field>
+    <canvas width="300" height="300" canvas-field data="vm.getMap()"></canvas>
 </div>

@@ -1,11 +1,18 @@
-var LoginController = function (LoginService, $state) {
-    this.login = function () {
-        $state.go('lobby');
-    };
-    this.register = function () {
-        $state.go('register')
-    };
-};
+(function () {
+    'use strict';
 
-LoginController.$inject = ['LoginService', '$state'];
-app.controller('LoginController', LoginController);
+    angular
+        .module('app')
+        .controller('LoginController', LoginController);
+
+    LoginController.$inject = ['LoginService', '$state'];
+
+    function LoginController (LoginService, $state) {
+        this.login = function () {
+            $state.go('lobby');
+        };
+        this.register = function () {
+            $state.go('register');
+        };
+    }
+})();

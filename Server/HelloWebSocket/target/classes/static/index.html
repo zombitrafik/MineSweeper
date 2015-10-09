@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <title>Hello WebSocket</title>
+    <script src="./components/sockjs-0.3.4.js"></script>
+    <script src="./components/stomp.js"></script>
+    <link rel="stylesheet" href="./components/bootstrap-css-only/css/bootstrap.min.css" />
+    <script type="text/javascript">
+        var stompClient = null;
+        
+        function setConnected(connected) {
+            document.getElementById('connect').disabled = connected;
+            document.getElementById('disconnect').disabled = !connected;
+            document.getElementById('roomList').style.visibility = connected ? 'visible' : 'hidden';
+            document.getElementById('chatRoom').style.visibility = 'hidden';      
+        }
+        
+        function connect() {
+            var socket = new SockJS('/chat');
+            stompClient = Stomp.over(socket);            
+            stompClient.connect({}, function(frame) {
+                setConnected(true);
+                stompClient.subscribe("/broker/rooms", function(rooms){
+                    refreshRooms(JSON.parse(rooms.body));
+                });
+                
+                stompClient.subscribe("/user/broker/connect", function(rooms){
+                    refreshRooms(JSON.parse(rooms.body));
+                });
+
+                stompClient.send("/test/connect", {},"");
+                /*
+                stompClient.subscribe('/chat/messages', function(message){
+                    showMessage(JSON.parse(message.body));
+                });
+                */
+            });
+        }
+        
+        function disconnect() {
+            if (stompClient != null) {
+                stompClient.disconnect();
+            }
+            setConnected(false);
+            console.log("Disconnected");
+        }
+        
+        function createRoom() {
+            stompClient.send("/test/createRoom", {},"");
+        }
+
+        function sendMessage() {
+            var message = document.getElementById('message').value;
+            var name = document.getElementById('name').value;
+            stompClient.send("/test/sendMessage/"+id, {}, JSON.stringify({ 'text': message}));
+            document.getElementById('message').value="";
+        }
+        
+        function showMessage(message) {
+            var chat = document.getElementById('chat').value;
+            var newMessage = "";
+            var date = new Date(message.date);
+            newMessage+="["+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+"]";
+            newMessage+=message.senderName+": ";
+            newMessage+=message.text;
+            document.getElementById('chat').value=chat+"\n"+newMessage;
+        }
+
+        function refreshRooms(rooms){
+            var select = document.getElementById("select");
+            select.innerHTML="";
+            rooms.forEach(function(room){
+                var opt = "<option value='"+room.id+"'>"+room.name+"</option>"
+                select.innerHTML+= opt;
+            })
+        }
+        var id;
+
+        function connectToRoom(){
+            id = document.getElementById("select").value;
+            stompClient.subscribe("/broker/rooms/"+id, function(message){
+                    showMessage(JSON.parse(message.body));
+                });
+            document.getElementById('roomList').style.visibility = 'hidden';
+            document.getElementById('chatRoom').style.visibility = 'visible';
+        }
+    </script>
+</head>
+<body onload="disconnect()" style="height:100%">
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<button id="connect" onclick="connect();" type="button" class="btn btn-primary">Connect</button>
+<button id="disconnect" disabled="disabled"  type="button" class="btn btn-primary" onclick="disconnect();">Disconnect</button>
+<div id="roomList" style="height:90%">
+    <form role="form" style="width: 50%; height:70%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);">
+        <div class="form-group" style="height:100%">
+            <select class="form-control" id="select" style="width: 100%; display: block" size=28 >
+                <option>
+                    1
+                </option>
+                <option>
+                    2
+                </option>
+            </select>
+            <button class="btn btn-primary" type="button" onclick="createRoom()">Create</button>
+            <button type="button" class="btn btn-success" style="float:left; margin-top:10px" onclick="connectToRoom();">Join</button>
+        
+        </div>
+    </form>
+</div>
+<div id="chatRoom" style="height:90%">
+    <form role="form" style="width: 50%; height:70%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);"
+    >
+        <div class="form-group" style="height:100%">
+            <input type="text" class="form-control" id="name" value="name"/>
+            <textarea class="form-control" style="height:60%; resize:none; margin-top:10px" id="chat" disabled> </textarea>
+            <input type="text" class="form-control" style="margin-top:10px" id="message"/>
+            <button type="button" class="btn btn-primary" style="float:right; margin-top:10px" onclick="sendMessage();">Send</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+
+<!--
+<div id="conversationDiv" style="height:90%">
+    <form role="form" style="width: 50%; height:70%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);"
+    >
+        <div class="form-group" style="height:100%">
+            <input type="text" class="form-control" id="name" value="name"/>
+            <textarea class="form-control" style="height:60%; resize:none; margin-top:10px" id="chat" disabled> </textarea>
+            <input type="text" class="form-control" style="margin-top:10px" id="message"/>
+            <button type="button" class="btn btn-primary" style="float:right; margin-top:10px" onclick="sendMessage();">Send</button>
+        </div>
+    </form>
+</div>
+-->

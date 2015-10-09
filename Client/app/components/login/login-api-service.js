@@ -1,6 +1,13 @@
-var LoginApiService = function (Restangular) {
+(function () {
+    'use strict';
 
-};
+    angular
+        .module('app')
+        .service('loginApiService', loginApiService);
 
-LoginApiService.$inject = ['Restangular'];
-app.service('LoginApiService', LoginApiService);
+    loginApiService.$inject = [];
+
+    function loginApiService () {
+
+    }
+})();

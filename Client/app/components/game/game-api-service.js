@@ -1,6 +1,13 @@
-var GameApiService = function (Restangular) {
+(function () {
+    'use strict';
 
-};
+    angular
+        .module('app')
+        .service('gameApiService', gameApiService);
 
-GameApiService.$inject = ['Restangular'];
-app.service('GameApiService', GameApiService);
+    gameApiService.$inject = [];
+
+    function gameApiService () {
+
+    }
+})();

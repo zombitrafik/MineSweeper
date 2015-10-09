@@ -1,6 +1,13 @@
-var LoginService = function () {
+(function () {
+    'use strict';
 
-};
+    angular
+        .module('app')
+        .service('LoginService', loginService);
 
-LoginService.$inject = [];
-app.service('LoginService', LoginService);
+    loginService.$inject = [];
+
+    function loginService () {
+
+    }
+})();

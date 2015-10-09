@@ -1,7 +1,10 @@
-'use strict';
+(function () {
+    'use strict';
 
-// Declare app level module which depends on views, and components
-var app = angular.module('myApp', [
-    'ui.router',
-    'restangular'
-]);
+    angular
+        .module('app', [
+            'ui.router',
+            'restangular'
+        ]);
+})();
+

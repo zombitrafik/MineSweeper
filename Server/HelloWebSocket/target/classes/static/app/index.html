@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title>My AngularJS App</title>
+</head>
+<body>
+  <div ng-include="'components/header/header-index.html'"></div>
+  <div ui-view="mainView"></div>
+  <div ng-include="'components/footer/footer-index.html'"></div>
+
+</body>
+
+<!-- Components -->
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+<script type="text/javascript" src="app.js"></script>
+
+<!-- Routers -->
+<script type="text/javascript" src="components/game-router.js"></script>
+
+<!-- Controllers -->
+<script type="text/javascript" src="components/game/game-controller.js"></script>
+<script type="text/javascript" src="components/login/login-controller.js"></script>
+
+<!-- Services -->
+<script type="text/javascript" src="components/game/game-service.js"></script>
+<script type="text/javascript" src="components/game/game-config-service.js"></script>
+
+</html>

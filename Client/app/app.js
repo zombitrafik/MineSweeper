@@ -3,8 +3,8 @@
 
     angular
         .module('app', [
-            'ui.router',
-            'restangular'
+            'app.config',
+            'ui.router'
         ]);
 })();
 

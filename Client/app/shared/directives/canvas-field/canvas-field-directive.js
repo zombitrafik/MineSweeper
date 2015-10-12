@@ -5,9 +5,9 @@
         .module('app')
         .directive('canvasField', canvasField);
 
-    canvasField.$inject = ['gameConfigService', 'gameSerivce', '$rootScope'];
+    canvasField.$inject = ['gameConfigService', 'gameService', '$rootScope'];
 
-    function canvasField (gameConfigService, gameSerivce, $rootScope) {
+    function canvasField (gameConfigService, gameService, $rootScope) {
         var directive = {
             restrict: 'A',
             scope: {
@@ -40,17 +40,22 @@
                 offsetTop = canvas[0].offsetTop,
                 offsetLeft = canvas[0].offsetLeft;
             canvas.on('click', function (e) {
-                var x = e.clientX - offsetLeft,
-                    y = e.clientY - offsetTop;
-                x = Math.floor(x / cellSize);
-                y = Math.floor(y / cellSize);
+                var coord = getCellCoord(e);
             });
             canvas.on('contextmenu', function (e) {
+                var coord = getCellCoord(e);
+            });
+
+            function getCellCoord (e) {
                 var x = e.clientX - offsetLeft,
                     y = e.clientY - offsetTop;
                 x = Math.floor(x / cellSize);
                 y = Math.floor(y / cellSize);
-            });
+                return {
+                    x: x,
+                    y: y
+                }
+            }
 
             scope.$watch('data', function () {
                 if(scope.data) {

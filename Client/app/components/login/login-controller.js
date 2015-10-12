@@ -8,10 +8,20 @@
     LoginController.$inject = ['LoginService', '$state'];
 
     function LoginController (LoginService, $state) {
-        this.login = function () {
-            $state.go('lobby');
+
+        var vm = this;
+
+        vm.model = {
+            username: '',
+            password: ''
         };
-        this.register = function () {
+
+        vm.login = function () {
+            LoginService.login(vm.model).then(function () {
+                $state.go('lobby');
+            });
+        };
+        vm.register = function () {
             $state.go('register');
         };
     }

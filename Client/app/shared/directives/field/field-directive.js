@@ -65,13 +65,13 @@
                     .attr('y', 15)
                     .attr('x', 5)
                     .attr('class', function (d) {
-                        if(d.number !== 'F' && d.number !== 'C' && d.number !== 0) {
+                        if(d.number !== -2 && d.number !== 'C' && d.number !== 0) {
                             return 'cell_text_' + d.number + ' cell_text';
                         }
                         return '';
                     })
                     .text(function (d) {
-                        if(d.number === 'F') {
+                        if(d.number === -2) {
                             return 'F'
                         }
                         if(d.number === 'C' || d.number === 0) {
@@ -85,7 +85,7 @@
             function getClassByCellType (type) {
                 switch (type) {
                     case 'C': return 'rect closed';
-                    case 'F': return 'rect flag';
+                    case -2: return 'rect flag';
                     case 0: return 'rect opened';
                 }
                 return 'rect opened';

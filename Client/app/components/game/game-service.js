@@ -11,7 +11,8 @@
             updateMap: updateMap,
             setFlag: setFlag,
             open: open,
-            map: []
+            map: [],
+            setRoom: setRoom
         };
 
         return service;
@@ -39,21 +40,31 @@
         function updateMap (data) {
             var map = service.map;
             data.forEach(function (cell) {
-                map[cell.x][cell.y].number = cell.number;
+                map[cell.x][cell.y].number = cell.value;
             });
         }
 
         function setFlag (cell) {
-            var map = service.map;
-            map[cell.x][cell.y].number = 'F';
+            var data = {x: cell.x, y: cell.y};
+            var roomId = service.room.id;
+            gameApiService.setFlag(data, roomId).then(function (response) {
+
+            });
         }
 
         function open (cell) {
-            var data = [
-                {x: cell.x, y: cell.y, number: cell.x}
-            ];
+            var data =  {x: cell.x, y: cell.y};
+            var roomId = service.room.id;
+            gameApiService.openCell(data, roomId).then(function (response) {
+                updateMap(response);
+            });
+        }
 
-            updateMap(data);
+        function setRoom (room) {
+            service.room = room;
+            var field = service.room.mineField;
+            generateMap(field.width, field.height);
+            updateMap(field.openedField);
         }
     }
 })();

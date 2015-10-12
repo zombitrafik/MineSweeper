@@ -10,9 +10,6 @@
     function canvasField (gameConfigService, gameService, $rootScope) {
         var directive = {
             restrict: 'A',
-            scope: {
-                data: '='
-            },
             link: link
         };
 
@@ -39,6 +36,10 @@
             var canvas = angular.element(element[0]),
                 offsetTop = canvas[0].offsetTop,
                 offsetLeft = canvas[0].offsetLeft;
+
+            canvas[0].width = cellSize * gameService.map.length;
+            canvas[0].height = cellSize * gameService.map[0].length;
+
             canvas.on('click', function (e) {
                 var coord = getCellCoord(e);
             });
@@ -57,9 +58,12 @@
                 }
             }
 
-            scope.$watch('data', function () {
-                if(scope.data) {
-                    scope.render(scope.data);
+
+            scope.$watch(function () {
+                return gameService.map;
+            }, function () {
+                if(gameService.map) {
+                    scope.render(gameService.map);
                 }
             }, true);
         }

@@ -9,7 +9,7 @@
         var service = {
             FIELD: {
                 CELL: {
-                    SIZE: 20
+                    SIZE: 32
                 }
             }
         };

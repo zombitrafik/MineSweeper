@@ -48,3 +48,12 @@
 .cell_text_8 {
     fill: gray;
 }
+
+.canvas {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+#field {
+    position: relative;
+}

@@ -26,9 +26,9 @@
             var blocks = generateBlocks(map, gameConfigService.FIELD.CELLS_COUNT);
             service.blocks = blocks;
 
-            canvasService.init(blocks, gameConfigService.FIELD.CELL.SIZE, 'field');
+            canvasService.init(map, blocks, gameConfigService.FIELD.CELL.SIZE, 'field');
             socketService.connect('http://localhost:9000/', function () {
-               console.log('connect');
+
             });
 
             socketService.subscribe('test', function (data) {
@@ -77,7 +77,7 @@
             return {
                 x: x,
                 y: y,
-                number: 'C'
+                value: 'E'
             }
         }
 

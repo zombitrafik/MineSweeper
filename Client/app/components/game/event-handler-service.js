@@ -3,9 +3,9 @@
         .module('app')
         .service('eventHandlerService', eventHandlerService);
 
-    eventHandlerService.$inject = ['gameApiService'];
+    eventHandlerService.$inject = ['gameApiService', 'socketService'];
 
-    function eventHandlerService (gameApiService) {
+    function eventHandlerService (gameApiService, socketService) {
         var service = {
             info: {},
             setFlag: setFlag,
@@ -20,21 +20,23 @@
         }
 
         function setFlag (cell) {
-            var data = {x: cell.i, y: cell.j};
-            var roomId = service.info.room.id;
+            /*var data = {x: cell.i, y: cell.j};
+            //var roomId = service.info.room.id;
+            var roomId = 1;
             gameApiService.setFlag(data, roomId).then(function (response) {
 
-            });
+            });*/
         }
 
         function openCell (cell) {
-            var data =  [{x: cell.i, y: cell.j}];
+            /*var data =  [{x: cell.i, y: cell.j}];
             //var roomId = service.info.room.id;
             var roomId = 1;
             gameApiService.openCell(data, roomId).then(function (response) {
                 updateMap(response);
-            });
+            });*/
         }
+
 
     }
 })();

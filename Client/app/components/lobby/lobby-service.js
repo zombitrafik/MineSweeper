@@ -5,9 +5,9 @@
         .module('app')
         .service('lobbyService', lobbyService);
 
-    lobbyService.$inject = ['lobbyApiService', 'gameService', 'eventHandlerService'];
+    lobbyService.$inject = ['lobbyApiService', 'eventHandlerService'];
 
-    function lobbyService (lobbyApiService, gameService, eventHandlerService) {
+    function lobbyService (lobbyApiService, eventHandlerService) {
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,

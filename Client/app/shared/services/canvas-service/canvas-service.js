@@ -15,7 +15,8 @@
 
         return service;
 
-        function init (blocks, blockSize, selector) {
+        function init (map, blocks, blockSize, selector) {
+            service.data.map = map;
             service.data.blocks = blocks;
             service.data.selector = selector;
 
@@ -42,9 +43,10 @@
             var canvas = angular.element('<div class="canvas" style="left: ' + (i * blockLength)  +'px;top: ' + (j * blockLength) +'px">' +
                 '<canvas width="' + (width * cellSize) + '" height="' + (height*cellSize) +'"></canvas>' +
                 '</div>');
+            parent.append(canvas);
+
             var canvasElement = canvas.find('canvas');
             var ctx = canvasElement[0].getContext('2d');
-            parent.append(canvas);
             bindEvents(canvasElement);
             initEmptyCanvas(ctx);
             return ctx;
@@ -58,12 +60,21 @@
 
             canvas.on('click', function (e) {
                 var coord = getCellCoord(e, offsetTop, offsetLeft);
-                redrawCell(coord.i, coord.j);
+                var value = getRandomInt(0, 8);
+
+                if(!isValidCellToOpen(service.data.map[coord.j][coord.i].value)) return;
+                updateCells([
+                    {x: coord.i, y: coord.j, value: value}
+                ]);
+                service.data.map[coord.j][coord.i].value = value;
                 eventHandlerService.openCell(coord)
             });
             canvas.on('contextmenu', function (e) {
                 var coord = getCellCoord(e, offsetTop, offsetLeft);
-                redrawCell(coord.i, coord.j);
+                if(!isValidCellForFlag(service.data.map[coord.j][coord.i].value)) return;
+                service.data.map[coord.j][coord.i].value = service.data.map[coord.j][coord.i].value === 'F'?'E':'F';
+                redrawCell(coord.i, coord.j, service.data.map[coord.j][coord.i].value);
+                window.navigator.vibrate(80);
                 eventHandlerService.setFlag(coord)
             });
 
@@ -100,9 +111,9 @@
             }
         }
 
-        function redrawCell (i, j) {
+        function redrawCell (i, j, value) {
             updateCells([
-                {x: i, y: j, value: 1}
+                {x: i, y: j, value: value}
             ]);
         }
 
@@ -114,6 +125,16 @@
             drawTriangle(ctx, x * cellSize, y * cellSize, cellSize, cellSize, '#787878');
             ctx.fillStyle = '#b8b8b8';
             ctx.fillRect(x * cellSize + cellPadding, y * cellSize + cellPadding, cellSize - 2 * cellPadding, cellSize - 2 * cellPadding);
+        }
+
+        function drawFlagCell (ctx, x, y) {
+            var cellSize = gameConfigService.FIELD.CELL.SIZE;
+            var cellPadding = gameConfigService.FIELD.CELL.PADDING;
+            var pic = new Image();
+            pic.src = 'images/flag.png';
+            pic.onload = function() {
+                ctx.drawImage(pic, 0, 0, pic.width, pic.height, x * cellSize + cellPadding * 1.5, y * cellSize + cellPadding * 1.5, cellSize - 3 * cellPadding, cellSize - 3 * cellPadding);
+            }
         }
 
         function drawTriangle(ctx, x, y, triangleWidth, triangleHeight, fillStyle){
@@ -133,8 +154,22 @@
                 var coord = {i: cell.x, j: cell.y};
                 var block = getBlockCoord(coord);
                 var ctx = canvases[block.i][block.j];
-
-                drawOpenedCell(ctx, coord.i % cellsCount, coord.j % cellsCount, cell.value);
+                service.data.map[coord.j][coord.i].value = cell.value;
+                switch (cell.value) {
+                    case 'F' : {
+                        drawEmptyCell(ctx, coord.i % cellsCount, coord.j % cellsCount);
+                        drawFlagCell(ctx, coord.i % cellsCount, coord.j % cellsCount);
+                        break;
+                    }
+                    case 'E' : {
+                        drawEmptyCell(ctx, coord.i % cellsCount, coord.j % cellsCount);
+                        break;
+                    }
+                    default : {
+                        drawOpenedCell(ctx, coord.i % cellsCount, coord.j % cellsCount, cell.value);
+                        setPendingAnimation(ctx, coord.i % cellsCount, coord.j % cellsCount);
+                    }
+                }
             });
         }
 
@@ -144,7 +179,7 @@
             ctx.strokeStyle = '#787878';
             ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
             ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
-            ctx.font="20px Arial";
+            ctx.font="bolder 20px Arial";
             ctx.fillStyle = getColorByValue(value);
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -153,6 +188,7 @@
             }
             ctx.fillText(value,x * cellSize + cellSize/ 2,y * cellSize + cellSize / 2);
         }
+
 
         function getColorByValue (value) {
             var color = 'blue';
@@ -166,6 +202,18 @@
                 case 8: color = 'gray'; break;
             }
             return color;
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function isValidCellToOpen (value) {
+            return value !== 'F' && value !== 0;
+        }
+
+        function isValidCellForFlag (value) {
+            return value === 'E' || value === 'F';
         }
 
     }

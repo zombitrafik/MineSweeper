@@ -8,7 +8,7 @@
     function GameController (gameService, gameConfigService) {
         var vm = this;
 
-        gameService.generateMap(20, 20);
+        gameService.generateMap(5, 5);
 
         vm.getMap = function () {
             return  gameService.map;

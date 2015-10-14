@@ -24,18 +24,25 @@
         }
     }
 
-    Image.prototype.split = function (config) {
+    Image.prototype.split = function (config, keys) {
         var images = [];
         var fakeCanvas = angular.element('<canvas width="' + this.width + '" height="' + this.height +'"></canvas>');
         var ctx = fakeCanvas[0].getContext('2d');
         ctx.drawImage(this, 0, 0, this.width, this.height);
-
         for(var k in config) {
             images[k] = [];
+            var key = keys[k];
             for(var img in config[k]) {
                 var imgConf = config[k][img];
                 var image = ctx.getImageData(imgConf.x, imgConf.y, 32, 32);
-                images[k].push(image);
+                for(var sc in imgConf) {
+                    image[sc] = imgConf[sc];
+                }
+                if(key !== null) {
+                    images[k][imgConf[key]] = image;
+                } else {
+                    images[k].push(image);
+                }
             }
         }
         return images;

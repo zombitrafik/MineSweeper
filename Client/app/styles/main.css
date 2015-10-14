@@ -58,6 +58,9 @@
     width: 0;
     height: 0;
 }
+.fake-canvas {
+    display: none;
+}
 #field {
     position: relative;
 }

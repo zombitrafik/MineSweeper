@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService'];
 
-    function canvasService (gameConfigService, eventHandlerService) {
+    function canvasService (gameConfigService, eventHandlerService, spriteService) {
         var service = {
             init: init,
             data: {},
@@ -20,7 +20,10 @@
             service.data.blocks = blocks;
             service.data.selector = selector;
 
-            service.canvases = createCanvases();
+            spriteService.Sprite('images/sprite.png').then(function (image) {
+                spriteService.sprites = image.split(gameConfigService.SPRITES);
+                service.canvases = createCanvases();
+            });
         }
 
         function createCanvases () {
@@ -119,32 +122,14 @@
 
         function drawEmptyCell (ctx, x, y) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var cellPadding = gameConfigService.FIELD.CELL.PADDING;
-            ctx.fillStyle = '#f8f8f8';
-            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-            drawTriangle(ctx, x * cellSize, y * cellSize, cellSize, cellSize, '#787878');
-            ctx.fillStyle = '#b8b8b8';
-            ctx.fillRect(x * cellSize + cellPadding, y * cellSize + cellPadding, cellSize - 2 * cellPadding, cellSize - 2 * cellPadding);
+            var image = spriteService.sprites['closed'][0];
+            ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
         function drawFlagCell (ctx, x, y) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var cellPadding = gameConfigService.FIELD.CELL.PADDING;
-            var pic = new Image();
-            pic.src = 'images/flag.png';
-            pic.onload = function() {
-                ctx.drawImage(pic, 0, 0, pic.width, pic.height, x * cellSize + cellPadding * 1.5, y * cellSize + cellPadding * 1.5, cellSize - 3 * cellPadding, cellSize - 3 * cellPadding);
-            }
-        }
-
-        function drawTriangle(ctx, x, y, triangleWidth, triangleHeight, fillStyle){
-            ctx.beginPath();
-            ctx.moveTo(x + triangleWidth, y);
-            ctx.lineTo(x, y + triangleHeight);
-            ctx.lineTo(x + triangleWidth, y + triangleHeight);
-            ctx.closePath();
-            ctx.fillStyle = fillStyle;
-            ctx.fill();
+            var image = spriteService.sprites['flag'][0];
+            ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
         function updateCells (data) {
@@ -167,7 +152,6 @@
                     }
                     default : {
                         drawOpenedCell(ctx, coord.i % cellsCount, coord.j % cellsCount, cell.value);
-                        setPendingAnimation(ctx, coord.i % cellsCount, coord.j % cellsCount);
                     }
                 }
             });

@@ -14,6 +14,11 @@
                 },
                 CELLS_COUNT: 10
             },
+            SYMBOLS: {
+                FLAG: -2,
+                MINE: -1,
+                EMPTY: 'E'
+            },
             SPRITES: {
                 closed: [
                     {x: 0, y: 96, step: 0, next: 1, speed: 100},

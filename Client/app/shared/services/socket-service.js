@@ -22,18 +22,19 @@
         }
 
         function subscribe (url, cb) {
-            setTimeout(function () {
+           /* setTimeout(function () {
                 cb([
                     {x: 0, y: 0, value: 1},
                     {x: 1, y: 0, value: 1},
                     {x: 0, y: 1, value: 1},
                     {x: 1, y: 1, value: 1}
                 ]);
-            }, 2000);
+            }, 2000);*/
 /*            service.socket.subscribe(url, function (data) {
                 cb(data);
             });*/
         }
+
     }
 
 })();

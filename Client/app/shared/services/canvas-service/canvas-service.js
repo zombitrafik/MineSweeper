@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService) {
         var service = {
             init: init,
             data: {},
@@ -16,21 +16,21 @@
         return service;
 
         function init(map, blocks, blockSize, selector) {
-            service.data.map = map;
-            service.data.blocks = blocks;
-            service.data.selector = selector;
+            storageService.map = map;
+            storageService.blocks = blocks;
+            storageService.selector = selector;
 
             spriteService.Sprite('images/sprites.png').then(function (image) {
                 spriteService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
-                service.canvases = createCanvases();
+                storageService.canvases = createCanvases();
             });
         }
 
         function createCanvases() {
             var canvases = [];
-            var parent = angular.element(document.querySelector('#' + service.data.selector));
-            var blocks = service.data.blocks;
+            var parent = angular.element(document.querySelector('#' + storageService.selector));
+            var blocks = storageService.blocks;
             for (var i = 0; i < blocks.length; i++) {
                 canvases[i] = [];
                 for (var j = 0; j < blocks[i].length; j++) {
@@ -57,43 +57,30 @@
         }
 
         function bindEvents(canvas) {
+            canvas.on('click', function (e) {
+                clickEvent(canvas, e);
+            });
+            canvas.on('contextmenu', function (e) {
+                contextMenuEvent(canvas, e);
+            });
+        }
+
+        function clickEvent(canvas, e) {
+            var coord = getCellCoord(e, canvas);
+            var cell = storageService.map[coord.j][coord.i];
+            actionManager(cell, e.type);
+        }
+
+        function contextMenuEvent(canvas, e) {
+            var coord = getCellCoord(e, canvas);
+            var cell = storageService.map[coord.j][coord.i];
+            actionManager(cell, e.type);
+        }
+
+        function getCellCoord(e, canvas) {
             var offsetTop = canvas[0].offsetParent.offsetParent.offsetTop,
                 offsetLeft = canvas[0].offsetParent.offsetParent.offsetLeft;
 
-            var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
-
-            canvas.on('click', function (e) {
-                var coord = getCellCoord(e, offsetTop, offsetLeft);
-                var value = getRandomInt(0, 8);
-
-                if (!isValidCellToOpen(service.data.map[coord.j][coord.i].value)) return;
-                updateCells([
-                    {x: coord.i, y: coord.j, value: value}
-                ]);
-                service.data.map[coord.j][coord.i].value = value;
-                eventHandlerService.openCell(coord);
-               /* if(isEqualInterval(ctx, x, y)) {
-                    removeInterval(ctx, x, y);
-                    playAnimation(ctx, x, y, getImageDataByKey('closed'), function () {
-                        ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
-                    });
-                } else {
-                    var interval = playAnimation(ctx, x, y, getImageDataByKey('pending'));
-                    addInterval(ctx, x, y, interval);
-                }*/
-            });
-            canvas.on('contextmenu', function (e) {
-                var coord = getCellCoord(e, offsetTop, offsetLeft);
-                if (!isValidCellForFlag(service.data.map[coord.j][coord.i].value)) return;
-                service.data.map[coord.j][coord.i].value = service.data.map[coord.j][coord.i].value === 'F' ? 'E' : 'F';
-                redrawCell(coord.i, coord.j, service.data.map[coord.j][coord.i].value);
-                window.navigator.vibrate(80);
-                eventHandlerService.setFlag(coord);
-            });
-
-        }
-
-        function getCellCoord(e, offsetTop, offsetLeft) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var x = e.pageX - offsetLeft,
                 y = e.pageY - offsetTop;
@@ -105,11 +92,11 @@
             }
         }
 
-        function getBlockCoord(coord) {
+        function getBlockCoord(x, y) {
             var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
             return {
-                i: Math.floor(coord.i / cellsCount),
-                j: Math.floor(coord.j / cellsCount)
+                x: Math.floor(x / cellsCount),
+                y: Math.floor(y / cellsCount)
             }
         }
 
@@ -122,12 +109,6 @@
                     drawEmptyCell(ctx, i, j);
                 }
             }
-        }
-
-        function redrawCell(i, j, value) {
-            updateCells([
-                {x: i, y: j, value: value}
-            ]);
         }
 
         function drawEmptyCell(ctx, x, y) {
@@ -143,75 +124,145 @@
         }
 
         function updateCells(data) {
-            var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
-            var canvases = service.canvases;
             data.forEach(function (cell) {
-                var coord = {i: cell.x, j: cell.y};
-                var block = getBlockCoord(coord);
-                var ctx = canvases[block.i][block.j];
-                service.data.map[coord.j][coord.i].value = cell.value;
+                var cellData = getCellInCtx(cell.x, cell.y);
+                console.log(cell.x, cell.y, cellData);
                 switch (cell.value) {
-                    case 'F' :
+                    case -2:
                     {
-                        drawFlagCell(ctx, coord.i % cellsCount, coord.j % cellsCount);
+                        drawFlagCell(cellData.ctx, cellData.x, cellData.y);
                         break;
                     }
-                    case 'E' :
+                    case 'E':
                     {
-                        drawEmptyCell(ctx, coord.i % cellsCount, coord.j % cellsCount);
+                        drawEmptyCell(cellData.ctx, cellData.x, cellData.y);
                         break;
                     }
                     default :
                     {
-                        drawOpenedCell(ctx, coord.i % cellsCount, coord.j % cellsCount, cell.value);
+                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value);
                     }
                 }
             });
         }
 
-        function drawOpenedCell(ctx, x, y, value) {
-            var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            if(isEqualInterval(ctx, x, y)) {
-                removeInterval(ctx, x, y);
-                playAnimation(ctx, x, y, getImageDataByKey('closed'), function () {
-                    ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
-                });
-            } else {
-                var interval = playAnimation(ctx, x, y, getImageDataByKey('pending'));
-                addInterval(ctx, x, y, interval);
-            }
-        }
-
-        function addInterval (ctx, x, y, interval) {
-            ctx.intervals.push({
-                interval: interval,
-                x: x,
-                y: y
-            });
-        }
-
-        function isEqualInterval (ctx, x, y) {
-            if(!_.isArray(ctx.intervals)) {
-                ctx.intervals = [];
-                return false;
-            }
-            for(var i in ctx.intervals) {
-                var interval = ctx.intervals[i];
-                if(interval.x === x && interval.y === y) {
-                    return true;
+        function actionManager (cell, action) {
+            var actions = eventHandlerService.ACTIONS;
+            switch (action) {
+                case actions.CLICK: {
+                    clickActions(cell);
+                    break;
                 }
-            }
-            return false;
-        }
-
-        function removeInterval (ctx, x, y) {
-            for(var i in ctx.intervals) {
-                var interval = ctx.intervals[i];
-                if(interval.x === x && interval.y === y) {
-                    clearInterval(interval.interval);
+                case actions.CONTEXTMENU: {
+                    contextmenuActions(cell);
                     break;
                 }
             }
+        }
+
+        function clickActions (cell) {
+            //open
+            if(isValidForOpen(cell)) {
+                eventHandlerService.openCell(cell);
+
+                animationService.play('pending', cell);
+
+                // TEST DATA
+                setTimeout(function () {
+
+                    updateCells([{
+                        x: cell.x,
+                        y: cell.y,
+                        value: 1
+                    }]);
+                    updateModel([{
+                        x: cell.x,
+                        y: cell.y,
+                        value: 1
+                    }]);
+
+                }, 2000);
+
+                return;
+            }
+            // click on opened cell
+            if(isValidToOpenMore(cell)) {
+
+            }
+        }
+
+        function contextmenuActions (cell) {
+            //set flag state
+            if(isValidForFlag(cell)) {
+                eventHandlerService.setFlag(cell);
+                updateCells([{
+                    x: cell.x,
+                    y: cell.y,
+                    value: -2
+                }]);
+                updateModel([{
+                    x: cell.x,
+                    y: cell.y,
+                    value: -2
+                }]);
+            }
+        }
+
+        function isValidForOpen(cell) {
+            //TODO check pendings
+            var empty = gameConfigService.SYMBOLS.EMPTY;
+            return cell.value === empty;
+        }
+
+        function isValidForFlag(cell) {
+            //TODO check pendings
+            var flag = gameConfigService.SYMBOLS.FLAG,
+                empty = gameConfigService.SYMBOLS.EMPTY;
+            return (cell.value === flag || cell.value === empty)
+        }
+
+        function isValidToOpenMore (cell) {
+            //TODO check pendings
+            var map = storageService.map;
+            var model = map[cell.y][cell.x];
+            var value = parseInt(model.value);
+            return (value >= 0 && value <= 8);
+        }
+
+        function updateModel (data) {
+            data.forEach(function (cell) {
+                storageService.map[cell.x][cell.y].value = cell.value;
+            });
+        }
+
+        function getCellInCtx (x, y) {
+            var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
+            var canvases = storageService.canvases;
+            var block = getBlockCoord(x, y);
+            return {
+                ctx: canvases[block.y][block.x],
+                y: x % cellsCount,
+                x: y % cellsCount
+            };
+        }
+
+        function drawOpenedCell(ctx, x, y, value) {
+            var cellSize = gameConfigService.FIELD.CELL.SIZE;
+            animationService.play({
+                ctx: ctx,
+                i: x,
+                j: y,
+                sprites: getImageDataByKey('closed'),
+                cellSize: gameConfigService.FIELD.CELL.SIZE,
+                cellsCount: gameConfigService.FIELD.CELLS_COUNT,
+                callback: function () {
+                    ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
+                },
+                priority: 3
+            });
+            /*playAnimation(ctx, x, y, getImageDataByKey('closed'), function () {
+                ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
+            });*/
         }
 
         function getImageByValue(value) {
@@ -233,27 +284,5 @@
         function isValidCellForFlag(value) {
             return value === 'E' || value === 'F';
         }
-
-        function playAnimation(ctx, x, y, spritesData, cb, frameCountForBreak) {
-            var pointer = Object.keys(spritesData)[0];
-            var animSpeed = spritesData[pointer].speed;
-            var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var frame = 0;
-            var interval = setInterval(function () {
-                ctx.putImageData(spritesData[pointer], x * cellSize, y * cellSize);
-                pointer = spritesData[pointer].next;
-                if(pointer === null) {
-                    clearInterval(interval);
-                    cb();
-                }
-                frame++;
-                if(frame === frameCountForBreak) {
-                    clearInterval(interval);
-                    cb();
-                }
-            }, 1000 / animSpeed);
-            return interval;
-        }
-
     }
 })();

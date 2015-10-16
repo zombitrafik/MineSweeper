@@ -9,7 +9,11 @@
         var service = {
             info: {},
             setFlag: setFlag,
-            openCell: openCell
+            openCell: openCell,
+            ACTIONS: {
+                CLICK: 'click',
+                CONTEXTMENU: 'contextmenu'
+            }
         };
         return service;
 

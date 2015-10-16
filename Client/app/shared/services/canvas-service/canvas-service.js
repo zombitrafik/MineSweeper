@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService) {
         var service = {
             init: init,
             data: {},
@@ -16,21 +16,21 @@
         return service;
 
         function init(map, blocks, blockSize, selector) {
-            service.data.map = map;
-            service.data.blocks = blocks;
-            service.data.selector = selector;
+            storageService.map = map;
+            storageService.blocks = blocks;
+            storageService.selector = selector;
 
             spriteService.Sprite('images/sprites.png').then(function (image) {
                 spriteService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
-                service.canvases = createCanvases();
+                storageService.canvases = createCanvases();
             });
         }
 
         function createCanvases() {
             var canvases = [];
-            var parent = angular.element(document.querySelector('#' + service.data.selector));
-            var blocks = service.data.blocks;
+            var parent = angular.element(document.querySelector('#' + storageService.selector));
+            var blocks = storageService.blocks;
             for (var i = 0; i < blocks.length; i++) {
                 canvases[i] = [];
                 for (var j = 0; j < blocks[i].length; j++) {
@@ -67,14 +67,14 @@
 
         function clickEvent(canvas, e) {
             var coord = getCellCoord(e, canvas);
-            var cell = service.data.map[coord.j][coord.i];
-            actionManager(cell);
+            var cell = storageService.map[coord.j][coord.i];
+            actionManager(cell, e.type);
         }
 
         function contextMenuEvent(canvas, e) {
             var coord = getCellCoord(e, canvas);
-            var cell = service.data.map[coord.j][coord.i];
-            actionManager(cell);
+            var cell = storageService.map[coord.j][coord.i];
+            actionManager(cell, e.type);
         }
 
         function getCellCoord(e, canvas) {
@@ -95,8 +95,8 @@
         function getBlockCoord(x, y) {
             var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
             return {
-                i: Math.floor(x / cellsCount),
-                j: Math.floor(y / cellsCount)
+                x: Math.floor(x / cellsCount),
+                y: Math.floor(y / cellsCount)
             }
         }
 
@@ -126,53 +126,85 @@
         function updateCells(data) {
             data.forEach(function (cell) {
                 var cellData = getCellInCtx(cell.x, cell.y);
-                var key = cell.x + '_' + cell.y;
+                console.log(cell.x, cell.y, cellData);
                 switch (cell.value) {
-                    case 'F' :
+                    case -2:
                     {
                         drawFlagCell(cellData.ctx, cellData.x, cellData.y);
                         break;
                     }
-                    case 'E' :
+                    case 'E':
                     {
                         drawEmptyCell(cellData.ctx, cellData.x, cellData.y);
                         break;
                     }
                     default :
                     {
-                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value, key);
+                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value);
                     }
                 }
             });
-            updateModel(data);
         }
 
-        function actionManager (cell) {
+        function actionManager (cell, action) {
+            var actions = eventHandlerService.ACTIONS;
+            switch (action) {
+                case actions.CLICK: {
+                    clickActions(cell);
+                    break;
+                }
+                case actions.CONTEXTMENU: {
+                    contextmenuActions(cell);
+                    break;
+                }
+            }
+        }
+
+        function clickActions (cell) {
             //open
             if(isValidForOpen(cell)) {
                 eventHandlerService.openCell(cell);
-                // TEST DATA
-                updateCells([{
-                    x: cell.y,
-                    y: cell.x,
-                    value: 1
-                }]);
-                updateModel([{
-                    x: cell.x,
-                    y: cell.y,
-                    value: 1
-                }]);
 
-                return;
-            }
-            //set flag state
-            if(isValidForFlag(cell)) {
-                eventHandlerService.setFlag(coord);
+                animationService.play('pending', cell);
+
+                // TEST DATA
+                setTimeout(function () {
+
+                    updateCells([{
+                        x: cell.x,
+                        y: cell.y,
+                        value: 1
+                    }]);
+                    updateModel([{
+                        x: cell.x,
+                        y: cell.y,
+                        value: 1
+                    }]);
+
+                }, 2000);
+
                 return;
             }
             // click on opened cell
             if(isValidToOpenMore(cell)) {
 
+            }
+        }
+
+        function contextmenuActions (cell) {
+            //set flag state
+            if(isValidForFlag(cell)) {
+                eventHandlerService.setFlag(cell);
+                updateCells([{
+                    x: cell.x,
+                    y: cell.y,
+                    value: -2
+                }]);
+                updateModel([{
+                    x: cell.x,
+                    y: cell.y,
+                    value: -2
+                }]);
             }
         }
 
@@ -191,7 +223,7 @@
 
         function isValidToOpenMore (cell) {
             //TODO check pendings
-            var map = service.data.map;
+            var map = storageService.map;
             var model = map[cell.y][cell.x];
             var value = parseInt(model.value);
             return (value >= 0 && value <= 8);
@@ -199,18 +231,18 @@
 
         function updateModel (data) {
             data.forEach(function (cell) {
-                service.data.map[cell.y][cell.x].value = cell.value;
+                storageService.map[cell.x][cell.y].value = cell.value;
             });
         }
 
         function getCellInCtx (x, y) {
             var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
-            var canvases = service.canvases;
+            var canvases = storageService.canvases;
             var block = getBlockCoord(x, y);
             return {
-                ctx: canvases[block.i][block.j],
-                x: x % cellsCount,
-                y: y % cellsCount
+                ctx: canvases[block.y][block.x],
+                y: x % cellsCount,
+                x: y % cellsCount
             };
         }
 

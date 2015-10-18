@@ -3,12 +3,11 @@
         .module('app')
         .service('spriteService', spriteService);
 
-    spriteService.$inject = ['$q'];
+    spriteService.$inject = ['$q', 'storageService'];
 
-    function spriteService ($q) {
+    function spriteService ($q, storageService) {
         var service = {
-            Sprite: Sprite,
-            sprites: []
+            Sprite: Sprite
         };
 
         return service;

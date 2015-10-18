@@ -3,25 +3,20 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService) {
         var service = {
-            init: init,
-            data: {},
-            canvases: [],
-            updateCells: updateCells
+            init: init
         };
 
         return service;
 
-        function init(map, blocks, blockSize, selector) {
-            storageService.map = map;
-            storageService.blocks = blocks;
+        function init(selector) {
             storageService.selector = selector;
 
             spriteService.Sprite('images/sprites.png').then(function (image) {
-                spriteService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
+                storageService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
                 storageService.canvases = createCanvases();
             });
@@ -58,50 +53,16 @@
 
         function bindEvents(canvas) {
             canvas.on('click', function (e) {
-                clickEvent(canvas, e);
+                actionManager(canvas, e);
+                //clickEvent(canvas, e);
             });
             canvas.on('contextmenu', function (e) {
-                contextMenuEvent(canvas, e);
+                actionManager(canvas, e);
+                //contextMenuEvent(canvas, e);
             });
-        }
-
-        function clickEvent(canvas, e) {
-            var coord = getCellCoord(e, canvas);
-            var cell = storageService.map[coord.j][coord.i];
-            actionManager(cell, e.type);
-        }
-
-        function contextMenuEvent(canvas, e) {
-            var coord = getCellCoord(e, canvas);
-            var cell = storageService.map[coord.j][coord.i];
-            actionManager(cell, e.type);
-        }
-
-        function getCellCoord(e, canvas) {
-            var offsetTop = canvas[0].offsetParent.offsetParent.offsetTop,
-                offsetLeft = canvas[0].offsetParent.offsetParent.offsetLeft;
-
-            var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var x = e.pageX - offsetLeft,
-                y = e.pageY - offsetTop;
-            x = Math.floor(x / cellSize);
-            y = Math.floor(y / cellSize);
-            return {
-                i: x,
-                j: y
-            }
-        }
-
-        function getBlockCoord(x, y) {
-            var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
-            return {
-                x: Math.floor(x / cellsCount),
-                y: Math.floor(y / cellsCount)
-            }
         }
 
         function initEmptyCanvas(ctx) {
-            var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
 
             for (var i = 0; i < cellsCount; i++) {
@@ -111,44 +72,44 @@
             }
         }
 
+        // drawnings block
+
         function drawEmptyCell(ctx, x, y) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var image = spriteService.sprites['closed'][0];
+            var image = getImageDataByKey('closed')[0];
             ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
         function drawFlagCell(ctx, x, y) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var image = spriteService.sprites['flag'][0];
+            var image = getImageDataByKey('flag')[0];
             ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
-        function updateCells(data) {
-            data.forEach(function (cell) {
-                var cellData = getCellInCtx(cell.x, cell.y);
-                console.log(cell.x, cell.y, cellData);
-                switch (cell.value) {
-                    case -2:
-                    {
-                        drawFlagCell(cellData.ctx, cellData.x, cellData.y);
-                        break;
-                    }
-                    case 'E':
-                    {
-                        drawEmptyCell(cellData.ctx, cellData.x, cellData.y);
-                        break;
-                    }
-                    default :
-                    {
-                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value);
-                    }
-                }
+        function drawOpenedCell(ctx, x, y, value, cell) {
+            var cellSize = gameConfigService.FIELD.CELL.SIZE;
+
+            animationService.play('closed', cell, function () {
+                ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
             });
         }
 
-        function actionManager (cell, action) {
-            var actions = eventHandlerService.ACTIONS;
-            switch (action) {
+        function drawMineCell (ctx, x, y, cell) {
+            var cellSize = gameConfigService.FIELD.CELL.SIZE;
+            var image = getImageDataByKey('mine')[0];
+
+            animationService.play('mine', cell, function () {
+                ctx.putImageData(image, x * cellSize, y * cellSize);
+            });
+        }
+
+        // end drawnings block
+
+        function actionManager (canvas, e) {
+            var actions = eventHandlerService.ACTIONS,
+                coord = customGetters.getCoordByMouse(e, canvas),
+                cell = customGetters.getCell(coord.x, coord.y);
+            switch (e.type) {
                 case actions.CLICK: {
                     clickActions(cell);
                     break;
@@ -164,30 +125,12 @@
             //open
             if(isValidForOpen(cell)) {
                 eventHandlerService.openCell(cell);
-
                 animationService.play('pending', cell);
-
-                // TEST DATA
-                setTimeout(function () {
-
-                    updateCells([{
-                        x: cell.x,
-                        y: cell.y,
-                        value: 1
-                    }]);
-                    updateModel([{
-                        x: cell.x,
-                        y: cell.y,
-                        value: 1
-                    }]);
-
-                }, 2000);
-
                 return;
             }
             // click on opened cell
             if(isValidToOpenMore(cell)) {
-
+                eventHandlerService.openCell(cell);
             }
         }
 
@@ -195,38 +138,60 @@
             //set flag state
             if(isValidForFlag(cell)) {
                 eventHandlerService.setFlag(cell);
-                updateCells([{
-                    x: cell.x,
-                    y: cell.y,
-                    value: -2
-                }]);
-                updateModel([{
-                    x: cell.x,
-                    y: cell.y,
-                    value: -2
-                }]);
             }
         }
 
+        function handleActions (data) {
+            data.forEach(function (cell) {
+                var cellData = customGetters.getCellInCtx(cell.x, cell.y);
+                var symbols = gameConfigService.SYMBOLS;
+                var previosCellValue = customGetters.getCell(cell.x, cell.y).value;
+                if(previosCellValue === cell.value) {
+                    //cell not changed
+                    return;
+                }
+                switch (cell.value) {
+                    case symbols.FLAG:
+                    {
+                        drawFlagCell(cellData.ctx, cellData.x, cellData.y);
+                        break;
+                    }
+                    case symbols.EMPTY:
+                    {
+                        drawEmptyCell(cellData.ctx, cellData.x, cellData.y);
+                        break;
+                    }
+                    case symbols.MINE: {
+                        drawMineCell(cellData.ctx, cellData.x, cellData.y, cell);
+                        break;
+                    }
+                    default :
+                    {
+                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value, cell);
+                    }
+                }
+            });
+
+            updateModel(data);
+        }
+
         function isValidForOpen(cell) {
-            //TODO check pendings
+            var key = customGetters.getKey(cell);
             var empty = gameConfigService.SYMBOLS.EMPTY;
-            return cell.value === empty;
+            return (cell.value === empty && !pendingService.exist(key));
         }
 
         function isValidForFlag(cell) {
-            //TODO check pendings
+            var key = customGetters.getKey(cell);
             var flag = gameConfigService.SYMBOLS.FLAG,
                 empty = gameConfigService.SYMBOLS.EMPTY;
-            return (cell.value === flag || cell.value === empty)
+            return (cell.value === flag || cell.value === empty) && !pendingService.exist(key);
         }
 
         function isValidToOpenMore (cell) {
-            //TODO check pendings
-            var map = storageService.map;
-            var model = map[cell.y][cell.x];
-            var value = parseInt(model.value);
-            return (value >= 0 && value <= 8);
+            var key = customGetters.getKey(cell);
+            var value = parseInt(cell.value);
+            return (value > 0 && value <= 8) && !pendingService.exist(key);
         }
 
         function updateModel (data) {
@@ -235,54 +200,17 @@
             });
         }
 
-        function getCellInCtx (x, y) {
-            var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
-            var canvases = storageService.canvases;
-            var block = getBlockCoord(x, y);
-            return {
-                ctx: canvases[block.y][block.x],
-                y: x % cellsCount,
-                x: y % cellsCount
-            };
-        }
-
-        function drawOpenedCell(ctx, x, y, value) {
-            var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            animationService.play({
-                ctx: ctx,
-                i: x,
-                j: y,
-                sprites: getImageDataByKey('closed'),
-                cellSize: gameConfigService.FIELD.CELL.SIZE,
-                cellsCount: gameConfigService.FIELD.CELLS_COUNT,
-                callback: function () {
-                    ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
-                },
-                priority: 3
-            });
-            /*playAnimation(ctx, x, y, getImageDataByKey('closed'), function () {
-                ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
-            });*/
-        }
-
         function getImageByValue(value) {
             return getImageDataByKey('number')[value];
         }
 
         function getImageDataByKey(key) {
-            return spriteService.sprites[key];
+            return storageService.sprites[key];
         }
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        function isValidCellToOpen(value) {
-            return value !== 'F' && value !== 0;
-        }
-
-        function isValidCellForFlag(value) {
-            return value === 'E' || value === 'F';
-        }
     }
 })();

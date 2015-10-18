@@ -33,8 +33,10 @@
                 pointer = data.sprites[pointer].next;
                 if(pointer === null) {
                     clearInterval(interval);
-                    data.callback();
                     pendingService.remove(data.key);
+                    if( typeof data.callback === 'function') {
+                        data.callback();
+                    }
                 }
             }, 1000 / animSpeed);
 

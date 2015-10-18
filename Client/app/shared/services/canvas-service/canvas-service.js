@@ -80,10 +80,12 @@
             ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
-        function drawFlagCell(ctx, x, y) {
+        function drawFlagCell(ctx, x, y, cell) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var image = getImageDataByKey('flag')[0];
-            ctx.putImageData(image, x * cellSize, y * cellSize);
+            animationService.play('closed', cell, function () {
+                ctx.putImageData(image, x * cellSize, y * cellSize);
+            });
         }
 
         function drawOpenedCell(ctx, x, y, value, cell) {
@@ -94,13 +96,8 @@
             });
         }
 
-        function drawMineCell (ctx, x, y, cell) {
-            var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var image = getImageDataByKey('mine')[0];
-
-            animationService.play('mine', cell, function () {
-                ctx.putImageData(image, x * cellSize, y * cellSize);
-            });
+        function drawMineCell (cell) {
+            animationService.play('mine', cell);
         }
 
         // end drawnings block
@@ -125,7 +122,15 @@
             //open
             if(isValidForOpen(cell)) {
                 eventHandlerService.openCell(cell);
-                animationService.play('pending', cell);
+                setTimeout(function () {
+                    handleActions([
+                        {x: cell.x, y: cell.y, value: getRandomInt(-1, 8)}
+                    ]);
+                }, 2000);
+                animationService.play('click_left', cell, function () {
+                    animationService.play('pending_open_one', cell);
+                });
+
                 return;
             }
             // click on opened cell
@@ -138,6 +143,15 @@
             //set flag state
             if(isValidForFlag(cell)) {
                 eventHandlerService.setFlag(cell);
+                setTimeout(function () {
+                    handleActions([
+                        {x: cell.x, y: cell.y, value: -2}
+                    ]);
+                }, 2000);
+                animationService.play('click_right', cell, function () {
+                    animationService.play('pending_flag', cell);
+                });
+                return;
             }
         }
 
@@ -153,7 +167,7 @@
                 switch (cell.value) {
                     case symbols.FLAG:
                     {
-                        drawFlagCell(cellData.ctx, cellData.x, cellData.y);
+                        drawFlagCell(cellData.ctx, cellData.x, cellData.y, cell);
                         break;
                     }
                     case symbols.EMPTY:
@@ -162,10 +176,10 @@
                         break;
                     }
                     case symbols.MINE: {
-                        drawMineCell(cellData.ctx, cellData.x, cellData.y, cell);
+                        drawMineCell(cell);
                         break;
                     }
-                    default :
+                    default:
                     {
                         drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value, cell);
                     }

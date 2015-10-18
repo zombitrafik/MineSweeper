@@ -3,13 +3,11 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'eventHandlerService', 'canvasService', 'socketService'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService'];
 
-    function gameService (gameConfigService, eventHandlerService, canvasService, socketService) {
+    function gameService (gameConfigService, canvasService, socketService, storageService) {
         var service = {
-            generateMap: generateMap,
-            map: [],
-            blocks: []
+            generateMap: generateMap
         };
 
         return service;
@@ -22,17 +20,16 @@
                     map[i][j] = getCell(i, j);
                 }
             }
-            service.map = map;
-            var blocks = generateBlocks(map, gameConfigService.FIELD.CELLS_COUNT);
-            service.blocks = blocks;
+            storageService.map = map;
+            storageService.blocks = generateBlocks(map, gameConfigService.FIELD.CELLS_COUNT);
 
-            canvasService.init(map, blocks, gameConfigService.FIELD.CELL.SIZE, 'field');
+            canvasService.init('field');
             socketService.connect('http://localhost:9000/', function () {
 
             });
 
             socketService.subscribe('test', function (data) {
-                canvasService.updateCells(data);
+                canvasService.handleActions(data);
             });
         }
 
@@ -51,7 +48,7 @@
         }
 
         function getOneBlock (x, y, blockSize) {
-            var map = service.map;
+            var map = storageService.map;
             var i = x * blockSize,
                 ie = i + blockSize,
                 j = y * blockSize,

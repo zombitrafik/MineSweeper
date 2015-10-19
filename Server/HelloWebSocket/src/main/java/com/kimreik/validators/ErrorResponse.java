@@ -2,14 +2,11 @@ package com.kimreik.validators;
 
 public class ErrorResponse {
 
-	public static final String EMPTY_NAME="EMPTY_NAME";
-	public static final String EMPLOYEES_COUNT="EMPLOYEES_COUNT";
-	public static final String MANAGER="MANAGER";
-	public static final String TELEPHONE="TELEPHONE";
-	public static final String ORGANIZATION_TYPE="ORGANIZATION_TYPE";
+	public static final ErrorResponse NOT_JOINED_TO_ROOM = new ErrorResponse("NOT_JOINED_TO_ROOM");
+	public static final ErrorResponse USER_ALREADY_IN_SOME_ROOM = new ErrorResponse("USER_ALREADY_IN_SOME_ROOM");
 	
-	public static final String USERNAME_ALREADY_EXIST = "USERNAME_ALREADY_EXIST";
-	public static final String PASSWORDS_DONT_MATCH = "PASSWORDS_DONT_MATCH";
+	public static final ErrorResponse USERNAME_ALREADY_EXIST = new ErrorResponse("USERNAME_ALREADY_EXIST");
+	public static final ErrorResponse PASSWORDS_DONT_MATCH = new ErrorResponse("PASSWORDS_DONT_MATCH");
 	
 	private String message;
 

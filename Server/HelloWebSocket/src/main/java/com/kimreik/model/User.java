@@ -16,7 +16,13 @@ public class User {
 	private String matchingPassword;
 	
 	@Column
+	private String role;
+	
+	@Column
 	private boolean enabled;
+	
+	@Column
+	private int currentRoomid;
 	
 	public String getUsername(){
 		return username;
@@ -48,6 +54,22 @@ public class User {
 	
 	public void setMatchingPassword(String matchingPassword){
 		this.matchingPassword = matchingPassword;
+	}
+	
+	public String getRole(){
+		return role;
+	}
+	
+	public void setRole(String role){
+		this.role = role;
+	}
+
+	public int getCurrentRoomid() {
+		return currentRoomid;
+	}
+
+	public void setCurrentRoomid(int currentRoomid) {
+		this.currentRoomid = currentRoomid;
 	}
 	
 }

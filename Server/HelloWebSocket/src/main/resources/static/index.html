@@ -16,7 +16,7 @@
         }
         
         function connect() {
-            var socket = new SockJS('/chat');
+            var socket = new SockJS('/game');
             stompClient = Stomp.over(socket);            
             stompClient.connect({}, function(frame) {
                 setConnected(true);
@@ -52,18 +52,13 @@
         function sendMessage() {
             var message = document.getElementById('message').value;
             var name = document.getElementById('name').value;
-            stompClient.send("/test/sendMessage/"+id, {}, JSON.stringify({ 'text': message}));
+            stompClient.send("/test/1", {}, message);
             document.getElementById('message').value="";
         }
         
         function showMessage(message) {
             var chat = document.getElementById('chat').value;
-            var newMessage = "";
-            var date = new Date(message.date);
-            newMessage+="["+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+"]";
-            newMessage+=message.senderName+": ";
-            newMessage+=message.text;
-            document.getElementById('chat').value=chat+"\n"+newMessage;
+            document.getElementById('chat').value=chat+"\n"+message;
         }
 
         function refreshRooms(rooms){
@@ -77,9 +72,10 @@
         var id;
 
         function connectToRoom(){
+            stompClient.send("/test/joinRoom/1", {},"");
             id = document.getElementById("select").value;
-            stompClient.subscribe("/broker/rooms/"+id, function(message){
-                    showMessage(JSON.parse(message.body));
+            stompClient.subscribe("/broker/rooms/1", function(message){
+                    showMessage(message.body);
                 });
             document.getElementById('roomList').style.visibility = 'hidden';
             document.getElementById('chatRoom').style.visibility = 'visible';
@@ -89,8 +85,10 @@
 <body onload="disconnect()" style="height:100%">
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
     Javascript and reload this page!</h2></noscript>
+
 <button id="connect" onclick="connect();" type="button" class="btn btn-primary">Connect</button>
 <button id="disconnect" disabled="disabled"  type="button" class="btn btn-primary" onclick="disconnect();">Disconnect</button>
+
 <div id="roomList" style="height:90%">
     <form role="form" style="width: 50%; height:70%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);">
         <div class="form-group" style="height:100%">
@@ -108,6 +106,7 @@
         </div>
     </form>
 </div>
+
 <div id="chatRoom" style="height:90%">
     <form role="form" style="width: 50%; height:70%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);"
     >

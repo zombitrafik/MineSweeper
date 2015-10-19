@@ -1,9 +1,18 @@
 package com.kimreik.model;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Point {
 
+	@Column
 	private int x;
+	
+	@Column
 	private int y;
+	
+	@Column
 	private int value;
 	
 	public Point(){
@@ -25,6 +34,11 @@ public class Point {
 		return false;
 	}
 	
+	@Override
+	public int hashCode(){
+		return Integer.parseInt(x+y+"");
+	}
+				
 	public int getX() {
 		return x;
 	}

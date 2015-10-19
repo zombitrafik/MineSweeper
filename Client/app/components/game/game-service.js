@@ -1,45 +1,70 @@
-var GameService = function (GameConfigService) {
+(function () {
+    angular
+        .module('app')
+        .service('gameService', gameService);
 
-    var config = GameConfigService.CONFIG
-    var self = this;
+    gameService.$inject = ['gameConfigService', 'gameApiService'];
 
-    this.init = function (config) {
-        for(var k in config) {
-            this[k] = config[k];
+    function gameService (gameConfigService, gameApiService) {
+        var service = {
+            generateMap: generateMap,
+            updateMap: updateMap,
+            setFlag: setFlag,
+            open: open,
+            map: [],
+            setRoom: setRoom
+        };
+
+        return service;
+
+        function generateMap (rows, cols) {
+            var map = [];
+            for(var i = 0; i < rows; i++) {
+                map[i] = [];
+                for(var j = 0; j < cols; j++) {
+                    map[i][j] = getCell(i, j);
+                }
+            }
+            service.map = map;
+            return map;
         }
-    };
 
-    this.draw = function (n, m) {
-        for(var i = 0; i < n; i++) {
-            for(var j = 0; j < m; j++) {
-                this.createCell(i, j);
+        function getCell (x, y) {
+            return {
+                x: x,
+                y: y,
+                number: 'C'
             }
         }
-    };
 
-    this.createCell = function (i, j) {
-        this.g.append('rect')
-            .attr('width', config.CELL.SIZE)
-            .attr('height', config.CELL.SIZE)
-            .attr('transform', 'translate(' + (config.CELL.SIZE + config.CELL.PADDINGS) * i + ', ' + (config.CELL.SIZE + config.CELL.PADDINGS) * j + ')')
-            .attr('id', parseInt(i + '' +  j))
-            .on('click', function () {
-                self.openCell(this.id);
-            })
-            .on('contextmenu', function (){
-                self.setFlag(this.id);
+        function updateMap (data) {
+            var map = service.map;
+            data.forEach(function (cell) {
+                map[cell.x][cell.y].number = cell.value;
             });
-    };
+        }
 
-    this.openCell = function (id) {
+        function setFlag (cell) {
+            var data = {x: cell.x, y: cell.y};
+            var roomId = service.room.id;
+            gameApiService.setFlag(data, roomId).then(function (response) {
 
-    };
+            });
+        }
 
-    this.setFlag = function (id) {
+        function open (cell) {
+            var data =  {x: cell.x, y: cell.y};
+            var roomId = service.room.id;
+            gameApiService.openCell(data, roomId).then(function (response) {
+                updateMap(response);
+            });
+        }
 
-    };
-
-};
-
-GameService.$inject = ['GameConfigService'];
-app.service('GameService', GameService);
+        function setRoom (room) {
+            service.room = room;
+            var field = service.room.mineField;
+            generateMap(field.width, field.height);
+            updateMap(field.openedField);
+        }
+    }
+})();

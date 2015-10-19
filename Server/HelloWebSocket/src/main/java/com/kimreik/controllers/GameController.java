@@ -40,7 +40,7 @@ public class GameController {
 		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameRightClick(principal.getName(), point));
 	}
 	
-	@MessageMapping("/{id}")
+	@MessageMapping("/right/{id}")
 	public void handleClick(Point point, Principal principal, @DestinationVariable Integer id){
 		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameClick(principal.getName(), point));
 	}	

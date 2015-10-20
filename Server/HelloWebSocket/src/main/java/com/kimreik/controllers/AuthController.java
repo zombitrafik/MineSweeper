@@ -20,8 +20,8 @@ public class AuthController {
 	private UserService userService;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public Principal loginUser(Principal user) {
-		return user;
+	public int loginUser(Principal user) {
+		return userService.login(user);
 	}
 
 	@RequestMapping(value = "/newUser", method = RequestMethod.POST)

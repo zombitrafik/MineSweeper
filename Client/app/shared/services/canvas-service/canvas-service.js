@@ -76,14 +76,14 @@
 
         function drawEmptyCell(ctx, x, y) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var image = getImageDataByKey('closed')[0];
+            var image = getImageDataByKey('explode_for_empty')[0];
             ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
         function drawFlagCell(ctx, x, y, cell) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var image = getImageDataByKey('flag')[0];
-            animationService.play('closed', cell, function () {
+            animationService.play('explode_for_flag', cell, function () {
                 ctx.putImageData(image, x * cellSize, y * cellSize);
             });
         }
@@ -91,7 +91,7 @@
         function drawOpenedCell(ctx, x, y, value, cell) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
 
-            animationService.play('closed', cell, function () {
+            animationService.play('explode_for_empty', cell, function () {
                 ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
             });
         }
@@ -113,6 +113,7 @@
                 }
                 case actions.CONTEXTMENU: {
                     contextmenuActions(cell);
+                    window.navigator.vibrate(50);
                     break;
                 }
             }

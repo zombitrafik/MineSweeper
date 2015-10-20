@@ -1,3 +1,11 @@
-<div>
-    Register form
+<div class="register-page">
+    <div class="form-group">
+        <input type="text" ng-model="vm.user.username" placeholder="username" />
+        <input type="password" ng-model="vm.user.password" placeholder="password" />
+        <input type="password" ng-model="vm.user.matchingPassword" placeholder="repeat password" />
+    </div>
+    <div class="form-actions">
+        <button class="login" ng-click="vm.login()">LOGIN</button>
+        <button class="register" ng-click="vm.register()">REGISTER</button>
+    </div>
 </div>

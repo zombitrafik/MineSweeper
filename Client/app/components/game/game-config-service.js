@@ -20,7 +20,7 @@
                 EMPTY: 'E'
             },
             SPRITES: {
-                closed: [
+                explode_for_empty: [
                     {x: 0, y: 64, step: 0, next: 1, speed: 100},
                     {x: 96, y: 96, step: 1, next: 2},
                     {x: 32, y: 96, step: 2, next: 3},
@@ -28,6 +28,12 @@
                     {x: 96, y: 96, step: 4, next: 5},
                     {x: 128, y: 96, step: 5, next: 6},
                     {x: 160, y: 96, step: 6, next: null}
+                ],
+                explode_for_flag: [
+                    {x: 0, y: 224, step: 0, next: 1, speed: 100},
+                    {x: 32, y: 224, step: 1, next: 2},
+                    {x: 64, y: 224, step: 2, next: 3},
+                    {x: 96, y: 224, step: 3, next: null}
                 ],
                 empty: [
                     {x: 32, y: 64}
@@ -74,7 +80,8 @@
                 ]
             },
             SPRITE_KEYS: {
-                closed: 'step',
+                explode_for_empty: 'step',
+                explode_for_flag: 'step',
                 empty: null,
                 flag: null,
                 number: 'value',
@@ -85,7 +92,8 @@
                 click_right: 'step'
             },
             SPRITES_PRIORITY: {
-                closed: 3,
+                explode_for_empty: 3,
+                explode_for_flag: 3,
                 empty: 0,
                 flag: 3,
                 number: 3,

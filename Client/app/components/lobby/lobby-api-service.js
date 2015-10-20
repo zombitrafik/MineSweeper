@@ -14,21 +14,21 @@
             createRoom: createRoom
         };
 
-        var lobby = Restangular.all('lobby');
+        var rooms = Restangular.all('rooms');
 
         return service;
 
 
         function getRooms () {
-            return lobby.one('rooms').customGET();
+            return Restangular.one('rooms').customGET();
         }
 
         function joinRoom (id) {
-            return lobby.one('rooms', id).customPOST();
+            return Restangular.one('rooms', id).customPOST();
         }
 
         function createRoom () {
-            return lobby.one('createRoom').customPOST();
+            return rooms.one('create').customPOST();
         }
     }
 })();

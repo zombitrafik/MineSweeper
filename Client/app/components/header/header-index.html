@@ -1,3 +1,6 @@
-<div class="header">
+<div class="header" ng-controller="LoginController as vm">
     <div class="logo">Mine Sweeper</div>
+    <div class="logout">
+        <button ng-click="vm.logout()" style="float: right;">Logout</button>
+    </div>
 </div>

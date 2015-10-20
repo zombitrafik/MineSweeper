@@ -5,7 +5,16 @@
 
     registerApiService.$inject = ['Restangular'];
 
-    function registerApiService () {
+    function registerApiService (Restangular) {
+        var service = {
+            register: register
+        };
+
+        return service;
+
+        function register (user) {
+            return Restangular.one('newUser').customPOST(user);
+        }
 
     }
 })();

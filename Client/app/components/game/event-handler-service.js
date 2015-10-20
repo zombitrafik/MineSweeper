@@ -8,6 +8,7 @@
     function eventHandlerService (gameApiService, socketService) {
         var service = {
             info: {},
+            init: init,
             setFlag: setFlag,
             openCell: openCell,
             ACTIONS: {

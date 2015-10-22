@@ -7,7 +7,8 @@
 
     function animationService (pendingService, storageService, gameConfigService, customGetters) {
         var service = {
-            play: play
+            play: play,
+            reset: reset
         };
         return service;
 
@@ -66,6 +67,10 @@
 
         function canReplace (exist, need) {
             return need > exist;
+        }
+
+        function reset () {
+            pendingService.clear();
         }
     }
 

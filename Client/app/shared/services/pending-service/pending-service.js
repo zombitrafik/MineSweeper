@@ -11,7 +11,8 @@
             get: get,
             remove: remove,
             exist: exist,
-            pendings: []
+            pendings: [],
+            clear: clear
         };
 
         return service;
@@ -30,6 +31,10 @@
 
         function exist (key) {
             return service.pendings[key] !== undefined;
+        }
+
+        function clear () {
+            service.pendings = [];
         }
     }
 })();

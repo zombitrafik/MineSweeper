@@ -14,7 +14,7 @@
 
         function init(selector) {
             storageService.selector = selector;
-
+            animationService.reset();
             spriteService.Sprite('images/sprites.png').then(function (image) {
                 storageService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
@@ -121,12 +121,9 @@
         function clickActions (cell) {
             //open
             if(isValidForOpen(cell)) {
-                eventHandlerService.openCell(cell);
-                setTimeout(function () {
-                    handleActions([
-                        {x: cell.x, y: cell.y, value: getRandomInt(-1, 8)}
-                    ]);
-                }, 2000);
+                eventHandlerService.openCell(cell).then(function (response) {
+                    handleActions(response);
+                });
                 animationService.play('click_left', cell, function () {
                     animationService.play('pending_open_one', cell);
                 });
@@ -135,6 +132,9 @@
             }
             // click on opened cell
             if(isValidToOpenMore(cell)) {
+                eventHandlerService.openCell(cell).then(function (response) {
+                    handleActions(response);
+                });
                 eventHandlerService.openCell(cell);
             }
         }
@@ -142,12 +142,9 @@
         function contextmenuActions (cell) {
             //set flag state
             if(isValidForFlag(cell)) {
-                eventHandlerService.setFlag(cell);
-                setTimeout(function () {
-                    handleActions([
-                        {x: cell.x, y: cell.y, value: -2}
-                    ]);
-                }, 2000);
+                eventHandlerService.setFlag(cell).then(function (response) {
+                    handleActions([response]);
+                });
                 animationService.play('click_right', cell, function () {
                     animationService.play('pending_flag', cell);
                 });

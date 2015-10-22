@@ -3,14 +3,21 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService) {
+    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService) {
         var service = {
-            generateMap: generateMap
+            leaveRoom: leaveRoom,
+            init: init
         };
 
         return service;
+
+        function init (data) {
+            var rows = data.game.mineField.width,
+                cols = data.game.mineField.height;
+            generateMap(rows, cols);
+        }
 
         function generateMap (rows, cols) {
             var map = [];
@@ -22,15 +29,14 @@
             }
             storageService.map = map;
             storageService.blocks = generateBlocks(map, gameConfigService.FIELD.CELLS_COUNT);
-
             canvasService.init('field');
-            socketService.connect('http://localhost:9000/', function () {
+            /*socketService.connect('http://localhost:9000/', function () {
 
             });
 
             socketService.subscribe('test', function (data) {
                 canvasService.handleActions(data);
-            });
+            });*/
         }
 
         function generateBlocks (map, blockSize) {
@@ -76,6 +82,11 @@
                 y: y,
                 value: 'E'
             }
+        }
+
+        function leaveRoom () {
+            var promise = gameApiService.leaveRoom();
+            return promise;
         }
 
     }

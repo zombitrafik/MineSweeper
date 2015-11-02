@@ -21,9 +21,8 @@
             return loginApiService.login(credentials);
         }
 
-        function logout () {
-            var promise = loginApiService.logout();
-            return promise;
+        function  logout () {
+            return loginApiService.logout();
         }
     }
 })();

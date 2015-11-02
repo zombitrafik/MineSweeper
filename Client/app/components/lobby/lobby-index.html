@@ -1,6 +1,9 @@
 <div>
     <button ng-click="vm.refreshRooms()">REFRESH</button>
     <button ng-click="vm.createRoom()">CREATE ROOM</button>
+    <input type="number" placeholder="WIDTH" ng-model="vm.newRoomModel.width"/>
+    <input type="number" placeholder="HEIGHT" ng-model="vm.newRoomModel.height"/>
+    <input type="number" placeholder="MINES COUNT" ng-model="vm.newRoomModel.minesCount"/>
     <div ng-repeat="room in vm.getRooms()">
         <span ng-bind="room.name"></span>
         <input type="button" ng-click="vm.joinRoom(room.id)" value="JOIN" />

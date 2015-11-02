@@ -20,8 +20,7 @@
         }
 
         function logout () {
-            console.log('213');
-            return Restangular.one('logout').customPOST({});
+            return Restangular.one('logout').customPOST();
         }
 
     }

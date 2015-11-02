@@ -25,7 +25,10 @@
         }
 
         function setFlag (cell) {
-            /*var data = {x: cell.i, y: cell.j};
+            var data = {x: cell.x, y: cell.y};
+            var promise = gameApiService.setFlag(data);
+            return promise;
+            /*
             //var roomId = service.info.room.id;
             var roomId = 1;
             gameApiService.setFlag(data, roomId).then(function (response) {
@@ -34,6 +37,9 @@
         }
 
         function openCell (cell) {
+            var data =  {x: cell.x, y: cell.y};
+            var promise = gameApiService.openCell(data);
+            return promise;
             /*var data =  [{x: cell.i, y: cell.j}];
             //var roomId = service.info.room.id;
             var roomId = 1;

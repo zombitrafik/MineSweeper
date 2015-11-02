@@ -14,8 +14,6 @@
             createRoom: createRoom
         };
 
-        var rooms = Restangular.all('rooms');
-
         return service;
 
 
@@ -27,8 +25,8 @@
             return Restangular.one('rooms', id).customPOST();
         }
 
-        function createRoom () {
-            return rooms.one('create').customPOST();
+        function createRoom (config) {
+            return Restangular.one('rooms/create').customPOST(config);
         }
     }
 })();

@@ -5,9 +5,9 @@
         .module('app')
         .service('lobbyService', lobbyService);
 
-    lobbyService.$inject = ['lobbyApiService', 'eventHandlerService'];
+    lobbyService.$inject = ['lobbyApiService', 'eventHandlerService', 'gameService'];
 
-    function lobbyService (lobbyApiService, eventHandlerService) {
+    function lobbyService (lobbyApiService, eventHandlerService, gameService) {
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,
@@ -27,15 +27,15 @@
         function joinRoom (id) {
             var promise = lobbyApiService.joinRoom(id);
             promise.then(function (response) {
-                eventHandlerService.init(response);
+                //eventHandlerService.init(response);
             });
             return promise;
         }
 
-        function createRoom () {
-            var promise = lobbyApiService.createRoom();
+        function createRoom (config) {
+            var promise = lobbyApiService.createRoom(config);
             promise.then(function (response) {
-                eventHandlerService.init(response);
+                gameService.init(response);
             });
             return promise;
         }

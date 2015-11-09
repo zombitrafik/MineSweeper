@@ -5,7 +5,7 @@
 
     fieldDirective.$inject = ['gameConfigService', 'gameService', '$rootScope'];
 
-    function fieldDirective (gameConfigService, gameSerivce, $rootScope) {
+    function fieldDirective (gameConfigService, gameService, $rootScope) {
         var directive = {
             link: link,
             scope: {
@@ -50,13 +50,13 @@
                     })
                     .on('click', function (d) {
                         if(d.number === 'C') {
-                            gameSerivce.open(d);
+                            gameService.open(d);
                             $rootScope.$apply();
                         }
                     })
                     .on('contextmenu', function (d) {
                         if(d.number === 'C') {
-                            gameSerivce.setFlag(d);
+                            gameService.setFlag(d);
                             $rootScope.$apply();
                         }
                     });

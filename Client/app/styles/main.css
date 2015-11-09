@@ -1,6 +1,10 @@
 * {
     padding: 0;
     margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 .mainView {
 
@@ -47,4 +51,16 @@
 }
 .cell_text_8 {
     fill: gray;
+}
+
+.canvas {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+.fake-canvas {
+    display: none;
+}
+#field {
+    position: relative;
 }

@@ -16,7 +16,7 @@
         return service;
 
         function login (credentials) {
-            return Restangular.one('user').customGET(null, {}, {headers: credentials});
+            return Restangular.one('user').customGET(null, {}, credentials);
         }
 
         function logout () {

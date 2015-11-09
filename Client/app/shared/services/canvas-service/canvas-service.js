@@ -7,7 +7,8 @@
 
     function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService) {
         var service = {
-            init: init
+            init: init,
+            handleActions: handleActions
         };
 
         return service;
@@ -19,6 +20,7 @@
                 storageService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
                 storageService.canvases = createCanvases();
+
             });
         }
 
@@ -121,9 +123,10 @@
         function clickActions (cell) {
             //open
             if(isValidForOpen(cell)) {
-                eventHandlerService.openCell(cell).then(function (response) {
+                /*eventHandlerService.openCell(cell).then(function (response) {
                     handleActions(response);
-                });
+                });*/
+                eventHandlerService.openCell(cell);
                 animationService.play('click_left', cell, function () {
                     animationService.play('pending_open_one', cell);
                 });
@@ -132,9 +135,9 @@
             }
             // click on opened cell
             if(isValidToOpenMore(cell)) {
-                eventHandlerService.openCell(cell).then(function (response) {
+                /*eventHandlerService.openCell(cell).then(function (response) {
                     handleActions(response);
-                });
+                });*/
                 eventHandlerService.openCell(cell);
             }
         }
@@ -142,9 +145,10 @@
         function contextmenuActions (cell) {
             //set flag state
             if(isValidForFlag(cell)) {
-                eventHandlerService.setFlag(cell).then(function (response) {
-                    handleActions([response]);
-                });
+                /*eventHandlerService.setFlag(cell).then(function (response) {
+                 handleActions([response]);
+                 });*/
+                eventHandlerService.setFlag(cell);
                 animationService.play('click_right', cell, function () {
                     animationService.play('pending_flag', cell);
                 });

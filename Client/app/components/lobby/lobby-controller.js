@@ -25,6 +25,7 @@
         };
 
         vm.joinRoom = function (id) {
+
             var promise = lobbyService.joinRoom(id);
 
             promise.then(function () {

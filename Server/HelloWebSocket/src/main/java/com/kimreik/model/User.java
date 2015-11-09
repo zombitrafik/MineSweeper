@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class User {
 	
@@ -11,14 +13,18 @@ public class User {
 	private String username;
 	
 	@Column
+	@JsonIgnore
 	private String password;
 	
+	@JsonIgnore
 	private String matchingPassword;
 	
 	@Column
+	@JsonIgnore
 	private String role;
 	
 	@Column
+	@JsonIgnore
 	private boolean enabled;
 	
 	@Column

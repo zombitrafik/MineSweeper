@@ -1,3 +1,18 @@
+Skip to content
+This repository  
+Search
+Pull requests
+Issues
+Gist
+ @kimreik
+ Unwatch 2
+  Star 0
+  Fork 0 zombitrafik/MineSweeper
+ Tree: ad1ecf965f  MineSweeper/Server/HelloWebSocket/src/main/resources/static/index.html
+ad1ecf9  21 days ago
+@kimreik kimreik всё перепилено без матриц
+1 contributor
+RawBlameHistory     139 lines (121 sloc)  5.69 KB
 <!DOCTYPE html>
 <html style="height:100%">
 <head>
@@ -27,7 +42,6 @@
                 stompClient.subscribe("/user/broker/connect", function(rooms){
                     refreshRooms(JSON.parse(rooms.body));
                 });
-
                 stompClient.send("/test/connect", {},"");
                 /*
                 stompClient.subscribe('/chat/messages', function(message){
@@ -48,7 +62,6 @@
         function createRoom() {
             stompClient.send("/test/createRoom", {},"");
         }
-
         function sendMessage() {
             var message = document.getElementById('message').value;
             var name = document.getElementById('name').value;
@@ -60,7 +73,6 @@
             var chat = document.getElementById('chat').value;
             document.getElementById('chat').value=chat+"\n"+message;
         }
-
         function refreshRooms(rooms){
             var select = document.getElementById("select");
             select.innerHTML="";
@@ -70,7 +82,6 @@
             })
         }
         var id;
-
         function connectToRoom(){
             stompClient.send("/test/joinRoom/1", {},"");
             id = document.getElementById("select").value;
@@ -137,3 +148,5 @@
     </form>
 </div>
 -->
+Status API Training Shop Blog About Pricing
+© 2015 GitHub, Inc. Terms Privacy Security Contact Help

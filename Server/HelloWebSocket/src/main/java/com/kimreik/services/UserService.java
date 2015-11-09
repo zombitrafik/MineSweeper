@@ -9,6 +9,6 @@ import com.kimreik.model.User;
 
 public interface UserService {
 	public ResponseEntity<?> addUser(User user, BindingResult result);
-	public int login(Principal user);
+	public User login(Principal user);
 
 }

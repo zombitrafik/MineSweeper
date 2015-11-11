@@ -10,8 +10,7 @@
     function loginService (loginApiService, $window) {
 
         var service = {
-            login: login,
-            logout: logout
+            login: login
         };
 
         return service;
@@ -19,10 +18,6 @@
         function login (model) {
             var credentials = { authoriaztion: 'Basic ' + $window.btoa(model.username + ':' + model.password)};
             return loginApiService.login(credentials);
-        }
-
-        function  logout () {
-            return loginApiService.logout();
         }
     }
 })();

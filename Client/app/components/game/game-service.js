@@ -3,21 +3,19 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService'];
+    gameService.$inject = ['gameConfigService', 'gameApiService'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService) {
+    function gameService (gameConfigService, gameApiService) {
         var service = {
-            leaveRoom: leaveRoom,
-            init: init
+            generateMap: generateMap,
+            updateMap: updateMap,
+            setFlag: setFlag,
+            open: open,
+            map: [],
+            setRoom: setRoom
         };
 
         return service;
-
-        function init (data) {
-            var rows = data.game.mineField.width,
-                cols = data.game.mineField.height;
-            generateMap(rows, cols);
-        }
 
         function generateMap (rows, cols) {
             var map = [];
@@ -27,67 +25,46 @@
                     map[i][j] = getCell(i, j);
                 }
             }
-            storageService.map = map;
-            storageService.blocks = generateBlocks(map, gameConfigService.FIELD.CELLS_COUNT);
-            canvasService.init('field');
-            /*socketService.connect('http://localhost:9000/', function () {
-
-            });
-
-            socketService.subscribe('test', function (data) {
-                canvasService.handleActions(data);
-            });*/
-        }
-
-        function generateBlocks (map, blockSize) {
-            var blocks = [];
-            var xBlocks = Math.ceil(map.length / blockSize),
-                yBlocks = Math.ceil(map[0].length / blockSize);
-
-            for(var i = 0; i < xBlocks; i++) {
-                blocks[i] = [];
-                for(var j = 0; j < yBlocks; j++) {
-                    blocks[i][j] = getOneBlock(i, j, blockSize);
-                }
-            }
-            return blocks;
-        }
-
-        function getOneBlock (x, y, blockSize) {
-            var map = storageService.map;
-            var i = x * blockSize,
-                ie = i + blockSize,
-                j = y * blockSize,
-                je = j + blockSize;
-
-            var block = [], rows = 0, cols = 0;
-            for(; i < ie; i++) {
-                if(!map[i]) break;
-                block[rows] = [];
-                for(; j < je; j++) {
-                    if(!map[i][j]) break;
-                    block[rows][cols] = map[i][j];
-                    cols++;
-                }
-                j = y * blockSize;
-                rows++;
-                cols = 0;
-            }
-            return block;
+            service.map = map;
+            return map;
         }
 
         function getCell (x, y) {
             return {
                 x: x,
                 y: y,
-                value: 'E'
+                number: 'C'
             }
         }
 
-        function leaveRoom () {
-            var promise = gameApiService.leaveRoom();
-            return promise;
+        function updateMap (data) {
+            var map = service.map;
+            data.forEach(function (cell) {
+                map[cell.x][cell.y].number = cell.value;
+            });
         }
 
+        function setFlag (cell) {
+            var data = {x: cell.x, y: cell.y};
+            var roomId = service.room.id;
+            gameApiService.setFlag(data, roomId).then(function (response) {
+
+            });
+        }
+
+        function open (cell) {
+            var data =  {x: cell.x, y: cell.y};
+            var roomId = service.room.id;
+            gameApiService.openCell(data, roomId).then(function (response) {
+                updateMap(response);
+            });
+        }
+
+        function setRoom (room) {
+            service.room = room;
+            var field = service.room.mineField;
+            generateMap(field.width, field.height);
+            updateMap(field.openedField);
+        }
     }
 })();

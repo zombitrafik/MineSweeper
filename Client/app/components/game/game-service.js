@@ -17,6 +17,8 @@
             var rows = data.game.mineField.width,
                 cols = data.game.mineField.height;
             generateMap(rows, cols);
+            canvasService.init('field');
+            socketService.subscribe('/broker/rooms/'+data.id, canvasService.handleActions, data.id);
         }
 
         function generateMap (rows, cols) {
@@ -29,11 +31,8 @@
             }
             storageService.map = map;
             storageService.blocks = generateBlocks(map, gameConfigService.FIELD.CELLS_COUNT);
-            canvasService.init('field');
-            /*socketService.connect('http://localhost:9000/', function () {
 
-            });
-
+/*
             socketService.subscribe('test', function (data) {
                 canvasService.handleActions(data);
             });*/

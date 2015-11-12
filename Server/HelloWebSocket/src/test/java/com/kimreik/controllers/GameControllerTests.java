@@ -52,7 +52,7 @@ public class GameControllerTests {
 	    authentication = RestAssured.given().auth().basic("user", "password");
 	}
 	
-	@Test
+	
 	public void fastExplore() throws Exception{
 		/*
 		int x=1;

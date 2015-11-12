@@ -26,105 +26,103 @@ public class GameServiceImpl implements GameService {
 
 	@Autowired
 	UserRepository userRepo;
-	
+
 	@Autowired
 	GameRoomRepository roomRepo;
-	
+
 	@Autowired
-	@Qualifier("testGenerator")
+	@Qualifier("simpleGenerator")
 	FieldGenerator fieldGenerator;
 
 	Logger logger = Logger.getLogger(GameService.class);
-	
+
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
-		
+
 		User user = userRepo.findOne(username);
-		
-		if(user.getCurrentRoomid()==0){
+
+		if (user.getCurrentRoomid() == 0) {
 			return ResponseWrapper.wrap(ErrorResponse.NOT_JOINED_TO_ROOM, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		Set<Point> result = new HashSet<Point>();
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
 
 		Game game = room.getGame();
-		
-		MineField mineField = game.getMineField();
-		//старт игры
-		
-		if(game.getOpenedField().size()==0){
-			
-			mineField = fieldGenerator.generate(point, mineField.getWidth(), mineField.getHeight(),
-					mineField.getMinesCount());
-			game.setMineField(mineField);
 
-		}
-	
-		Point openedPoint = mineField.getPoint(point);
-		
-		//нажатие на уже раскрытую клетку(быстрое раскрытие)
-		
-		if(game.getOpenedField().contains(openedPoint)){
-			if(openedPoint.getValue()==-2 || openedPoint.getValue()==0){
+		// старт игры
+
+		generateField(game, point);
+
+		MineField mineField = game.getMineField();
+
+		Point openedPoint = game.getMineField().getPoint(point);
+
+		// TODO: проверить открытие бомбы при ошибке
+		// нажатие на уже раскрытую клетку(быстрое раскрытие)
+
+		if (game.getOpenedField().contains(openedPoint)) {
+			if (openedPoint.getValue() == -2 || openedPoint.getValue() == 0) {
 				return ResponseWrapper.wrap(result, HttpStatus.OK);
 			}
 			int realValue = openedPoint.getValue();
 			Set<Point> nearbyPoints = mineField.getNearbyPoints(openedPoint);
-			for(Point nearby: nearbyPoints){
-				if(game.getFlags().contains(nearby)){
+			for (Point nearby : nearbyPoints) {
+				if (game.getFlags().contains(nearby)) {
 					realValue--;
 				}
 			}
-			if(realValue==0){
+			if (realValue == 0) {
 				nearbyPoints.removeAll(game.getOpenedField());
 				nearbyPoints.removeAll(game.getFlags());
-				for(Point nearby: nearbyPoints){
+				for (Point nearby : nearbyPoints) {
 					result.add(nearby);
 				}
+				openFreeSpace(game, result, openedPoint);
+				game.getOpenedField().addAll(result);
+				roomRepo.save(room);
+				return ResponseWrapper.wrap(result, HttpStatus.OK);
 			}
-			game.getOpenedField().addAll(result);
-			roomRepo.save(room);
-			return ResponseWrapper.wrap(result, HttpStatus.OK);
-			
 		}
-		
+
 		result.add(openedPoint);
-		
-		//нажатие на 0
-		
-		if(openedPoint.getValue()==0){
+
+		// нажатие на 0
+
+		if (openedPoint.getValue() == 0) {
 			openFreeSpace(game, result, openedPoint);
 		}
-		
+
 		game.getOpenedField().addAll(result);
-		
+
 		roomRepo.save(room);
-		
+
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
 
 	public ResponseEntity<?> handleGameRightClick(String username, Point point) {
 		User user = userRepo.findOne(username);
-		
+
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
-		
+
 		Game game = room.getGame();
-		
+
+		generateField(game, point);
+
 		MineField mineField = game.getMineField();
-		
+
 		point = mineField.getPoint(point);
-		
-		if(game.getOpenedField().contains(point)){
+
+		if (game.getOpenedField().contains(point)) {
 			return ResponseWrapper.wrap(null, HttpStatus.OK);
 		}
-		
+
 		Point result;
-		
-		if(game.getFlags().contains(point)){
+
+		if (game.getFlags().contains(point)) {
 			game.getFlags().remove(point);
 			result = point;
-		}else{
+		} else {
 			Point newPoint = new Point();
 			newPoint.setX(point.getX());
 			newPoint.setY(point.getY());
@@ -132,9 +130,9 @@ public class GameServiceImpl implements GameService {
 			result = newPoint;
 			game.getFlags().add(newPoint);
 		}
-		
+
 		roomRepo.save(room);
-		
+
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
 
@@ -144,17 +142,17 @@ public class GameServiceImpl implements GameService {
 		int y = startPoint.getY();
 
 		Set<Point> nearbyPoints = game.getMineField().getNearbyPoints(x, y);
-		
-		for(Point point : nearbyPoints){
-			checkCandidateForAutoOpen(game,point,freeSpace);
+
+		for (Point point : nearbyPoints) {
+			checkCandidateForAutoOpen(game, point, freeSpace);
 		}
-		
+
 		return freeSpace;
 	}
 
 	private void checkCandidateForAutoOpen(Game game, Point point, Set<Point> freeSpace) {
-			
-		if (isValidForAutoOpen(freeSpace, game.getOpenedField(), point)) {
+
+		if (isValidForAutoOpen(freeSpace, game, point)) {
 			freeSpace.add(point);
 			if (point.getValue() == 0) {
 				freeSpace.addAll(openFreeSpace(game, freeSpace, point));
@@ -162,8 +160,21 @@ public class GameServiceImpl implements GameService {
 		}
 	}
 
-	private boolean isValidForAutoOpen(Set<Point> space, Set<Point> opened, Point point) {
-		return !(space.contains(point) || opened.contains(point));
+	private boolean isValidForAutoOpen(Set<Point> space, Game game, Point point) {
+
+		return !(space.contains(point) || game.getOpenedField().contains(point) || game.getFlags().contains(point)
+				|| point.getValue() == -1); // TODO: не подходит для быстрого
+											// открытия
 	}
-	
+
+	private void generateField(Game game, Point point) {
+		if (game.getOpenedField().size() != 0 || game.getFlags().size() != 0)
+			return;
+		MineField mineField = game.getMineField();
+		mineField = fieldGenerator.generate(point, mineField.getWidth(), mineField.getHeight(),
+				mineField.getMinesCount());
+		game.setMineField(mineField);
+
+	}
+
 }

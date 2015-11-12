@@ -10,23 +10,17 @@
     function gameApiService (Restangular) {
         var service = {
             openCell: openCell,
-            setFlag: setFlag,
-            leaveRoom: leaveRoom
+            setFlag: setFlag
         };
 
         return service;
 
-        function openCell (cell) {
-            return Restangular.one('rooms/testClick').customPOST(cell);
+        function openCell (cell, roomId) {
+            return Restangular.one('lobby/testClick', roomId).customPOST(cell);
         }
 
-        function setFlag (cell) {
-            return Restangular.one('rooms/testRightClick').customPOST(cell);
+        function setFlag (cell, roomId) {
+            return Restangular.one('lobby/testRightClick', roomId).customPOST(cell);
         }
-
-        function leaveRoom () {
-            return Restangular.one('rooms/leave').customPOST();
-        }
-
     }
 })();

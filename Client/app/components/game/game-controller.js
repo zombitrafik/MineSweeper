@@ -3,9 +3,9 @@
         .module('app')
         .controller('GameController', GameController);
 
-    GameController.$inject = ['gameService', 'gameConfigService', '$state'];
+    GameController.$inject = ['gameService', '$state'];
 
-    function GameController (gameService, gameConfigService, $state) {
+    function GameController (gameService, $state) {
         var vm = this;
 
         vm.getMap = function () {

@@ -32,15 +32,16 @@ public class GameController {
 	@MessageMapping("/joinRoom/{id}")
 	public ResponseEntity<?> handleJoin(Principal principal, @DestinationVariable Integer id){
 		return roomsService.joinRoom(id, principal.getName());
-		//ретурн не работает, но этой функнции тут вообще не будет
-	}
-	
-	@MessageMapping("/{id}")
-	public void handleRightClick(Point point, Principal principal, @DestinationVariable Integer id){
-		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameRightClick(principal.getName(), point));
+		//ретурн не работает, но этой функции тут вообще не будет
 	}
 	
 	@MessageMapping("/right/{id}")
+	public void handleRightClick(Point point, Principal principal, @DestinationVariable Integer id){
+		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameRightClick(principal.getName(), point));
+		//TODO: убрать id.
+	}
+	
+	@MessageMapping("/{id}")
 	public void handleClick(Point point, Principal principal, @DestinationVariable Integer id){
 		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameClick(principal.getName(), point));
 	}	

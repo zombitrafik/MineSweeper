@@ -43,8 +43,7 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	public int login(Principal principal) {
-		User user = userRepo.findOne(principal.getName());
-		return user.getCurrentRoomid();
+	public User login(Principal principal) {
+		return userRepo.findOne(principal.getName());
 	}
 }

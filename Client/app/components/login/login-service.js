@@ -10,8 +10,7 @@
     function loginService (loginApiService, $window, socketService, $q) {
 
         var service = {
-            login: login,
-            logout: logout
+            login: login
         };
 
         return service;
@@ -26,10 +25,6 @@
                 });
             });
             return defered.promise;
-        }
-
-        function  logout () {
-            return loginApiService.logout();
         }
     }
 })();

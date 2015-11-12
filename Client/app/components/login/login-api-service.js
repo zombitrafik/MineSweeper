@@ -9,18 +9,13 @@
 
     function loginApiService (Restangular) {
         var service = {
-            login: login,
-            logout: logout
+            login: login
         };
 
         return service;
 
         function login (credentials) {
             return Restangular.one('user').customGET(null, {}, credentials);
-        }
-
-        function logout () {
-            return Restangular.one('logout').customPOST();
         }
 
     }

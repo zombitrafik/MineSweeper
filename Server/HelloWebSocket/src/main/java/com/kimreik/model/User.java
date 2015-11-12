@@ -13,18 +13,18 @@ public class User {
 	private String username;
 	
 	@Column
-	@JsonIgnore
+	//@JsonIgnore
 	private String password;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	private String matchingPassword;
 	
 	@Column
-	@JsonIgnore
+	//@JsonIgnore
 	private String role;
 	
 	@Column
-	@JsonIgnore
+	//@JsonIgnore
 	private boolean enabled;
 	
 	@Column

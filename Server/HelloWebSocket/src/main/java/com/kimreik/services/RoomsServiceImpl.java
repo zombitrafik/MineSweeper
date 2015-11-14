@@ -3,6 +3,7 @@ package com.kimreik.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ import com.kimreik.validators.ErrorResponse;
 @Service
 public class RoomsServiceImpl implements RoomsService {
 
+
+	Logger logger = Logger.getLogger(RoomsServiceImpl.class);
+	
 	@Autowired
 	GameRoomRepository roomRepo;
 
@@ -28,6 +32,7 @@ public class RoomsServiceImpl implements RoomsService {
 
 	public ResponseEntity<?> createRoom(String username, MineField mineField) {
 
+		
 		User user = userRepo.findOne(username);
 
 		if(user.getCurrentRoomid()!=0){
@@ -74,12 +79,16 @@ public class RoomsServiceImpl implements RoomsService {
 		
 		GameRoom joinedRoom = roomRepo.findOne(id);
 
+		logger.error("before join "+joinedRoom.getPlayers().size());
+		
 		if(user.getCurrentRoomid()!=id){
 			joinedRoom.addPlayer(username);
 			user.setCurrentRoomid(joinedRoom.getId());
 			userRepo.save(user);
 		}
 
+		logger.error("after join "+joinedRoom.getPlayers().size());
+		
 		return ResponseWrapper.wrap(roomRepo.save(joinedRoom), HttpStatus.OK);
 	}
 
@@ -88,14 +97,24 @@ public class RoomsServiceImpl implements RoomsService {
 	}
 
 	public void leaveRoom(String username) {
+		
 		User user = userRepo.findOne(username);
+		if(user==null || user.getCurrentRoomid()==0){
+			return;//мб какой-то ответ отсылать
+		}
 		GameRoom leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
+		
+		logger.error("before leave "+leavedRoom.getPlayers().size());
 		
 		leavedRoom.removePlayer(username);
 		
 		user.setCurrentRoomid(0);
 		
+
+		logger.error("after leave "+leavedRoom.getPlayers().size());
+		
 		if (leavedRoom.getPlayers().size() == 0) {
+			logger.error("after after if proc pro2000 leave "+leavedRoom.getPlayers().size());
 			roomRepo.delete(leavedRoom);
 		}
 	}

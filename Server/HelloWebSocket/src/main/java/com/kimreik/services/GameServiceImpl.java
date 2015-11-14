@@ -32,6 +32,8 @@ public class GameServiceImpl implements GameService {
 
 	@Autowired
 	@Qualifier("simpleGenerator")
+	//@Qualifier("testGenerator")
+	
 	FieldGenerator fieldGenerator;
 
 	Logger logger = Logger.getLogger(GameService.class);
@@ -75,10 +77,13 @@ public class GameServiceImpl implements GameService {
 			if (realValue == 0) {
 				nearbyPoints.removeAll(game.getOpenedField());
 				nearbyPoints.removeAll(game.getFlags());
-				for (Point nearby : nearbyPoints) {
-					result.add(nearby);
+				//result.addAll(nearbyPoints);
+				for(Point nearbyPoint : nearbyPoints){
+					result.add(nearbyPoint);
+					if(nearbyPoint.getValue()==0){
+						openFreeSpace(game, result, nearbyPoint);
+					}
 				}
-				openFreeSpace(game, result, openedPoint);
 				game.getOpenedField().addAll(result);
 				roomRepo.save(room);
 				return ResponseWrapper.wrap(result, HttpStatus.OK);
@@ -117,17 +122,17 @@ public class GameServiceImpl implements GameService {
 			return ResponseWrapper.wrap(null, HttpStatus.OK);
 		}
 
-		Point result;
+		Set<Point> result = new HashSet<Point>(); //сет для одного флажка(на клиенте проще)
 
 		if (game.getFlags().contains(point)) {
 			game.getFlags().remove(point);
-			result = point;
+			result.add(point);
 		} else {
 			Point newPoint = new Point();
 			newPoint.setX(point.getX());
 			newPoint.setY(point.getY());
 			newPoint.setValue(-2);
-			result = newPoint;
+			result.add(newPoint);
 			game.getFlags().add(newPoint);
 		}
 

@@ -102,6 +102,8 @@ public class GameServiceImpl implements GameService {
 
 		roomRepo.save(room);
 
+		logger.error("result "+result.size());
+		
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
 
@@ -126,7 +128,11 @@ public class GameServiceImpl implements GameService {
 
 		if (game.getFlags().contains(point)) {
 			game.getFlags().remove(point);
-			result.add(point);
+			Point newPoint = new Point();
+			newPoint.setX(point.getX());
+			newPoint.setY(point.getY());
+			newPoint.setValue(-3);//-3 это не открытая клетка.
+			result.add(newPoint);
 		} else {
 			Point newPoint = new Point();
 			newPoint.setX(point.getX());

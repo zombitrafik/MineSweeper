@@ -30,6 +30,7 @@ public class RoomsServiceImpl implements RoomsService {
 	@Autowired
 	UserRepository userRepo;
 
+	
 	public ResponseEntity<?> createRoom(String username, MineField mineField) {
 
 		
@@ -73,12 +74,18 @@ public class RoomsServiceImpl implements RoomsService {
 	public ResponseEntity<?> joinRoom(Integer id, String username) {
 		User user = userRepo.findOne(username);
 		
+		logger.error("1");
+		
 		if(user.getCurrentRoomid()!=0 && user.getCurrentRoomid()!=id){
 			return ResponseWrapper.wrap(ErrorResponse.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
+		logger.error("2");
+		
 		GameRoom joinedRoom = roomRepo.findOne(id);
 
+		logger.error("3");
+		
 		logger.error("before join "+joinedRoom.getPlayers().size());
 		
 		if(user.getCurrentRoomid()!=id){
@@ -87,6 +94,8 @@ public class RoomsServiceImpl implements RoomsService {
 			userRepo.save(user);
 		}
 
+		logger.error("4");
+		
 		logger.error("after join "+joinedRoom.getPlayers().size());
 		
 		return ResponseWrapper.wrap(roomRepo.save(joinedRoom), HttpStatus.OK);

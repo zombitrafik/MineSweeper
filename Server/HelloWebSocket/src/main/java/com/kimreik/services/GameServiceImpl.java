@@ -40,8 +40,6 @@ public class GameServiceImpl implements GameService {
 
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
 
-		logger.error("handle game click "+point.getX()+":"+point.getY()+" = "+point.getValue());
-		
 		User user = userRepo.findOne(username);
 
 		if (user.getCurrentRoomid() == 0) {

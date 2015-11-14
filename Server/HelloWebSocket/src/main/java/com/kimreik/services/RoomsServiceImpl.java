@@ -110,13 +110,14 @@ public class RoomsServiceImpl implements RoomsService {
 		
 		user.setCurrentRoomid(0);
 		
-
 		logger.error("after leave "+leavedRoom.getPlayers().size());
 		
 		if (leavedRoom.getPlayers().size() == 0) {
 			logger.error("after after if proc pro2000 leave "+leavedRoom.getPlayers().size());
 			roomRepo.delete(leavedRoom);
 		}
+		
+		roomRepo.save(leavedRoom);
 	}
 
 }

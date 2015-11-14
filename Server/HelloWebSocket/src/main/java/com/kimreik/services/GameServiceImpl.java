@@ -40,6 +40,8 @@ public class GameServiceImpl implements GameService {
 
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
 
+		logger.error("handle game click "+point.getX()+":"+point.getY()+" = "+point.getValue());
+		
 		User user = userRepo.findOne(username);
 
 		if (user.getCurrentRoomid() == 0) {
@@ -128,7 +130,11 @@ public class GameServiceImpl implements GameService {
 
 		if (game.getFlags().contains(point)) {
 			game.getFlags().remove(point);
-			result.add(point);
+			Point newPoint = new Point();
+			newPoint.setX(point.getX());
+			newPoint.setY(point.getY());
+			newPoint.setValue(-3);//-3 это не открытая клетка.
+			result.add(newPoint);
 		} else {
 			Point newPoint = new Point();
 			newPoint.setX(point.getX());

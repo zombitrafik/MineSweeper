@@ -27,20 +27,10 @@
 
         function subscribe (url, cb, roomId) {
             service.roomId = roomId;
-           /* setTimeout(function () {
-                cb([
-                    {x: 0, y: 0, value: 1},
-                    {x: 1, y: 0, value: 1},
-                    {x: 0, y: 1, value: 1},
-                    {x: 1, y: 1, value: 1}
-                ]);
-            }, 2000);*/
-/*            service.socket.subscribe(url, function (data) {
-                cb(data);
-            });*/
             service.client.subscribe(url, function (data) {
-                console.log('get data from socket', data);
-                //cb(JSON.parse(data).body.);
+                console.log('get data from socket');
+                console.log(JSON.parse(data.body).body);
+                cb(JSON.parse(data.body).body);
             });
         }
 

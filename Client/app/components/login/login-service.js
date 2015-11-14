@@ -5,14 +5,16 @@
         .module('app')
         .service('LoginService', loginService);
 
-    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q'];
+    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'popupService'];
 
-    function loginService (loginApiService, $window, socketService, $q) {
+    function loginService (loginApiService, $window, socketService, $q, popupService) {
 
         var service = {
             login: login,
             logout: logout
         };
+
+        popupService.createPopup('est');
 
         return service;
 

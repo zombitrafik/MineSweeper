@@ -17,7 +17,7 @@
             SYMBOLS: {
                 FLAG: -2,
                 MINE: -1,
-                EMPTY: 'E'
+                EMPTY: -3
             },
             SPRITES: {
                 closed: [
@@ -28,6 +28,9 @@
                     {x: 96, y: 96, step: 4, next: 5},
                     {x: 128, y: 96, step: 5, next: 6},
                     {x: 160, y: 96, step: 6, next: null}
+                ],
+                closed_one: [
+                    {x: 0, y: 64}
                 ],
                 empty: [
                     {x: 32, y: 64}
@@ -75,6 +78,7 @@
             },
             SPRITE_KEYS: {
                 closed: 'step',
+                closed_one: null,
                 empty: null,
                 flag: null,
                 number: 'value',
@@ -86,6 +90,7 @@
             },
             SPRITES_PRIORITY: {
                 closed: 3,
+                closed_one: 3,
                 empty: 0,
                 flag: 3,
                 number: 3,

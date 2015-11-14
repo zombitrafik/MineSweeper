@@ -8,7 +8,8 @@
     function animationService (pendingService, storageService, gameConfigService, customGetters) {
         var service = {
             play: play,
-            reset: reset
+            reset: reset,
+            clearCellAnimation: clearCellAnimation
         };
         return service;
 
@@ -71,6 +72,16 @@
 
         function reset () {
             pendingService.clear();
+        }
+
+        function clearCellAnimation (cell) {
+            var key = cell.x + '_' + cell.y;
+            var currentAnim = pendingService.get(key);
+            if(currentAnim) {
+                clearInterval(currentAnim.interval);
+                pendingService.remove(key);
+                console.log('removed');
+            }
         }
     }
 

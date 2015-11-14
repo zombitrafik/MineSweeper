@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q) {
         var service = {
             init: init,
             handleActions: handleActions
@@ -19,22 +19,28 @@
             spriteService.Sprite('images/sprites.png').then(function (image) {
                 storageService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
-                storageService.canvases = createCanvases();
-
+                createCanvases().then(function (canvases) {
+                    storageService.canvases = canvases;
+                });
             });
         }
 
         function createCanvases() {
+            var deferred = $q.defer();
             var canvases = [];
             var parent = angular.element(document.querySelector('#' + storageService.selector));
-            var blocks = storageService.blocks;
-            for (var i = 0; i < blocks.length; i++) {
-                canvases[i] = [];
-                for (var j = 0; j < blocks[i].length; j++) {
-                    canvases[i][j] = createCanvas(parent, i, j, blocks[i][j].length, blocks[i][j][0].length);
+            parent.ready(function () {
+                var blocks = storageService.blocks;
+                for (var i = 0; i < blocks.length; i++) {
+                    canvases[i] = [];
+                    for (var j = 0; j < blocks[i].length; j++) {
+                        canvases[i][j] = createCanvas(parent, i, j, blocks[i][j].length, blocks[i][j][0].length);
+                    }
                 }
-            }
-            return canvases;
+                deferred.resolve(canvases);
+            });
+
+            return deferred.promise;
         }
 
         function createCanvas(parent, i, j, width, height) {
@@ -45,7 +51,6 @@
                 '<canvas width="' + (width * cellSize) + '" height="' + (height * cellSize) + '"></canvas>' +
                 '</div>');
             parent.append(canvas);
-
             var canvasElement = canvas.find('canvas');
             var ctx = canvasElement[0].getContext('2d');
             bindEvents(canvasElement);
@@ -76,9 +81,12 @@
 
         // drawnings block
 
-        function drawEmptyCell(ctx, x, y) {
+        function drawEmptyCell(ctx, x, y, cell) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var image = getImageDataByKey('closed')[0];
+            if(cell) {
+                animationService.clearCellAnimation(cell);
+            }
             ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
@@ -160,8 +168,8 @@
             data.forEach(function (cell) {
                 var cellData = customGetters.getCellInCtx(cell.x, cell.y);
                 var symbols = gameConfigService.SYMBOLS;
-                var previosCellValue = customGetters.getCell(cell.x, cell.y).value;
-                if(previosCellValue === cell.value) {
+                var previousCellValue = customGetters.getCell(cell.x, cell.y).value;
+                if(previousCellValue === cell.value) {
                     //cell not changed
                     return;
                 }
@@ -173,7 +181,7 @@
                     }
                     case symbols.EMPTY:
                     {
-                        drawEmptyCell(cellData.ctx, cellData.x, cellData.y);
+                        drawEmptyCell(cellData.ctx, cellData.x, cellData.y, cell);
                         break;
                     }
                     case symbols.MINE: {

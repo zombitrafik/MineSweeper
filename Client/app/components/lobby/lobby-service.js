@@ -27,8 +27,7 @@
         function joinRoom (id) {
             var promise = lobbyApiService.joinRoom(id);
             promise.then(function (response) {
-                socketService.subscribe('broker/rooms/'+id, function () {}, id);
-                //eventHandlerService.init(response);
+                gameService.init(response);
             });
             return promise;
         }
@@ -37,7 +36,6 @@
             var promise = lobbyApiService.createRoom(config);
             promise.then(function (response) {
                 gameService.init(response);
-                //socketService.subscribe('broker/rooms/'+response.id, function () {}, response.id);
             });
             return promise;
         }

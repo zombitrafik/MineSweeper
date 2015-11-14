@@ -79,7 +79,7 @@
             return {
                 x: x,
                 y: y,
-                value: 'E'
+                value: -3
             }
         }
 

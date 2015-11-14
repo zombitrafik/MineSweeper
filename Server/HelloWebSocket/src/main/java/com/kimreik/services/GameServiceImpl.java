@@ -102,6 +102,8 @@ public class GameServiceImpl implements GameService {
 
 		roomRepo.save(room);
 
+		logger.error("result "+result.size());
+		
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
 

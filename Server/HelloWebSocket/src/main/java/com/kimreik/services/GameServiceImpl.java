@@ -31,8 +31,8 @@ public class GameServiceImpl implements GameService {
 	GameRoomRepository roomRepo;
 
 	@Autowired
-	@Qualifier("simpleGenerator")
-	//@Qualifier("testGenerator")
+	//@Qualifier("simpleGenerator")
+	@Qualifier("testGenerator")
 	
 	FieldGenerator fieldGenerator;
 
@@ -132,7 +132,7 @@ public class GameServiceImpl implements GameService {
 			newPoint.setX(point.getX());
 			newPoint.setY(point.getY());
 			newPoint.setValue(-2);
-			result.add(newPoint);
+			result.add(point);
 			game.getFlags().add(newPoint);
 		}
 

@@ -10,6 +10,12 @@
     function LobbyController (lobbyService, $state) {
         var vm = this;
 
+        vm.newRoomModel = {
+            width: 0,
+            height: 0,
+            minesCount: 0
+        };
+
         vm.getRooms = function () {
             return lobbyService.rooms;
         };
@@ -28,11 +34,13 @@
         };
 
         vm.createRoom = function () {
-            var promise = lobbyService.createRoom();
+            console.log(vm.newRoomModel);
+            var promise = lobbyService.createRoom(vm.newRoomModel);
 
             promise.then(function () {
                 $state.go('game');
             });
-        }
+        };
+
     }
 })();

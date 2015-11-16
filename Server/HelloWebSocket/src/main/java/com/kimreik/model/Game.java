@@ -14,10 +14,10 @@ public class Game {
 	@Embedded
 	private MineField mineField;
 	
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
 	private Set<Point> openedField = new HashSet<Point>();
 	
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
 	private Set<Point> flags = new HashSet<Point>();
 	
 	public Set<Point> getOpenedField(){

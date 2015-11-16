@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.kimreik.helpers.DebugTimer;
 import com.kimreik.helpers.FieldGenerator;
 import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
@@ -32,23 +33,29 @@ public class GameServiceImpl implements GameService {
 
 	@Autowired
 	@Qualifier("simpleGenerator")
-	//@Qualifier("testGenerator")
-	
+	// @Qualifier("testGenerator")
+
 	FieldGenerator fieldGenerator;
 
 	Logger logger = Logger.getLogger(GameService.class);
 
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
 
+		DebugTimer timer = new DebugTimer();
+		
 		User user = userRepo.findOne(username);
 
 		if (user.getCurrentRoomid() == 0) {
 			return ResponseWrapper.wrap(ErrorResponse.NOT_JOINED_TO_ROOM, HttpStatus.BAD_REQUEST);
 		}
+		
+		logger.error(timer.tick("start"));
 
 		Set<Point> result = new HashSet<Point>();
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
+
+		logger.error(timer.tick("getRoom"));
 
 		Game game = room.getGame();
 
@@ -65,6 +72,7 @@ public class GameServiceImpl implements GameService {
 
 		if (game.getOpenedField().contains(openedPoint)) {
 			if (openedPoint.getValue() == -2 || openedPoint.getValue() == 0) {
+				logger.error(timer.tick("not_fastOpen"));
 				return ResponseWrapper.wrap(result, HttpStatus.OK);
 			}
 			int realValue = openedPoint.getValue();
@@ -77,15 +85,18 @@ public class GameServiceImpl implements GameService {
 			if (realValue == 0) {
 				nearbyPoints.removeAll(game.getOpenedField());
 				nearbyPoints.removeAll(game.getFlags());
-				//result.addAll(nearbyPoints);
-				for(Point nearbyPoint : nearbyPoints){
+				// result.addAll(nearbyPoints);
+				for (Point nearbyPoint : nearbyPoints) {
 					result.add(nearbyPoint);
-					if(nearbyPoint.getValue()==0){
+					if (nearbyPoint.getValue() == 0) {
 						openFreeSpace(game, result, nearbyPoint);
 					}
 				}
 				game.getOpenedField().addAll(result);
 				roomRepo.save(room);
+				
+				logger.error(timer.tick("fastOpen"));
+				
 				return ResponseWrapper.wrap(result, HttpStatus.OK);
 			}
 		}
@@ -102,7 +113,7 @@ public class GameServiceImpl implements GameService {
 
 		roomRepo.save(room);
 
-		logger.error("result "+result.size());
+		logger.error(timer.tick("fastOpen_0"));
 		
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
@@ -124,14 +135,15 @@ public class GameServiceImpl implements GameService {
 			return ResponseWrapper.wrap(null, HttpStatus.OK);
 		}
 
-		Set<Point> result = new HashSet<Point>(); //сет для одного флажка(на клиенте проще)
+		Set<Point> result = new HashSet<Point>(); // сет для одного флажка(на
+													// клиенте проще)
 
 		if (game.getFlags().contains(point)) {
 			game.getFlags().remove(point);
 			Point newPoint = new Point();
 			newPoint.setX(point.getX());
 			newPoint.setY(point.getY());
-			newPoint.setValue(-3);//-3 это не открытая клетка.
+			newPoint.setValue(-3);// -3 это не открытая клетка.
 			result.add(newPoint);
 		} else {
 			Point newPoint = new Point();

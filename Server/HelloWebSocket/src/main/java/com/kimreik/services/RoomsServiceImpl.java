@@ -74,30 +74,18 @@ public class RoomsServiceImpl implements RoomsService {
 	public ResponseEntity<?> joinRoom(Integer id, String username) {
 		User user = userRepo.findOne(username);
 		
-		logger.error("1");
-		
 		if(user.getCurrentRoomid()!=0 && user.getCurrentRoomid()!=id){
 			return ResponseWrapper.wrap(ErrorResponse.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
-		logger.error("2");
-		
 		GameRoom joinedRoom = roomRepo.findOne(id);
 
-		logger.error("3");
-		
-		logger.error("before join "+joinedRoom.getPlayers().size());
-		
 		if(user.getCurrentRoomid()!=id){
 			joinedRoom.addPlayer(username);
 			user.setCurrentRoomid(joinedRoom.getId());
 			userRepo.save(user);
 		}
 
-		logger.error("4");
-		
-		logger.error("after join "+joinedRoom.getPlayers().size());
-		
 		return ResponseWrapper.wrap(roomRepo.save(joinedRoom), HttpStatus.OK);
 	}
 
@@ -113,8 +101,6 @@ public class RoomsServiceImpl implements RoomsService {
 		}
 		GameRoom leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
 		
-		logger.error("before leave "+leavedRoom.getPlayers().size());
-		
 		leavedRoom.removePlayer(username);
 		
 		user.setCurrentRoomid(0);
@@ -122,7 +108,6 @@ public class RoomsServiceImpl implements RoomsService {
 		leavedRoom = roomRepo.save(leavedRoom);
 		
 		if (leavedRoom.getPlayers().size() == 0) {
-			logger.error("after after if proc pro2000 leave "+leavedRoom.getPlayers().size());
 			roomRepo.delete(leavedRoom);
 		}
 		

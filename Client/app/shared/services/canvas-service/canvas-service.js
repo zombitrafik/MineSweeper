@@ -14,6 +14,7 @@
         return service;
 
         function init(selector) {
+            var deferred = $q.defer();
             storageService.selector = selector;
             animationService.reset();
             spriteService.Sprite('images/sprites.png').then(function (image) {
@@ -21,8 +22,11 @@
 
                 createCanvases().then(function (canvases) {
                     storageService.canvases = canvases;
+                    deferred.resolve();
                 });
             });
+
+            return deferred.promise;
         }
 
         function createCanvases() {

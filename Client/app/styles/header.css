@@ -8,3 +8,8 @@
     margin: 0 auto;
     text-align: center;
 }
+.header .logout-btn {
+    position: absolute;
+    right: 0;
+    top: 20px;
+}

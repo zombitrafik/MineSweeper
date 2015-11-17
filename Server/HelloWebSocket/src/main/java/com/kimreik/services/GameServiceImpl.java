@@ -16,6 +16,7 @@ import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
 import com.kimreik.model.GameRoom;
 import com.kimreik.model.MineField;
+import com.kimreik.model.Player;
 import com.kimreik.model.Point;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
@@ -23,7 +24,7 @@ import com.kimreik.repositories.UserRepository;
 import com.kimreik.validators.ErrorResponse;
 
 @Service
-public class GameServiceImpl implements GameService {
+public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
 
 	@Autowired
 	UserRepository userRepo;
@@ -60,60 +61,18 @@ public class GameServiceImpl implements GameService {
 		Game game = room.getGame();
 
 		// старт игры
+		
+		
+		generateField(room, point, fieldGenerator);
 
-		generateField(game, point);
-
-		MineField mineField = game.getMineField();
-
-		Point openedPoint = game.getMineField().getPoint(point);
-
-		// TODO: проверить открытие бомбы при ошибке
-		// нажатие на уже раскрытую клетку(быстрое раскрытие)
-
-		if (game.getOpenedField().contains(openedPoint)) {
-			if (openedPoint.getValue() == -2 || openedPoint.getValue() == 0) {
-				logger.error(timer.tick("not_fastOpen"));
-				return ResponseWrapper.wrap(result, HttpStatus.OK);
-			}
-			int realValue = openedPoint.getValue();
-			Set<Point> nearbyPoints = mineField.getNearbyPoints(openedPoint);
-			for (Point nearby : nearbyPoints) {
-				if (game.getFlags().contains(nearby)) {
-					realValue--;
-				}
-			}
-			if (realValue == 0) {
-				nearbyPoints.removeAll(game.getOpenedField());
-				nearbyPoints.removeAll(game.getFlags());
-				// result.addAll(nearbyPoints);
-				for (Point nearbyPoint : nearbyPoints) {
-					result.add(nearbyPoint);
-					if (nearbyPoint.getValue() == 0) {
-						openFreeSpace(game, result, nearbyPoint);
-					}
-				}
-				game.getOpenedField().addAll(result);
-				roomRepo.save(room);
-				
-				logger.error(timer.tick("fastOpen"));
-				
-				return ResponseWrapper.wrap(result, HttpStatus.OK);
-			}
-		}
-
-		result.add(openedPoint);
-
-		// нажатие на 0
-
-		if (openedPoint.getValue() == 0) {
-			openFreeSpace(game, result, openedPoint);
-		}
-
+		result = handleLeftClick(game, point);
+		
+		addPointsToPlayer(room, user.getUsername(), result.size()); //TODO add bomb logic
+		
 		game.getOpenedField().addAll(result);
-
 		roomRepo.save(room);
-
-		logger.error(timer.tick("fastOpen_0"));
+		
+		logger.error(timer.tick("fastOpen"));
 		
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
@@ -125,7 +84,7 @@ public class GameServiceImpl implements GameService {
 
 		Game game = room.getGame();
 
-		generateField(game, point);
+		generateField(room, point, fieldGenerator);
 
 		MineField mineField = game.getMineField();
 
@@ -158,46 +117,15 @@ public class GameServiceImpl implements GameService {
 
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
-
-	private Set<Point> openFreeSpace(Game game, Set<Point> freeSpace, Point startPoint) {
-
-		int x = startPoint.getX();
-		int y = startPoint.getY();
-
-		Set<Point> nearbyPoints = game.getMineField().getNearbyPoints(x, y);
-
-		for (Point point : nearbyPoints) {
-			checkCandidateForAutoOpen(game, point, freeSpace);
-		}
-
-		return freeSpace;
-	}
-
-	private void checkCandidateForAutoOpen(Game game, Point point, Set<Point> freeSpace) {
-
-		if (isValidForAutoOpen(freeSpace, game, point)) {
-			freeSpace.add(point);
-			if (point.getValue() == 0) {
-				freeSpace.addAll(openFreeSpace(game, freeSpace, point));
+	
+	private void addPointsToPlayer(GameRoom room, String playerName, int scoreToAdd){
+		for(Player p :room.getPlayers()){
+			if(p.getUsername().equals(playerName)){
+				int currentScore = p.getCurrentScore();
+				p.setCurrentScore(currentScore+scoreToAdd);
 			}
 		}
 	}
-
-	private boolean isValidForAutoOpen(Set<Point> space, Game game, Point point) {
-
-		return !(space.contains(point) || game.getOpenedField().contains(point) || game.getFlags().contains(point)
-				|| point.getValue() == -1); // TODO: не подходит для быстрого
-											// открытия
-	}
-
-	private void generateField(Game game, Point point) {
-		if (game.getOpenedField().size() != 0 || game.getFlags().size() != 0)
-			return;
-		MineField mineField = game.getMineField();
-		mineField = fieldGenerator.generate(point, mineField.getWidth(), mineField.getHeight(),
-				mineField.getMinesCount());
-		game.setMineField(mineField);
-
-	}
-
+	
+	
 }

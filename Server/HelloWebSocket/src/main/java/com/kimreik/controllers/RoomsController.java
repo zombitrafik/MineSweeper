@@ -37,6 +37,11 @@ public class RoomsController {
 		return roomsService.getRooms();
 	}	
 	
+	@RequestMapping(value="/current", method = RequestMethod.GET)
+	public GameRoom getCurrentRoom(Principal principal){
+		return roomsService.getCurrentRoom(principal.getName());
+	}
+	
 	@RequestMapping(value="/{id}", method = RequestMethod.POST)
 	public ResponseEntity<?> joinRoom(Principal principal, @PathVariable Integer id){
 		return roomsService.joinRoom(id, principal.getName());

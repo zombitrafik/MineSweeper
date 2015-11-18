@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kimreik.helpers.DebugTimer;
 import com.kimreik.helpers.FieldGenerator;
@@ -16,6 +17,7 @@ import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
 import com.kimreik.model.GameRoom;
 import com.kimreik.model.MineField;
+import com.kimreik.model.Player;
 import com.kimreik.model.Point;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
@@ -23,7 +25,7 @@ import com.kimreik.repositories.UserRepository;
 import com.kimreik.validators.ErrorResponse;
 
 @Service
-public class GameServiceImpl implements GameService {
+public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
 
 	@Autowired
 	UserRepository userRepo;
@@ -33,12 +35,13 @@ public class GameServiceImpl implements GameService {
 
 	@Autowired
 	@Qualifier("simpleGenerator")
-	// @Qualifier("testGenerator")
+	//@Qualifier("testGenerator")
 
 	FieldGenerator fieldGenerator;
 
 	Logger logger = Logger.getLogger(GameService.class);
 
+	@Transactional
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
 
 		DebugTimer timer = new DebugTimer();
@@ -54,70 +57,47 @@ public class GameServiceImpl implements GameService {
 		Set<Point> result = new HashSet<Point>();
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
-
+		
+		for(Player p : room.getPlayers()){
+			if(p.getUsername().equals(user.getUsername())){
+				if(p.isBombed()){
+					return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
+				}
+			}
+		}
+		
 		logger.error(timer.tick("getRoom"));
 
 		Game game = room.getGame();
 
 		// старт игры
+		
+		
+		generateField(room, point, fieldGenerator);
 
-		generateField(game, point);
-
-		MineField mineField = game.getMineField();
-
-		Point openedPoint = game.getMineField().getPoint(point);
-
-		// TODO: проверить открытие бомбы при ошибке
-		// нажатие на уже раскрытую клетку(быстрое раскрытие)
-
-		if (game.getOpenedField().contains(openedPoint)) {
-			if (openedPoint.getValue() == -2 || openedPoint.getValue() == 0) {
-				logger.error(timer.tick("not_fastOpen"));
-				return ResponseWrapper.wrap(result, HttpStatus.OK);
-			}
-			int realValue = openedPoint.getValue();
-			Set<Point> nearbyPoints = mineField.getNearbyPoints(openedPoint);
-			for (Point nearby : nearbyPoints) {
-				if (game.getFlags().contains(nearby)) {
-					realValue--;
-				}
-			}
-			if (realValue == 0) {
-				nearbyPoints.removeAll(game.getOpenedField());
-				nearbyPoints.removeAll(game.getFlags());
-				// result.addAll(nearbyPoints);
-				for (Point nearbyPoint : nearbyPoints) {
-					result.add(nearbyPoint);
-					if (nearbyPoint.getValue() == 0) {
-						openFreeSpace(game, result, nearbyPoint);
-					}
-				}
-				game.getOpenedField().addAll(result);
-				roomRepo.save(room);
+		result = handleLeftClick(game, point);
+		
+		addPointsToPlayer(room, user.getUsername(), result.size()); //TODO add bomb logic
+		
+		for(Point p : result){
+			if(p.getValue()==-1){
+				bombPlayer(room, user.getUsername());
 				
-				logger.error(timer.tick("fastOpen"));
-				
-				return ResponseWrapper.wrap(result, HttpStatus.OK);
 			}
 		}
-
-		result.add(openedPoint);
-
-		// нажатие на 0
-
-		if (openedPoint.getValue() == 0) {
-			openFreeSpace(game, result, openedPoint);
-		}
-
+		
 		game.getOpenedField().addAll(result);
-
+		
+		checkGameEnd(room);
+		
 		roomRepo.save(room);
-
-		logger.error(timer.tick("fastOpen_0"));
+		
+		logger.error(timer.tick("fastOpen"));
 		
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
 
+	@Transactional
 	public ResponseEntity<?> handleGameRightClick(String username, Point point) {
 		User user = userRepo.findOne(username);
 
@@ -125,7 +105,7 @@ public class GameServiceImpl implements GameService {
 
 		Game game = room.getGame();
 
-		generateField(game, point);
+		generateField(room, point, fieldGenerator);
 
 		MineField mineField = game.getMineField();
 
@@ -158,46 +138,48 @@ public class GameServiceImpl implements GameService {
 
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
-
-	private Set<Point> openFreeSpace(Game game, Set<Point> freeSpace, Point startPoint) {
-
-		int x = startPoint.getX();
-		int y = startPoint.getY();
-
-		Set<Point> nearbyPoints = game.getMineField().getNearbyPoints(x, y);
-
-		for (Point point : nearbyPoints) {
-			checkCandidateForAutoOpen(game, point, freeSpace);
+	
+	private void addPointsToPlayer(GameRoom room, String playerName, int scoreToAdd){
+		Player player = getPlayer(room, playerName);
+		if(player!=null){
+			int currentScore = player.getCurrentScore();
+			player.setCurrentScore(currentScore+scoreToAdd);
 		}
-
-		return freeSpace;
 	}
-
-	private void checkCandidateForAutoOpen(Game game, Point point, Set<Point> freeSpace) {
-
-		if (isValidForAutoOpen(freeSpace, game, point)) {
-			freeSpace.add(point);
-			if (point.getValue() == 0) {
-				freeSpace.addAll(openFreeSpace(game, freeSpace, point));
+	
+	private void bombPlayer(GameRoom room, String playerName){
+		Player player = getPlayer(room, playerName);
+		if(player!=null) player.setBombed(true);
+	}
+	
+	private void checkGameEnd(GameRoom room){
+		Game game = room.getGame();
+		boolean isFinished = true;
+		for(Player p : room.getPlayers()){
+			if(!p.isBombed()){
+				isFinished=false;
 			}
 		}
-	}
-
-	private boolean isValidForAutoOpen(Set<Point> space, Game game, Point point) {
-
-		return !(space.contains(point) || game.getOpenedField().contains(point) || game.getFlags().contains(point)
-				|| point.getValue() == -1); // TODO: не подходит для быстрого
-											// открытия
-	}
-
-	private void generateField(Game game, Point point) {
-		if (game.getOpenedField().size() != 0 || game.getFlags().size() != 0)
+		if(isFinished){
+			room.setFinished(true);
 			return;
-		MineField mineField = game.getMineField();
-		mineField = fieldGenerator.generate(point, mineField.getWidth(), mineField.getHeight(),
-				mineField.getMinesCount());
-		game.setMineField(mineField);
-
+		}
+		//TODO перепилить норм, считать флаги это дно
+		if(game.getOpenedField().size()+game.getFlags().size()==game.getMineField().getHeight()*game.getMineField().getWidth()){
+			room.setFinished(true);
+			room.setWin(true);
+		}
+		
 	}
-
+	
+	private Player getPlayer(GameRoom room, String playerName){
+		for(Player p :room.getPlayers()){
+			if(p.getUsername().equals(playerName)){
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	
 }

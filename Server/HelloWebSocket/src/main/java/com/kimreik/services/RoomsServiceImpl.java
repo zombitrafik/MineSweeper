@@ -101,6 +101,7 @@ public class RoomsServiceImpl implements RoomsService {
 		}
 		GameRoom leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
 		
+		
 		leavedRoom.removePlayer(username);
 		
 		user.setCurrentRoomid(0);
@@ -111,6 +112,12 @@ public class RoomsServiceImpl implements RoomsService {
 			roomRepo.delete(leavedRoom);
 		}
 		
+		
+	}
+
+	public GameRoom getCurrentRoom(String username) {
+		User user = userRepo.findOne(username);
+		return roomRepo.findOne(user.getCurrentRoomid());
 		
 	}
 

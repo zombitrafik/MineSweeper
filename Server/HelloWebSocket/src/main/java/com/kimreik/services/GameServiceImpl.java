@@ -1,6 +1,6 @@
 package com.kimreik.services;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -54,7 +54,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		logger.error(timer.tick("start"));
 
-		Set<Point> result = new HashSet<Point>();
+		Set<Point> result = new LinkedHashSet<Point>();
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
 		
@@ -115,7 +115,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 			return ResponseWrapper.wrap(null, HttpStatus.OK);
 		}
 
-		Set<Point> result = new HashSet<Point>(); // сет для одного флажка(на
+		Set<Point> result = new LinkedHashSet<Point>(); // сет для одного флажка(на
 													// клиенте проще)
 
 		if (game.getFlags().contains(point)) {

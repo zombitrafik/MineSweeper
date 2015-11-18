@@ -36,7 +36,7 @@
             gameApiService.setFlag(data, roomId).then(function (response) {
 
             });*/
-            socketService.send('test/right/', data)
+            socketService.send('/test/right', data)
         }
 
         function openCell (cell) {
@@ -49,7 +49,7 @@
             gameApiService.openCell(data, roomId).then(function (response) {
                 updateMap(response);
             });*/
-            socketService.send('test/', data);
+            socketService.send('/test/left', data);
         }
 
 

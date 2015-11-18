@@ -4,7 +4,8 @@
     angular
         .module('app', [
             'app.config',
-            'ui.router'
+            'ui.router',
+            'LocalForageModule'
         ]);
 })();
 

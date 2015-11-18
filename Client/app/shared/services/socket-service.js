@@ -12,8 +12,7 @@
             connect: connect,
             client: {},
             subscribe: subscribe,
-            send: send,
-            roomId: ''
+            send: send
         };
         return service;
 
@@ -25,8 +24,7 @@
             });
         }
 
-        function subscribe (url, cb, roomId) {
-            service.roomId = roomId;
+        function subscribe (url, cb) {
             service.client.subscribe(url, function (data) {
                 console.log('get data from socket');
                 console.log(JSON.parse(data.body).body);
@@ -35,7 +33,7 @@
         }
 
         function send(url, data) {
-            service.client.send('/' + url + service.roomId, {}, JSON.stringify(data));
+            service.client.send(url, {}, JSON.stringify(data));
         }
 
     }

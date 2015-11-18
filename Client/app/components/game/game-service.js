@@ -17,14 +17,12 @@
             var rows = data.game.mineField.width,
                 cols = data.game.mineField.height;
             generateMap(rows, cols);
-            socketService.subscribe('/broker/rooms/'+data.id, canvasService.handleActions, data.id);
+            socketService.subscribe('/broker/rooms/'+data.id, canvasService.handleActions);
 
             canvasService.init('field').then(function () {
                 canvasService.handleActions(data.game.flags);
                 canvasService.handleActions(data.game.openedField);
             });
-
-
         }
 
         function generateMap (rows, cols) {

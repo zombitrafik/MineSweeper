@@ -5,16 +5,15 @@
         .module('app')
         .service('LoginService', loginService);
 
-    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'popupService'];
+    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'sessionService'];
 
-    function loginService (loginApiService, $window, socketService, $q, popupService) {
+    function loginService (loginApiService, $window, socketService, $q, sessionService) {
 
         var service = {
             login: login,
             logout: logout
         };
 
-        popupService.createPopup('est');
 
         return service;
 
@@ -22,7 +21,7 @@
             var defered = $q.defer();
             var credentials = { authorization: 'Basic ' + $window.btoa(model.username + ':' + model.password)};
             var promise = loginApiService.login(credentials);
-            promise.then(function () {
+            promise.then(function (user) {
                 socketService.connect('game', function () {
                     defered.resolve();
                 });

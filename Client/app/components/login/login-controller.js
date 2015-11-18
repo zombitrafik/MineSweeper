@@ -11,7 +11,6 @@
 
         var vm = this;
 
-
         vm.model = {
             username: '',
             password: ''

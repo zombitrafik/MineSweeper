@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q', 'popupService'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q, popupService) {
         var service = {
             init: init,
             handleActions: handleActions
@@ -16,6 +16,7 @@
         function init(selector) {
             var deferred = $q.defer();
             storageService.selector = selector;
+            initPopup();
             animationService.reset();
             spriteService.Sprite('images/sprites.png').then(function (image) {
                 storageService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
@@ -27,6 +28,10 @@
             });
 
             return deferred.promise;
+        }
+
+        function initPopup () {
+            popupService.init('#' + storageService.selector);
         }
 
         function createCanvases() {
@@ -135,9 +140,6 @@
         function clickActions (cell) {
             //open
             if(isValidForOpen(cell)) {
-                /*eventHandlerService.openCell(cell).then(function (response) {
-                    handleActions(response);
-                });*/
                 eventHandlerService.openCell(cell);
                 animationService.play('click_left', cell, function () {
                     animationService.play('pending_open_one', cell);
@@ -147,9 +149,6 @@
             }
             // click on opened cell
             if(isValidToOpenMore(cell)) {
-                /*eventHandlerService.openCell(cell).then(function (response) {
-                    handleActions(response);
-                });*/
                 eventHandlerService.openCell(cell);
             }
         }
@@ -157,9 +156,6 @@
         function contextmenuActions (cell) {
             //set flag state
             if(isValidForFlag(cell)) {
-                /*eventHandlerService.setFlag(cell).then(function (response) {
-                 handleActions([response]);
-                 });*/
                 eventHandlerService.setFlag(cell);
                 animationService.play('click_right', cell, function () {
                     animationService.play('pending_flag', cell);
@@ -169,6 +165,15 @@
         }
 
         function handleActions (data) {
+
+
+/*            setTimeout(function () {
+                popupService.createPopup('someName', 1 * gameConfigService.FIELD.CELL.SIZE, 1 * gameConfigService.FIELD.CELL.SIZE);
+            }, 3000);*/
+
+            if(_.isEmpty(data)) {
+                return;
+            }
             data.forEach(function (cell) {
                 var cellData = customGetters.getCellInCtx(cell.x, cell.y);
                 var symbols = gameConfigService.SYMBOLS;
@@ -198,6 +203,8 @@
                     }
                 }
             });
+
+            popupService.createPopup('someName', data[0].x * gameConfigService.FIELD.CELL.SIZE, data[0].y * gameConfigService.FIELD.CELL.SIZE);
 
             updateModel(data);
         }

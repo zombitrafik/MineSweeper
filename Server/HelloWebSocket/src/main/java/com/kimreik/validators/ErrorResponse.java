@@ -4,6 +4,8 @@ public class ErrorResponse {
 
 	public static final ErrorResponse NOT_JOINED_TO_ROOM = new ErrorResponse("NOT_JOINED_TO_ROOM");
 	public static final ErrorResponse USER_ALREADY_IN_SOME_ROOM = new ErrorResponse("USER_ALREADY_IN_SOME_ROOM");
+	public static final ErrorResponse PLAYER_BOMBED = new ErrorResponse("PLAYER_BOMBED");
+	
 	
 	public static final ErrorResponse USERNAME_ALREADY_EXIST = new ErrorResponse("USERNAME_ALREADY_EXIST");
 	public static final ErrorResponse PASSWORDS_DONT_MATCH = new ErrorResponse("PASSWORDS_DONT_MATCH");

@@ -2,7 +2,6 @@ package com.kimreik.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 
 @Embeddable
 public class Player {
@@ -12,6 +11,9 @@ public class Player {
 	
 	@Column
 	private int currentScore;
+	
+	@Column
+	private boolean isBombed;
 	
 	public String getUsername(){
 		return username;
@@ -27,6 +29,14 @@ public class Player {
 
 	public void setCurrentScore(int currentScore) {
 		this.currentScore = currentScore;
+	}
+
+	public boolean isBombed() {
+		return isBombed;
+	}
+
+	public void setBombed(boolean isBombed) {
+		this.isBombed = isBombed;
 	}
 	
 }

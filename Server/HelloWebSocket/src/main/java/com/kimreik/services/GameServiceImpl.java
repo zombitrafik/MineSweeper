@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kimreik.helpers.DebugTimer;
 import com.kimreik.helpers.FieldGenerator;
@@ -34,12 +35,13 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 	@Autowired
 	@Qualifier("simpleGenerator")
-	// @Qualifier("testGenerator")
+	//@Qualifier("testGenerator")
 
 	FieldGenerator fieldGenerator;
 
 	Logger logger = Logger.getLogger(GameService.class);
 
+	@Transactional
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
 
 		DebugTimer timer = new DebugTimer();
@@ -55,7 +57,15 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Set<Point> result = new HashSet<Point>();
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
-
+		
+		for(Player p : room.getPlayers()){
+			if(p.getUsername().equals(user.getUsername())){
+				if(p.isBombed()){
+					return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
+				}
+			}
+		}
+		
 		logger.error(timer.tick("getRoom"));
 
 		Game game = room.getGame();
@@ -69,7 +79,17 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		addPointsToPlayer(room, user.getUsername(), result.size()); //TODO add bomb logic
 		
+		for(Point p : result){
+			if(p.getValue()==-1){
+				bombPlayer(room, user.getUsername());
+				
+			}
+		}
+		
 		game.getOpenedField().addAll(result);
+		
+		checkGameEnd(room);
+		
 		roomRepo.save(room);
 		
 		logger.error(timer.tick("fastOpen"));
@@ -77,6 +97,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
 
+	@Transactional
 	public ResponseEntity<?> handleGameRightClick(String username, Point point) {
 		User user = userRepo.findOne(username);
 
@@ -119,12 +140,45 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	}
 	
 	private void addPointsToPlayer(GameRoom room, String playerName, int scoreToAdd){
-		for(Player p :room.getPlayers()){
-			if(p.getUsername().equals(playerName)){
-				int currentScore = p.getCurrentScore();
-				p.setCurrentScore(currentScore+scoreToAdd);
+		Player player = getPlayer(room, playerName);
+		if(player!=null){
+			int currentScore = player.getCurrentScore();
+			player.setCurrentScore(currentScore+scoreToAdd);
+		}
+	}
+	
+	private void bombPlayer(GameRoom room, String playerName){
+		Player player = getPlayer(room, playerName);
+		if(player!=null) player.setBombed(true);
+	}
+	
+	private void checkGameEnd(GameRoom room){
+		Game game = room.getGame();
+		boolean isFinished = true;
+		for(Player p : room.getPlayers()){
+			if(!p.isBombed()){
+				isFinished=false;
 			}
 		}
+		if(isFinished){
+			room.setFinished(true);
+			return;
+		}
+		//TODO перепилить норм, считать флаги это дно
+		if(game.getOpenedField().size()+game.getFlags().size()==game.getMineField().getHeight()*game.getMineField().getWidth()){
+			room.setFinished(true);
+			room.setWin(true);
+		}
+		
+	}
+	
+	private Player getPlayer(GameRoom room, String playerName){
+		for(Player p :room.getPlayers()){
+			if(p.getUsername().equals(playerName)){
+				return p;
+			}
+		}
+		return null;
 	}
 	
 	

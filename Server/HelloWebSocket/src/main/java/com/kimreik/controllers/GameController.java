@@ -25,7 +25,6 @@ public class GameController {
 	@Autowired
 	GameService gameService;
 	
-	//temp
 	@Autowired
 	RoomsService roomsService;
 	
@@ -35,14 +34,15 @@ public class GameController {
 		//ретурн не работает, но этой функции тут вообще не будет
 	}
 	
-	@MessageMapping("/right/{id}")
-	public void handleRightClick(Point point, Principal principal, @DestinationVariable Integer id){
+	@MessageMapping("/right")
+	public void handleRightClick(Point point, Principal principal){
+		int id = roomsService.getCurrentRoom(principal.getName()).getId();
 		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameRightClick(principal.getName(), point));
-		//TODO: убрать id.
 	}
 	
-	@MessageMapping("/{id}")
-	public void handleClick(Point point, Principal principal, @DestinationVariable Integer id){
+	@MessageMapping("/left")
+	public void handleClick(Point point, Principal principal){
+		int id = roomsService.getCurrentRoom(principal.getName()).getId();
 		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameClick(principal.getName(), point));
 	}	
 	

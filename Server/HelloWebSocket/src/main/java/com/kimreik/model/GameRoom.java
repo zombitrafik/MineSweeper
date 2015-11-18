@@ -3,12 +3,10 @@ package com.kimreik.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +32,12 @@ public class GameRoom {
 	
 	@Column
 	private boolean isStarted;
+	
+	@Column
+	private boolean isFinished;
+	
+	@Column
+	private boolean isWin;
 	
 	public String getName(){
 		return name;
@@ -101,6 +105,22 @@ public class GameRoom {
 
 	public void setStarted(boolean isStarted) {
 		this.isStarted = isStarted;
+	}
+
+	public boolean isFinished() {
+		return isFinished;
+	}
+
+	public void setFinished(boolean isFinished) {
+		this.isFinished = isFinished;
+	}
+
+	public boolean isWin() {
+		return isWin;
+	}
+
+	public void setWin(boolean isWin) {
+		this.isWin = isWin;
 	}
 	
 	

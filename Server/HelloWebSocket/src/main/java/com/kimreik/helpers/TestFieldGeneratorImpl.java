@@ -25,6 +25,7 @@ public class TestFieldGeneratorImpl implements FieldGenerator {
 			{0,0,0,0,0,0,0,0,0,0}
 		};
 		
+		
 		Set<Point> set = new HashSet<Point>();
 		for(int i=0;i<matr.length;i++){
 			for(int j=0;j<matr[i].length;j++){

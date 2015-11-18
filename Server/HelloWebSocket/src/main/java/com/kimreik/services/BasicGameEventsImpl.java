@@ -1,6 +1,6 @@
 package com.kimreik.services;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.kimreik.helpers.FieldGenerator;
@@ -14,7 +14,7 @@ public class BasicGameEventsImpl {
 
 	protected Set<Point> handleLeftClick(Game game, Point point){
 		
-		Set<Point> result = new HashSet<Point>();
+		Set<Point> result = new LinkedHashSet<Point>();
 
 		MineField mineField = game.getMineField();
 

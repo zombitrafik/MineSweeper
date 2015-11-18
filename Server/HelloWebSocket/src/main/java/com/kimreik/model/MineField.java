@@ -1,6 +1,6 @@
 package com.kimreik.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Embeddable
 public class MineField {
 
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
 	@JsonIgnore
 	private Set<Point> field;
 	
@@ -45,7 +45,7 @@ public class MineField {
 	}
 	
 	public Set<Point> getNearbyPoints(int x, int y){
-		Set<Point> res = new HashSet<Point>();
+		Set<Point> res = new LinkedHashSet<Point>();
 		if (x != 0) {
 			if (y != 0) {
 				res.add(getPoint(x-1,y-1));

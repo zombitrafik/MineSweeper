@@ -1,7 +1,7 @@
 package com.kimreik.helpers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -23,10 +23,10 @@ public class SimpleFieldGeneratorImpl implements FieldGenerator {
 		res.setWidth(width);
 		res.setMinesCount(minesCount);
 		
-		Set<Point> field = new HashSet<Point>();
+		Set<Point> field = new LinkedHashSet<Point>();
 		List<Integer> vect = new ArrayList<Integer>();
 		
-		Set<Point> mines = new HashSet<Point>();
+		Set<Point> mines = new LinkedHashSet<Point>();
 
 		for (int i = 0; i < width * height; i++) {
 			if (i != startPoint.getY() * width + startPoint.getX())

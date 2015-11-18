@@ -1,6 +1,6 @@
 package com.kimreik.helpers;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class TestFieldGeneratorImpl implements FieldGenerator {
 		};
 		
 		
-		Set<Point> set = new HashSet<Point>();
+		Set<Point> set = new LinkedHashSet<Point>();
 		for(int i=0;i<matr.length;i++){
 			for(int j=0;j<matr[i].length;j++){
 				Point point = new Point();

@@ -1,6 +1,6 @@
 package com.kimreik.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.ElementCollection;
@@ -15,10 +15,10 @@ public class Game {
 	private MineField mineField;
 	
 	@ElementCollection(fetch=FetchType.LAZY)
-	private Set<Point> openedField = new HashSet<Point>();
+	private Set<Point> openedField = new LinkedHashSet<Point>();
 	
 	@ElementCollection(fetch=FetchType.LAZY)
-	private Set<Point> flags = new HashSet<Point>();
+	private Set<Point> flags = new LinkedHashSet<Point>();
 	
 	public Set<Point> getOpenedField(){
 		return openedField;

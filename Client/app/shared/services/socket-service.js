@@ -3,8 +3,8 @@
         .module('app')
         .service('socketService', socketService);
 
-    socketService.$inject = [];
-    function socketService () {
+    socketService.$inject = ['cacheService', '$q'];
+    function socketService (cacheService, $q) {
 
         var BASE_URL = 'http://52.28.17.161:8080/';
 
@@ -14,14 +14,17 @@
             subscribe: subscribe,
             send: send
         };
+
         return service;
 
-        function connect (url, cb) {
+        function connect (url) {
+            var deferred = $q.defer();
             var ws = new SockJS(BASE_URL + url);
             service.client = Stomp.over(ws);
             service.client.connect({}, function () {
-                cb();
+                deferred.resolve();
             });
+            return deferred.promise;
         }
 
         function subscribe (url, cb) {

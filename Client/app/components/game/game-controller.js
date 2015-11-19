@@ -8,14 +8,14 @@
     function GameController (gameService, $state) {
         var vm = this;
 
-        vm.getMap = function () {
-            return  gameService.map;
-        };
-
         vm.leaveRoom = function () {
             gameService.leaveRoom().then(function () {
                 $state.go('lobby');
             });
+        };
+
+        vm.init = function () {
+            gameService.init();
         };
 
         return vm;

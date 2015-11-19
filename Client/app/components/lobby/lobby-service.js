@@ -5,9 +5,9 @@
         .module('app')
         .service('lobbyService', lobbyService);
 
-    lobbyService.$inject = ['lobbyApiService', 'socketService', 'gameService', '$q'];
+    lobbyService.$inject = ['lobbyApiService', 'cacheService', '$q'];
 
-    function lobbyService (lobbyApiService, socketService, gameService, $q) {
+    function lobbyService (lobbyApiService, cacheService, $q) {
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,
@@ -25,19 +25,33 @@
         }
 
         function joinRoom (id) {
+            var deferred = $q.defer();
             var promise = lobbyApiService.joinRoom(id);
             promise.then(function (response) {
-                gameService.init(response);
+                cacheService.item(ROUTE_REQUIRES.ROOM, response.plain()).then(function () {
+                    deferred.resolve();
+                }).catch(function () {
+                    deferred.reject();
+                });
+            }).catch(function () {
+                deferred.reject();
             });
-            return promise;
+            return deferred.promise;
         }
 
         function createRoom (config) {
+            var deferred = $q.defer();
             var promise = lobbyApiService.createRoom(config);
             promise.then(function (response) {
-                gameService.init(response);
+                cacheService.item(ROUTE_REQUIRES.ROOM, response.plain()).then(function () {
+                    deferred.resolve();
+                }).catch(function () {
+                    deferred.reject();
+                })
+            }).catch(function () {
+                deferred.reject();
             });
-            return promise;
+            return deferred.promise;
         }
     }
 })();

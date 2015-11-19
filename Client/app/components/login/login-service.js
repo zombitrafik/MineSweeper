@@ -5,9 +5,9 @@
         .module('app')
         .service('LoginService', loginService);
 
-    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'sessionService'];
+    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'cacheService'];
 
-    function loginService (loginApiService, $window, socketService, $q, sessionService) {
+    function loginService (loginApiService, $window, socketService, $q, cacheService) {
 
         var service = {
             login: login,
@@ -22,14 +22,19 @@
             var credentials = { authorization: 'Basic ' + $window.btoa(model.username + ':' + model.password)};
             var promise = loginApiService.login(credentials);
             promise.then(function (user) {
-                socketService.connect('game', function () {
-                    defered.resolve();
+                cacheService.item(ROUTE_REQUIRES.AUTH, true).then(function () {
+                    socketService.connect('game').then(function () {
+                        defered.resolve();
+                    });
+                }).catch(function () {
+                    defered.reject();
                 });
             });
             return defered.promise;
         }
 
         function  logout () {
+            cacheService.clear();
             return loginApiService.logout();
         }
     }

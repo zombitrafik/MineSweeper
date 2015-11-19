@@ -16,3 +16,9 @@
         });
     }
 })();
+
+
+var ROUTE_REQUIRES = {
+    AUTH: 'AUTH',
+    ROOM: 'ROOM'
+};

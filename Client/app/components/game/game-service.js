@@ -3,26 +3,35 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService) {
+    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q) {
         var service = {
             leaveRoom: leaveRoom,
-            init: init
+            init: init,
+            isInit: false
         };
 
         return service;
 
-        function init (data) {
-            var rows = data.game.mineField.width,
-                cols = data.game.mineField.height;
-            generateMap(rows, cols);
-            socketService.subscribe('/broker/rooms/'+data.id, canvasService.handleActions);
+        function init () {
 
-            canvasService.init('field').then(function () {
-                canvasService.handleActions(data.game.flags);
-                canvasService.handleActions(data.game.openedField);
+            cacheService.item(ROUTE_REQUIRES.ROOM).then(function (data) {
+
+                var rows = data.game.mineField.width,
+                    cols = data.game.mineField.height;
+                generateMap(rows, cols);
+                socketService.subscribe('/broker/rooms/'+data.id, canvasService.handleActions);
+
+                cacheService.item('ROOM', data);
+
+                canvasService.init('field').then(function () {
+                    canvasService.handleActions(data.game.flags);
+                    canvasService.handleActions(data.game.openedField);
+                });
+
             });
+
         }
 
         function generateMap (rows, cols) {
@@ -88,7 +97,13 @@
         }
 
         function leaveRoom () {
-            var promise = gameApiService.leaveRoom();
+            var deferred = $q.defer();
+            cacheService.remove(ROUTE_REQUIRES.ROOM).finally(function () {
+                gameApiService.leaveRoom().finally(function () {
+                    deferred.resolve();
+                });
+            });
+            var promise =
             return promise;
         }
 

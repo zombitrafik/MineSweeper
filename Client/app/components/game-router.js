@@ -22,7 +22,10 @@
                         controllerAs: 'vm'
                     }
                 },
-                requires: ['USER']
+                requires: [
+                    ROUTE_REQUIRES.AUTH,
+                    ROUTE_REQUIRES.ROOM
+                ]
             })
 
             .state({
@@ -59,18 +62,20 @@
                         controllerAs: 'vm'
                     }
                 },
-                requires: ['USER']
+                requires: [
+                    ROUTE_REQUIRES.AUTH
+                ]
             });
 
     }
 
 
-    running.$inject = ['$rootScope', 'sessionService', '$q', '$state'];
+    running.$inject = ['$rootScope', 'routeService', '$q', '$state'];
 
-    function running ($rootScope, sessionService, $q, $state) {
+    function running ($rootScope, routeService, $q, $state) {
         $rootScope.$on('$stateChangeStart', function(event, toState) {
             var deffered = $q.defer();
-            sessionService.checkAuth(toState.requires).then(function () {
+            routeService.checkRoute(toState.requires).then(function () {
                 deffered.resolve();
             }).catch(function () {
                 $state.go('login');

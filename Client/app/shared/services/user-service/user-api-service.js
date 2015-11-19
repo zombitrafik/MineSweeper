@@ -14,6 +14,5 @@
         function current() {
             return Restangular.one('user').customGET();
         }
-
     }
 })();

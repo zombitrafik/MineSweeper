@@ -20,6 +20,8 @@ public class BasicGameEventsImpl {
 
 		Point openedPoint = game.getMineField().getPoint(point);
 
+		result.add(openedPoint);
+		
 		// TODO: проверить открытие бомбы при ошибке
 		// нажатие на уже раскрытую клетку(быстрое раскрытие)
 
@@ -47,8 +49,6 @@ public class BasicGameEventsImpl {
 				return result;
 			}
 		}
-
-		result.add(openedPoint);
 
 		// нажатие на 0
 

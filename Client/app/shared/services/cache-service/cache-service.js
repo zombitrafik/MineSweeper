@@ -8,7 +8,8 @@
     function cacheService($localForage, $q) {
         var service = {
             item: item,
-            clear: clear
+            clear: clear,
+            remove: remove
         };
         return service;
 
@@ -22,7 +23,7 @@
                 $localForage.getItem(key).then(function (response) {
                     if (_.isNull(response) || isExpired(response)) {
                         $localForage.removeItem(key).finally(function () {
-                            deferred.resolve(null);
+                            deferred.reject();
                         });
                     } else {
                         deferred.resolve(response.data);
@@ -52,6 +53,10 @@
 
         function clear() {
             return $localForage.clear();
+        }
+
+        function remove (key) {
+            return $localForage.removeItem(key);
         }
     }
 })();

@@ -12,7 +12,9 @@
             connect: connect,
             client: {},
             subscribe: subscribe,
-            send: send
+            unsubscribe: unsubscribe,
+            send: send,
+            subscriptions: []
         };
 
         return service;
@@ -27,12 +29,20 @@
             return deferred.promise;
         }
 
-        function subscribe (url, cb) {
-            service.client.subscribe(url, function (data) {
-                console.log('get data from socket');
+        function subscribe (url, cb, sub_key) {
+            var subscription = service.client.subscribe(url, function (data) {
                 console.log(JSON.parse(data.body).body);
                 cb(JSON.parse(data.body).body);
             });
+
+            service.subscriptions[sub_key] = subscription;
+        }
+
+        function unsubscribe (sub_key) {
+            if(service.subscriptions[sub_key]) {
+                service.subscriptions[sub_key].unsubscribe();
+                service.subscriptions[sub_key] = undefined;
+            }
         }
 
         function send(url, data) {

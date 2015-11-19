@@ -23,9 +23,9 @@
             var promise = loginApiService.login(credentials);
             promise.then(function (user) {
                 cacheService.item(ROUTE_REQUIRES.AUTH, true).then(function () {
-                    socketService.connect('game').then(function () {
-                        defered.resolve();
-                    });
+
+                    defered.resolve();
+
                 }).catch(function () {
                     defered.reject();
                 });

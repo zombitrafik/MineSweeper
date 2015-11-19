@@ -16,18 +16,30 @@
 
         function init () {
 
-            cacheService.item(ROUTE_REQUIRES.ROOM).then(function (data) {
+            //load room id from cache
+            cacheService.item(ROUTE_REQUIRES.ROOM).then(function (roomId) {
 
-                var rows = data.game.mineField.width,
-                    cols = data.game.mineField.height;
-                generateMap(rows, cols);
-                socketService.subscribe('/broker/rooms/'+data.id, canvasService.handleActions);
+                //join to room by id
+                gameApiService.joinRoom(roomId).then(function (data) {
 
-                cacheService.item('ROOM', data);
+                    var rows = data.game.mineField.width,
+                        cols = data.game.mineField.height;
+                    generateMap(rows, cols);
 
-                canvasService.init('field').then(function () {
-                    canvasService.handleActions(data.game.flags);
-                    canvasService.handleActions(data.game.openedField);
+                    // connect to socket
+                    socketService.connect('game').then(function () {
+
+                        // subscribe
+                        socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
+
+                        canvasService.init('field').then(function () {
+                            canvasService.handleActions(data.game.flags);
+                            canvasService.handleActions(data.game.openedField);
+                        });
+
+
+                    });
+
                 });
 
             });
@@ -98,13 +110,24 @@
 
         function leaveRoom () {
             var deferred = $q.defer();
+            socketService.unsubscribe('room_' + ROUTE_REQUIRES.ROOM);
             cacheService.remove(ROUTE_REQUIRES.ROOM).finally(function () {
                 gameApiService.leaveRoom().finally(function () {
                     deferred.resolve();
                 });
             });
-            var promise =
-            return promise;
+            return deferred.promise;
+        }
+
+        function handleSocket (data) {
+            //parseData
+            if(_.isArray(data)) {
+                canvasService.handleActions(data);
+            } else {
+                console.log(data);
+                canvasService.blockAllActions();
+            }
+
         }
 
     }

@@ -11,7 +11,8 @@
         var service = {
             openCell: openCell,
             setFlag: setFlag,
-            leaveRoom: leaveRoom
+            leaveRoom: leaveRoom,
+            joinRoom: joinRoom
         };
 
         return service;
@@ -26,6 +27,10 @@
 
         function leaveRoom () {
             return Restangular.one('rooms/leave').customPOST();
+        }
+
+        function joinRoom (id) {
+            return Restangular.one('rooms', id).customPOST();
         }
 
     }

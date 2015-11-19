@@ -26,13 +26,8 @@
 
         function joinRoom (id) {
             var deferred = $q.defer();
-            var promise = lobbyApiService.joinRoom(id);
-            promise.then(function (response) {
-                cacheService.item(ROUTE_REQUIRES.ROOM, response.plain()).then(function () {
-                    deferred.resolve();
-                }).catch(function () {
-                    deferred.reject();
-                });
+            cacheService.item(ROUTE_REQUIRES.ROOM, id).then(function () {
+                deferred.resolve();
             }).catch(function () {
                 deferred.reject();
             });
@@ -43,7 +38,7 @@
             var deferred = $q.defer();
             var promise = lobbyApiService.createRoom(config);
             promise.then(function (response) {
-                cacheService.item(ROUTE_REQUIRES.ROOM, response.plain()).then(function () {
+                cacheService.item(ROUTE_REQUIRES.ROOM, response.plain().id).then(function () {
                     deferred.resolve();
                 }).catch(function () {
                     deferred.reject();

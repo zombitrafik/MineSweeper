@@ -8,7 +8,9 @@
     function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q, popupService) {
         var service = {
             init: init,
-            handleActions: handleActions
+            handleActions: handleActions,
+            blockAllActions: blockAllActions,
+            isBlockActions: false
         };
 
         return service;
@@ -122,6 +124,9 @@
         // end drawnings block
 
         function actionManager (canvas, e) {
+            if(service.isBlockActions) {
+                return;
+            }
             var actions = eventHandlerService.ACTIONS,
                 coord = customGetters.getCoordByMouse(e, canvas),
                 cell = customGetters.getCell(coord.x, coord.y);
@@ -246,5 +251,8 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
+        function blockAllActions () {
+            service.isBlockActions = true;
+        }
     }
 })();

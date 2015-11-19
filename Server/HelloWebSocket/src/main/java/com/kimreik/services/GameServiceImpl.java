@@ -88,6 +88,12 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		game.getOpenedField().addAll(result);
 		
+		int explodedBombsCount=0;
+		for(Point p: result){
+			if(p.getValue()==-1) explodedBombsCount++;
+		}
+		game.addExploidedBombs(explodedBombsCount);
+				
 		checkGameEnd(room);
 		
 		roomRepo.save(room);
@@ -155,7 +161,8 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			player.setBombed(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), "YOU BOMBED");
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap("YOU BOMBED", HttpStatus.OK));
+			
 		}
 	}
 	
@@ -169,12 +176,15 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 		if(isFinished){
 			room.setFinished(true);
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap("game finished with lose", HttpStatus.OK));
 			return;
 		}
 		//TODO перепилить норм, считать флаги это дно
-		if(game.getOpenedField().size()+game.getFlags().size()==game.getMineField().getHeight()*game.getMineField().getWidth()){
+		int fieldSize = game.getMineField().getHeight()*game.getMineField().getWidth();
+		if(fieldSize - game.getOpenedField().size() - (game.getMineField().getMinesCount()-game.getExplodedBombsCount())==0){
 			room.setFinished(true);
 			room.setWin(true);
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap("game finished with win", HttpStatus.OK));
 		}
 		
 	}

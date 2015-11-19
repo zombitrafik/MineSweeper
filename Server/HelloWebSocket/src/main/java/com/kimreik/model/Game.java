@@ -3,6 +3,7 @@ package com.kimreik.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -19,6 +20,9 @@ public class Game {
 	
 	@ElementCollection(fetch=FetchType.LAZY)
 	private Set<Point> flags = new LinkedHashSet<Point>();
+	
+	@Column
+	private int explodedBombsCount;
 	
 	public Set<Point> getOpenedField(){
 		return openedField;
@@ -43,5 +47,22 @@ public class Game {
 	public void setFlags(Set<Point> flags) {
 		this.flags = flags;
 	}
+
+	public int getExplodedBombsCount() {
+		return explodedBombsCount;
+	}
+
+	public void setExplodedBombsCount(int explodedBombsCount) {
+		this.explodedBombsCount = explodedBombsCount;
+	}
+	
+	public void addExploidedBomb(){
+		explodedBombsCount++;
+	}
+	
+	public void addExploidedBombs(int count){
+		explodedBombsCount+=count;
+	}
+	
 	
 }

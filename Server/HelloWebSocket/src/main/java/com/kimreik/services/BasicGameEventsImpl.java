@@ -77,6 +77,7 @@ public class BasicGameEventsImpl {
 
 		if (isValidForAutoOpen(freeSpace, game, point)) {
 			freeSpace.add(point);
+			
 			if (point.getValue() == 0) {
 				freeSpace.addAll(openFreeSpace(game, freeSpace, point));
 			}

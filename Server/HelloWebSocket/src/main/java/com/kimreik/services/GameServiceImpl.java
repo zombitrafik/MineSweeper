@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	GameRoomRepository roomRepo;
 
 	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+	
+	@Autowired
 	@Qualifier("simpleGenerator")
 	//@Qualifier("testGenerator")
 
@@ -58,12 +62,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
 		
-		for(Player p : room.getPlayers()){
-			if(p.getUsername().equals(user.getUsername())){
-				if(p.isBombed()){
-					return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
-				}
-			}
+		
+		if(getPlayer(room, user.getUsername()).isBombed()){
+			return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
 		}
 		
 		logger.error(timer.tick("getRoom"));
@@ -82,7 +83,6 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		for(Point p : result){
 			if(p.getValue()==-1){
 				bombPlayer(room, user.getUsername());
-				
 			}
 		}
 		
@@ -103,6 +103,10 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
 
+		if(getPlayer(room, user.getUsername()).isBombed()){
+			return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
+		}
+		
 		Game game = room.getGame();
 
 		generateField(room, point, fieldGenerator);
@@ -149,7 +153,10 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	
 	private void bombPlayer(GameRoom room, String playerName){
 		Player player = getPlayer(room, playerName);
-		if(player!=null) player.setBombed(true);
+		if(player!=null){
+			player.setBombed(true);
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), "YOU BOMBED");
+		}
 	}
 	
 	private void checkGameEnd(GameRoom room){

@@ -86,8 +86,7 @@ public class BasicGameEventsImpl {
 	private boolean isValidForAutoOpen(Set<Point> space, Game game, Point point) {
 
 		return !(space.contains(point) || game.getOpenedField().contains(point) || game.getFlags().contains(point)
-				|| point.getValue() == -1); // TODO: не подходит для быстрого
-											// открытия
+				|| point.getValue() == -1);
 	}
 	
 	protected void generateField(GameRoom room, Point point, FieldGenerator fieldGenerator) {

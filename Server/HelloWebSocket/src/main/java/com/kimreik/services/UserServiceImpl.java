@@ -12,7 +12,7 @@ import org.springframework.validation.ObjectError;
 
 import com.kimreik.model.User;
 import com.kimreik.repositories.UserRepository;
-import com.kimreik.validators.ErrorResponse;
+import com.kimreik.validators.ResponseMessage;
 import com.kimreik.validators.UserValidator;
 
 @Service
@@ -26,7 +26,9 @@ public class UserServiceImpl implements UserService {
 	
 	public ResponseEntity<?> addUser(User user, BindingResult result) {
 		user.setEnabled(true);
-
+		
+		user.setUsername(user.getUsername().toLowerCase());
+		
 		UserValidator validator = new UserValidator(userRepo);
 
 		validator.validate(user, result);
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
 			for (ObjectError err : result.getAllErrors()) {
 				errStr += err.getCode();
 			}
-			return new ResponseEntity<ErrorResponse>(new ErrorResponse(errStr), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage(errStr), HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole("ROLE_USER");

@@ -23,7 +23,7 @@ import com.kimreik.model.Point;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
 import com.kimreik.repositories.UserRepository;
-import com.kimreik.validators.ErrorResponse;
+import com.kimreik.validators.ResponseMessage;
 
 @Service
 public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
@@ -53,7 +53,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		User user = userRepo.findOne(username);
 
 		if (user.getCurrentRoomid() == 0) {
-			return ResponseWrapper.wrap(ErrorResponse.NOT_JOINED_TO_ROOM, HttpStatus.BAD_REQUEST);
+			return ResponseWrapper.wrap(ResponseMessage.NOT_JOINED_TO_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
 		logger.error(timer.tick("start"));
@@ -64,7 +64,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		
 		if(getPlayer(room, user.getUsername()).isBombed()){
-			return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
+			return ResponseWrapper.wrap(ResponseMessage.PLAYER_BOMBED, HttpStatus.OK);
 		}
 		
 		logger.error(timer.tick("getRoom"));
@@ -79,26 +79,24 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		result = handleLeftClick(game, point);
 		
 		addPointsToPlayer(room, user.getUsername(), result.size()); //TODO add bomb logic
-		
-		for(Point p : result){
-			if(p.getValue()==-1){
-				bombPlayer(room, user.getUsername());
-			}
-		}
-		
+				
 		game.getOpenedField().addAll(result);
 		
-		int explodedBombsCount=0;
+		boolean findBomb = false;
 		for(Point p: result){
-			if(p.getValue()==-1) explodedBombsCount++;
+			if(p.getValue()==-1){
+				game.addExploidedBomb(p);
+				findBomb=true;
+			}
 		}
-		game.addExploidedBombs(explodedBombsCount);
-				
+		if(findBomb) bombPlayer(room, user.getUsername());
+		
+		
 		checkGameEnd(room);
 		
 		roomRepo.save(room);
 		
-		logger.error(timer.tick("fastOpen"));
+		logger.error(timer.tick("Open"));
 		
 		return ResponseWrapper.wrap(result, HttpStatus.OK);
 	}
@@ -110,7 +108,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
 
 		if(getPlayer(room, user.getUsername()).isBombed()){
-			return ResponseWrapper.wrap(ErrorResponse.PLAYER_BOMBED, HttpStatus.OK);
+			return ResponseWrapper.wrap(ResponseMessage.PLAYER_BOMBED, HttpStatus.OK);
 		}
 		
 		Game game = room.getGame();
@@ -161,7 +159,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			player.setBombed(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap("YOU BOMBED", HttpStatus.OK));
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap(new ResponseMessage("YOU BOMBED"), HttpStatus.OK));
 			
 		}
 	}
@@ -176,15 +174,15 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 		if(isFinished){
 			room.setFinished(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap("game finished with lose", HttpStatus.OK));
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap(new ResponseMessage("game finished with lose"), HttpStatus.OK));
 			return;
 		}
-		//TODO перепилить норм, считать флаги это дно
+		
 		int fieldSize = game.getMineField().getHeight()*game.getMineField().getWidth();
-		if(fieldSize - game.getOpenedField().size() - (game.getMineField().getMinesCount()-game.getExplodedBombsCount())==0){
+		if(fieldSize - game.getOpenedField().size() - (game.getMineField().getMinesCount()-game.getExplodedBombs().size())==0){
 			room.setFinished(true);
 			room.setWin(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap("game finished with win", HttpStatus.OK));
+			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap(new ResponseMessage("game finished with win"), HttpStatus.OK));
 		}
 		
 	}

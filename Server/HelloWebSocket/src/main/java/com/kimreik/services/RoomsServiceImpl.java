@@ -16,7 +16,7 @@ import com.kimreik.model.MineField;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
 import com.kimreik.repositories.UserRepository;
-import com.kimreik.validators.ErrorResponse;
+import com.kimreik.validators.ResponseMessage;
 
 @Service
 public class RoomsServiceImpl implements RoomsService {
@@ -37,7 +37,7 @@ public class RoomsServiceImpl implements RoomsService {
 		User user = userRepo.findOne(username);
 
 		if(user.getCurrentRoomid()!=0){
-			return ResponseWrapper.wrap(ErrorResponse.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
+			return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
 		GameRoom newRoom = new GameRoom();
@@ -75,7 +75,7 @@ public class RoomsServiceImpl implements RoomsService {
 		User user = userRepo.findOne(username);
 		
 		if(user.getCurrentRoomid()!=0 && user.getCurrentRoomid()!=id){
-			return ResponseWrapper.wrap(ErrorResponse.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
+			return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
 		GameRoom joinedRoom = roomRepo.findOne(id);

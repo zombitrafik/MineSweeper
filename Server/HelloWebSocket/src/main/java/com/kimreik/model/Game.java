@@ -9,6 +9,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.FetchType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Embeddable
 public class Game {
 
@@ -21,8 +23,10 @@ public class Game {
 	@ElementCollection(fetch=FetchType.LAZY)
 	private Set<Point> flags = new LinkedHashSet<Point>();
 	
-	@Column
-	private int explodedBombsCount;
+	
+	@ElementCollection(fetch=FetchType.LAZY)
+	@JsonIgnore
+	private Set<Point> explodedBombs = new LinkedHashSet<Point>();
 	
 	public Set<Point> getOpenedField(){
 		return openedField;
@@ -48,21 +52,15 @@ public class Game {
 		this.flags = flags;
 	}
 
-	public int getExplodedBombsCount() {
-		return explodedBombsCount;
+	public Set<Point> getExplodedBombs() {
+		return explodedBombs;
 	}
 
-	public void setExplodedBombsCount(int explodedBombsCount) {
-		this.explodedBombsCount = explodedBombsCount;
+	public void setExplodedBombsCount(Set<Point> explodedBombs) {
+		this.explodedBombs = explodedBombs;
 	}
 	
-	public void addExploidedBomb(){
-		explodedBombsCount++;
-	}
-	
-	public void addExploidedBombs(int count){
-		explodedBombsCount+=count;
-	}
-	
-	
+	public void addExploidedBomb(Point point){
+		explodedBombs.add(point);
+	}	
 }

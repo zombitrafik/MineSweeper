@@ -39,6 +39,7 @@ public class BasicGameEventsImpl {
 			if (realValue == 0) {
 				nearbyPoints.removeAll(game.getOpenedField());
 				nearbyPoints.removeAll(game.getFlags());
+				
 				for (Point nearbyPoint : nearbyPoints) {
 					result.add(nearbyPoint);
 					if (nearbyPoint.getValue() == 0) {

@@ -64,7 +64,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		
 		if(getPlayer(room, user.getUsername()).isBombed()){
-			return ResponseWrapper.wrap(ResponseMessage.PLAYER_BOMBED, HttpStatus.OK);
+			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
+			message.addMessage("username", user.getUsername());
+			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}
 		
 		logger.error(timer.tick("getRoom"));
@@ -98,7 +100,10 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		logger.error(timer.tick("Open"));
 		
-		return ResponseWrapper.wrap(result, HttpStatus.OK);
+		ResponseMessage message = new ResponseMessage();
+		message.addMessage("field", result);
+		message.addMessage("username", user.getUsername());
+		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
 	@Transactional
@@ -108,7 +113,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
 
 		if(getPlayer(room, user.getUsername()).isBombed()){
-			return ResponseWrapper.wrap(ResponseMessage.PLAYER_BOMBED, HttpStatus.OK);
+			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
+			message.addMessage("username", user.getUsername());
+			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}
 		
 		Game game = room.getGame();
@@ -143,8 +150,12 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 
 		roomRepo.save(room);
-
-		return ResponseWrapper.wrap(result, HttpStatus.OK);
+		
+		ResponseMessage message = new ResponseMessage();
+		message.addMessage("flag", result);
+		message.addMessage("username", user.getUsername());
+		
+		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 	
 	private void addPointsToPlayer(GameRoom room, String playerName, int scoreToAdd){

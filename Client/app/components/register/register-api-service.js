@@ -5,7 +5,7 @@
 
     registerApiService.$inject = ['Restangular'];
 
-    function registerApiService () {
+    function registerApiService (Restangular) {
         var service = {
             register: register
         };

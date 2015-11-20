@@ -5,9 +5,9 @@
         .module('app')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['LoginService', '$state', '$http'];
+    LoginController.$inject = ['LoginService', '$state'];
 
-    function LoginController (LoginService, $state, $http) {
+    function LoginController (LoginService, $state) {
 
         var vm = this;
 

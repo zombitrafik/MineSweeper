@@ -26,9 +26,21 @@
                         cols = data.game.mineField.height;
                     generateMap(rows, cols);
 
+                    cacheService.item(ROUTE_REQUIRES.AUTH).then(function (user) {
+                        var players = data.players;
+                        for(var i in players) {
+                            if(players[i].username.toUpperCase() === user.username.toUpperCase()) {
+                                console.log(players[i].bombed);
+                                if(players[i].bombed) {
+                                    canvasService.blockAllActions();
+                                }
+                                break;
+                            }
+                        }
+                    });
+
                     // connect to socket
                     socketService.connect('game').then(function () {
-
                         // subscribe
                         socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
 
@@ -36,7 +48,6 @@
                             canvasService.handleActions(data.game.flags);
                             canvasService.handleActions(data.game.openedField);
                         });
-
 
                     });
 
@@ -124,10 +135,8 @@
             if(_.isArray(data)) {
                 canvasService.handleActions(data);
             } else {
-                console.log(data);
                 canvasService.blockAllActions();
             }
-
         }
 
     }

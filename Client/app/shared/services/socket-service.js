@@ -31,7 +31,7 @@
 
         function subscribe (url, cb, sub_key) {
             var subscription = service.client.subscribe(url, function (data) {
-                console.log(JSON.parse(data.body).body);
+                console.log(data);
                 cb(JSON.parse(data.body).body);
             });
 

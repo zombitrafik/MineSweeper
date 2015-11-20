@@ -22,10 +22,9 @@
             var credentials = { authorization: 'Basic ' + $window.btoa(model.username + ':' + model.password)};
             var promise = loginApiService.login(credentials);
             promise.then(function (user) {
-                cacheService.item(ROUTE_REQUIRES.AUTH, true).then(function () {
-
+                console.log(user);
+                cacheService.item(ROUTE_REQUIRES.AUTH, user.plain()).then(function () {
                     defered.resolve();
-
                 }).catch(function () {
                     defered.reject();
                 });

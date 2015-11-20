@@ -26,13 +26,13 @@ public class BasicGameEventsImpl {
 		// нажатие на уже раскрытую клетку(быстрое раскрытие)
 
 		if (game.getOpenedField().contains(openedPoint)) {
-			if (openedPoint.getValue() == -2 || openedPoint.getValue() == 0) {
+			if (openedPoint.getValue() <=0) {
 				return result;
 			}
 			int realValue = openedPoint.getValue();
 			Set<Point> nearbyPoints = mineField.getNearbyPoints(openedPoint);
 			for (Point nearby : nearbyPoints) {
-				if (game.getFlags().contains(nearby)) {
+				if (game.getFlags().contains(nearby) || game.getExplodedBombs().contains(nearby)) {
 					realValue--;
 				}
 			}

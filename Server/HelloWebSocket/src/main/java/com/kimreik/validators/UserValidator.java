@@ -21,11 +21,11 @@ public class UserValidator  implements Validator{
 	public void validate(Object target, Errors error) {
 		User user = (User) target;
 		if(repo.findOne(user.getUsername())!=null){
-			error.rejectValue("username", ErrorResponse.USERNAME_ALREADY_EXIST.getMessage());
+			error.rejectValue("username", ResponseMessage.USERNAME_ALREADY_EXIST.getMessage());
 			return;
 		}
 		if(!user.getPassword().equals(user.getMatchingPassword())){
-			error.rejectValue("password", ErrorResponse.PASSWORDS_DONT_MATCH.getMessage());
+			error.rejectValue("password", ResponseMessage.PASSWORDS_DONT_MATCH.getMessage());
 		}
 	}
 

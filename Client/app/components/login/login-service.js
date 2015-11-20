@@ -28,6 +28,8 @@
                 }).catch(function () {
                     defered.reject();
                 });
+            }).catch(function () {
+                defered.reject();
             });
             return defered.promise;
         }

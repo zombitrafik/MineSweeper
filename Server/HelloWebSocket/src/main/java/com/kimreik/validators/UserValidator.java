@@ -5,13 +5,13 @@ import org.springframework.validation.Validator;
 
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.model.User;
-import com.kimreik.repositories.UserRepository;
+import com.kimreik.repositories.UsersRepository;
 
 public class UserValidator  implements Validator{
 	
-	private UserRepository repo;
+	private UsersRepository repo;
 	
-	public UserValidator(UserRepository repo){
+	public UserValidator(UsersRepository repo){
 		this.repo = repo;
 	}
 	

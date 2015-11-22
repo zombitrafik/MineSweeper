@@ -22,6 +22,18 @@ public class ResponseMessage {
 	public static final ResponseMessage GAME_LOSE = new ResponseMessage("GAME_LOSE");
 	public static final ResponseMessage GAME_WIN = new ResponseMessage("GAME_WIN");
 	
+	public static final ResponseMessage FIND_USER_RESULT = new ResponseMessage("FIND_USER_RESULT");
+	
+	public static final ResponseMessage FRIEND_ADDED_SUCCESFULLY = new ResponseMessage("FRIEND_ADDED_SUCCESFULLY");
+	public static final ResponseMessage FRIEND_ADDING_ERROR = new ResponseMessage("FRIEND_ADDING_ERROR");
+	
+	public static final ResponseMessage FRIEND_REMOVED_SUCCESFULLY = new ResponseMessage("FRIEND_REMOVED_SUCCESFULLY");
+	public static final ResponseMessage FRIEND_REMOVNG_ERROR = new ResponseMessage("FRIEND_REMOVNG_ERROR");
+	
+	public static final ResponseMessage FRIENDS = new ResponseMessage("FRIENDS");
+	
+	
+	public static final ResponseMessage PRIVATE_MESSAGE = new ResponseMessage("PRIVATE_MESSAGE");
 	
 	private String type;
 	private HashMap<String, Object> data = new HashMap<String, Object>();

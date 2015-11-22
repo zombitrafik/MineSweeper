@@ -16,7 +16,7 @@ import com.kimreik.model.GameRoom;
 import com.kimreik.model.MineField;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
-import com.kimreik.repositories.UserRepository;
+import com.kimreik.repositories.UsersRepository;
 
 @Service
 public class RoomsServiceImpl implements RoomsService {
@@ -28,7 +28,7 @@ public class RoomsServiceImpl implements RoomsService {
 	GameRoomRepository roomRepo;
 
 	@Autowired
-	UserRepository userRepo;
+	UsersRepository userRepo;
 
 	
 	public ResponseEntity<?> createRoom(String username, MineField mineField) {

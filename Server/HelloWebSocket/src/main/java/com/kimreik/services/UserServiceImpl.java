@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.model.User;
 import com.kimreik.repositories.UserRepository;
-import com.kimreik.validators.ResponseMessage;
 import com.kimreik.validators.UserValidator;
 
 @Service
@@ -37,7 +37,9 @@ public class UserServiceImpl implements UserService {
 			for (ObjectError err : result.getAllErrors()) {
 				errStr += err.getCode();
 			}
-			return new ResponseEntity<ResponseMessage>(new ResponseMessage(errStr), HttpStatus.BAD_REQUEST);
+			ResponseMessage message = ResponseMessage.ERROR;
+			message.add("ERROR", errStr);
+			return new ResponseEntity<ResponseMessage>(message, HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole("ROLE_USER");

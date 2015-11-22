@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kimreik.helpers.DebugTimer;
 import com.kimreik.helpers.FieldGenerator;
+import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
 import com.kimreik.model.GameRoom;
@@ -23,7 +24,6 @@ import com.kimreik.model.Point;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
 import com.kimreik.repositories.UserRepository;
-import com.kimreik.validators.ResponseMessage;
 
 @Service
 public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
@@ -46,6 +46,8 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	Logger logger = Logger.getLogger(GameService.class);
 
 	@Transactional
+	
+	//ретурны только для http тестов
 	public ResponseEntity<?> handleGameClick(String username, Point point) {
 
 		DebugTimer timer = new DebugTimer();
@@ -53,6 +55,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		User user = userRepo.findOne(username);
 
 		if (user.getCurrentRoomid() == 0) {
+			sendToUser(username, ResponseMessage.NOT_JOINED_TO_ROOM);
 			return ResponseWrapper.wrap(ResponseMessage.NOT_JOINED_TO_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
@@ -65,7 +68,8 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		if(getPlayer(room, user.getUsername()).isBombed()){
 			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
-			message.addMessage("username", user.getUsername());
+			message.add("username", user.getUsername());
+			sendToUser(username, message);
 			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}
 		
@@ -100,9 +104,12 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 		logger.error(timer.tick("Open"));
 		
-		ResponseMessage message = new ResponseMessage();
-		message.addMessage("field", result);
-		message.addMessage("username", user.getUsername());
+		ResponseMessage message = ResponseMessage.FIELD_UPDATE;
+		message.add("field", result);
+		message.add("username", user.getUsername());
+		
+		sendToRoom(room.getId(), message);
+		
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
@@ -114,7 +121,10 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 		if(getPlayer(room, user.getUsername()).isBombed()){
 			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
-			message.addMessage("username", user.getUsername());
+			message.add("username", user.getUsername());
+			
+			sendToUser(username, message);
+			
 			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}
 		
@@ -127,6 +137,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		point = mineField.getPoint(point);
 
 		if (game.getOpenedField().contains(point)) {
+			//в сокете это передаваться не будет
 			return ResponseWrapper.wrap(null, HttpStatus.OK);
 		}
 
@@ -151,9 +162,11 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 		roomRepo.save(room);
 		
-		ResponseMessage message = new ResponseMessage();
-		message.addMessage("flag", result);
-		message.addMessage("username", user.getUsername());
+		ResponseMessage message = ResponseMessage.FIELD_UPDATE;
+		message.add("field", result);
+		message.add("username", user.getUsername());
+		
+		sendToRoom(room.getId(), message);
 		
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
@@ -170,8 +183,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			player.setBombed(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap(new ResponseMessage("YOU BOMBED"), HttpStatus.OK));
-			
+			sendToUser(playerName, ResponseMessage.YOU_BOMBED);
 		}
 	}
 	
@@ -185,7 +197,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 		if(isFinished){
 			room.setFinished(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap(new ResponseMessage("game finished with lose"), HttpStatus.OK));
+			sendToRoom(room.getId(), ResponseMessage.GAME_LOSE);
 			return;
 		}
 		
@@ -193,7 +205,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		if(fieldSize - game.getOpenedField().size() - (game.getMineField().getMinesCount()-game.getExplodedBombs().size())==0){
 			room.setFinished(true);
 			room.setWin(true);
-			simpMessagingTemplate.convertAndSend("/broker/rooms/"+room.getId(), ResponseWrapper.wrap(new ResponseMessage("game finished with win"), HttpStatus.OK));
+			sendToRoom(room.getId(), ResponseMessage.GAME_WIN);
 		}
 		
 	}
@@ -207,5 +219,12 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		return null;
 	}
 	
+	private void sendToUser(String username, ResponseMessage message){
+		simpMessagingTemplate.convertAndSendToUser(username, "/game-events", message);
+	}
+	
+	private void sendToRoom(int roomId, ResponseMessage message){
+		simpMessagingTemplate.convertAndSend("/broker/rooms/"+roomId, message);
+	}
 	
 }

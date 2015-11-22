@@ -35,11 +35,11 @@ public class ResponseMessage {
 		return this;
 	}
 
-	public void setMessages(HashMap<String, Object> messages) {
-		this.data = messages;
+	public void setData(HashMap<String, Object> data) {
+		this.data = data;
 	}
 
-	public HashMap<String, Object> getMessages() {
+	public HashMap<String, Object> getData() {
 		return data;
 	}
 	

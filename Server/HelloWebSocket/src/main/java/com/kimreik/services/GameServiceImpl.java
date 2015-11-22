@@ -23,13 +23,13 @@ import com.kimreik.model.Player;
 import com.kimreik.model.Point;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
-import com.kimreik.repositories.UserRepository;
+import com.kimreik.repositories.UsersRepository;
 
 @Service
 public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
 
 	@Autowired
-	UserRepository userRepo;
+	UsersRepository userRepo;
 
 	@Autowired
 	GameRoomRepository roomRepo;
@@ -107,7 +107,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		ResponseMessage message = ResponseMessage.FIELD_UPDATE;
 		message.add("field", result);
 		message.add("username", user.getUsername());
-		
+		message.add("points", result.size());
 		sendToRoom(room.getId(), message);
 		
 		return ResponseWrapper.wrap(message, HttpStatus.OK);

@@ -12,23 +12,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kimreik.model.User;
-import com.kimreik.services.UserService;
+import com.kimreik.services.UsersService;
 import com.kimreik.validators.UserValidator;
 
 @RestController
 public class AuthController {
 	
 	@Autowired
-	private UserService userService;
+	private UsersService userService;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public User loginUser(Principal user) {
+		Logger.getLogger(AuthController.class).error("login");
+		
 		return userService.login(user);
 	}
 
 	@RequestMapping(value = "/newUser", method = RequestMethod.POST)
 	public ResponseEntity<?> registerUser(@RequestBody User user, BindingResult result) {
-		Logger.getLogger(AuthController.class).error(user.getUsername()+" "+user.getMatchingPassword());
 		
 		return userService.addUser(user, result);
 	}

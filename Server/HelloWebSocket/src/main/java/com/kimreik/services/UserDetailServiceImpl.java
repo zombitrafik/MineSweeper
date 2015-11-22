@@ -12,13 +12,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kimreik.repositories.UserRepository;
+import com.kimreik.repositories.UsersRepository;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService{
 
 	@Autowired
-	UserRepository userRepo;
+	UsersRepository userRepo;
 	
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

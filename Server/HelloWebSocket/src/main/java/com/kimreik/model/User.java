@@ -1,6 +1,9 @@
 package com.kimreik.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -27,6 +30,10 @@ public class User {
 	
 	@Column
 	private int currentRoomid;
+
+	@JsonIgnore
+	@ElementCollection
+	private List<String> friends;
 	
 	public String getUsername(){
 		return username;
@@ -82,6 +89,22 @@ public class User {
 
 	public void setCurrentRoomid(int currentRoomid) {
 		this.currentRoomid = currentRoomid;
+	}
+
+	public List<String> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(List<String> friends) {
+		this.friends = friends;
+	}
+	
+	public void addFriend(String username){
+		friends.add(username);
+	}
+	
+	public void removeFriend(String username){
+		friends.remove(username);
 	}
 	
 }

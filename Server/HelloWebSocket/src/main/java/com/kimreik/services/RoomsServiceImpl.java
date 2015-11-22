@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
 import com.kimreik.model.GameRoom;
@@ -16,7 +17,6 @@ import com.kimreik.model.MineField;
 import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
 import com.kimreik.repositories.UserRepository;
-import com.kimreik.validators.ResponseMessage;
 
 @Service
 public class RoomsServiceImpl implements RoomsService {

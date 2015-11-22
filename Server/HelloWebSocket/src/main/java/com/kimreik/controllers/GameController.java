@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.kimreik.model.Point;
@@ -17,9 +16,6 @@ import com.kimreik.services.RoomsService;
 @Controller("/test")
 public class GameController {
 
-	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
-	
 	Logger logger = Logger.getLogger(GameController.class);
 	
 	@Autowired
@@ -36,14 +32,12 @@ public class GameController {
 	
 	@MessageMapping("/right")
 	public void handleRightClick(Point point, Principal principal){
-		int id = roomsService.getCurrentRoom(principal.getName()).getId();
-		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameRightClick(principal.getName(), point));
+		gameService.handleGameRightClick(principal.getName(), point);
 	}
 	
 	@MessageMapping("/left")
 	public void handleClick(Point point, Principal principal){
-		int id = roomsService.getCurrentRoom(principal.getName()).getId();
-		simpMessagingTemplate.convertAndSend("/broker/rooms/"+id, gameService.handleGameClick(principal.getName(), point));
+		gameService.handleGameClick(principal.getName(), point);
 	}	
 	
 	//эта функция будет нужна не для отправки присоединившемуся, а для остальных в комнате.

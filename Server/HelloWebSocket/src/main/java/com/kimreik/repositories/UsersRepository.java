@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kimreik.model.User;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UsersRepository extends JpaRepository<User, String>, UsersRepositoryCustom{
 
 }

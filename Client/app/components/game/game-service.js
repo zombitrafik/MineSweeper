@@ -30,7 +30,6 @@
                         var players = data.players;
                         for(var i in players) {
                             if(players[i].username.toUpperCase() === user.username.toUpperCase()) {
-                                console.log(players[i].bombed);
                                 if(players[i].bombed) {
                                     canvasService.blockAllActions();
                                 }
@@ -43,6 +42,7 @@
                     socketService.connect('game').then(function () {
                         // subscribe
                         socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
+                        socketService.subscribe('/user/game-events', handleSocket, 'gameEvt_' + data.id);
 
                         canvasService.init('field').then(function () {
                             canvasService.handleActions(data.game.flags);
@@ -121,7 +121,8 @@
 
         function leaveRoom () {
             var deferred = $q.defer();
-            socketService.unsubscribe('room_' + ROUTE_REQUIRES.ROOM);
+            //console.log(ROUTE_REQUIRES.ROOM);
+            //socketService.unsubscribe('room_' + ROUTE_REQUIRES.ROOM);
             cacheService.remove(ROUTE_REQUIRES.ROOM).finally(function () {
                 gameApiService.leaveRoom().finally(function () {
                     deferred.resolve();
@@ -132,10 +133,19 @@
 
         function handleSocket (data) {
             //parseData
-            if(_.isArray(data)) {
-                canvasService.handleActions(data);
-            } else {
-                canvasService.blockAllActions();
+            switch (data.type) {
+                case 'FIELD_UPDATE': {
+                    canvasService.handleActions(data.data);
+                    break;
+                }
+                case 'GAME_LOSE': {
+                    canvasService.blockAllActions();
+                    break;
+                }
+                case 'GAME_WIN' : {
+                    console.log('win');
+                    break;
+                }
             }
         }
 

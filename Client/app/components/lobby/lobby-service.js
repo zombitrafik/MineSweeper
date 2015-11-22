@@ -11,10 +11,15 @@
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,
-            createRoom: createRoom
+            createRoom: createRoom,
+            init: init
         };
 
         return service;
+
+        function init () {
+
+        }
 
         function getRooms () {
             var promise = lobbyApiService.getRooms();

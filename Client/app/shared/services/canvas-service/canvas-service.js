@@ -169,12 +169,15 @@
             }
         }
 
-        function handleActions (data) {
+        function handleActions (info) {
+            var data, username = '';
+            if(_.isArray(info)) {
+                data = info;
+            } else {
+                data = info.field;
+                username = info.username;
+            }
 
-
-/*            setTimeout(function () {
-                popupService.createPopup('someName', 1 * gameConfigService.FIELD.CELL.SIZE, 1 * gameConfigService.FIELD.CELL.SIZE);
-            }, 3000);*/
 
             if(_.isEmpty(data)) {
                 return;
@@ -208,8 +211,9 @@
                     }
                 }
             });
-
-            popupService.createPopup('someName', data[0].x * gameConfigService.FIELD.CELL.SIZE, data[0].y * gameConfigService.FIELD.CELL.SIZE);
+            if(username !== '') {
+                popupService.createPopup(username, data[0].x * gameConfigService.FIELD.CELL.SIZE, data[0].y * gameConfigService.FIELD.CELL.SIZE);
+            }
 
             updateModel(data);
         }

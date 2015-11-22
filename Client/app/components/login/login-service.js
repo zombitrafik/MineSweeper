@@ -11,7 +11,8 @@
 
         var service = {
             login: login,
-            logout: logout
+            logout: logout,
+            isLoggined: false
         };
 
 
@@ -24,6 +25,7 @@
             promise.then(function (user) {
                 console.log(user);
                 cacheService.item(ROUTE_REQUIRES.AUTH, user.plain()).then(function () {
+                    service.isLoggined = true;
                     defered.resolve();
                 }).catch(function () {
                     defered.reject();
@@ -36,6 +38,7 @@
 
         function  logout () {
             cacheService.clear();
+            service.isLoggined = false;
             return loginApiService.logout();
         }
     }

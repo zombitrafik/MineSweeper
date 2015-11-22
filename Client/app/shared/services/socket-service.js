@@ -32,7 +32,7 @@
         function subscribe (url, cb, sub_key) {
             var subscription = service.client.subscribe(url, function (data) {
                 console.log(data);
-                cb(JSON.parse(data.body).body);
+                cb(JSON.parse(data.body));
             });
 
             service.subscriptions[sub_key] = subscription;

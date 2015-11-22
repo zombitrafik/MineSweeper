@@ -1,4 +1,6 @@
-<div class="header" ng-controller="LoginController as controller">
-    <div class="logo">Mine Sweeper</div>
-    <button class="logout-btn" ng-click="controller.logout()">-</button>
+<div class="header" ng-controller="HeaderController as controller">
+    <div class="menu" ng-click="controller.toggleMenu()">
+        <i ng-class="{'fa fa-bars': !pageController.isShowMenu(), 'fa fa-arrow-left': pageController.isShowMenu()}" > Mine Sweeper</i>
+    </div>
 </div>
+<div ng-class="{'hidden': !pageController.isShowMenu()}" ng-include="'components/menu/left-bar-menu-indext.html'"></div>

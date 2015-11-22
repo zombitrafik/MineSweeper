@@ -5,9 +5,9 @@
         .module('app')
         .controller('LobbyController', LobbyController);
 
-    LobbyController.$inject = ['lobbyService', '$state'];
+    LobbyController.$inject = ['lobbyService', '$state', 'createRoomService'];
 
-    function LobbyController (lobbyService, $state) {
+    function LobbyController (lobbyService, $state, createRoomService) {
         var vm = this;
 
         vm.newRoomModel = {
@@ -34,12 +34,17 @@
         };
 
         vm.createRoom = function () {
-            console.log(vm.newRoomModel);
+/*            console.log(vm.newRoomModel);
             var promise = lobbyService.createRoom(vm.newRoomModel);
 
             promise.then(function () {
                 $state.go('game');
-            });
+            });*/
+            createRoomService.showDialog();
+        };
+
+        vm.isShowCreateMenuDialog = function () {
+            return createRoomService.isShow;
         };
 
     }

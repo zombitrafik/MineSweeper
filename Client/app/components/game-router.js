@@ -12,6 +12,20 @@
         $urlRouterProvider.otherwise('/login');
 
         $stateProvider
+
+            .state({
+                name: 'home',
+                url: '/home',
+                views: {
+                    'mainView': {
+                        templateUrl: 'components/home/home-index.html',
+                        controller: 'HomeController',
+                        controllerAs: 'vm'
+                    }
+                },
+                requires: []
+            })
+
             .state({
                 name: 'game',
                 url: '/game',

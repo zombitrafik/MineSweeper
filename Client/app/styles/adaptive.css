@@ -21,7 +21,7 @@
     .header {
         height: 60px;
         width: 100%;
-        background: #212121;
+        background: #2A2A31;
         line-height: 60px;
         color: white;
     }
@@ -117,5 +117,130 @@
         border: 1px solid #5D5D5D;
         border-top: 0px solid black;
     }
+
+    .refresh-btn {
+        color: white;
+        position: absolute;
+        left: 21px;
+        top: -5px;
+    }
+
+    .refresh-btn i {
+        font-size: 13px;
+    }
+
+    .create-btn {
+        position: absolute;
+        right: 15px;
+        top: 45px;
+        color: white;
+        width: 30px;
+        height: 30px;
+        line-height: 32px;
+        text-align: center;
+        border-radius: 50%;
+        background: #2196F3;
+    }
+
+    .room-list-label {
+        display: block;
+        color: #B3A52F;
+        font-size: 11px;
+        padding-left: 20px;
+        border-bottom: 1px solid #B3A52F;
+    }
+
+    .room-list-block {
+        position: relative;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .room-list-block .room {
+        height: 45px;
+        line-height: 45px;
+        background: #424242;
+        color: white;
+        padding-left: 5px;
+        border-bottom: 1px solid #212121;
+    }
+
+    .room-list-block .room:last-child {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    .room-list-block .room * {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+    }
+
+    .room-list-block .room .room-name {
+        width: 40%;
+        display: inline-block;
+    }
+
+    .room-list-block .room .players-count {
+        width: 15%;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .room-list-block .room .room-started {
+        display: inline-block;
+        width: 20%;
+        float: right;
+        text-align: center;
+    }
+
+    .room-list-block .room .started {
+        color: #4CAF50;
+    }
+
+    .room-list-block .room .non-started {
+        color: #9E9E9E;
+    }
+
+    .room-list-block .room .game-type {
+        font-size: 10px;
+        width: 20%;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .room-list-block .room-header .room-name {
+        width: 40%;
+        display: inline-block;
+        font-size: 10px;
+    }
+    .room-list-block .room-header .players-count {
+        width: 15%;
+        display: inline-block;
+        text-align: center;
+        font-size: 10px;
+    }
+    .room-list-block .room-header .room-started {
+        display: inline-block;
+        width: 20%;
+        font-size: 10px;
+        text-align: center;
+    }
+    .room-list-block .room-header .game-type {
+        display: inline-block;
+        width: 20%;
+        font-size: 10px;
+        text-align: center;
+    }
+
+    .room-list-block .room-header {
+        line-height: 15px;
+        padding-left: 5px;
+        color: #928C59;
+    }
+
 
 }

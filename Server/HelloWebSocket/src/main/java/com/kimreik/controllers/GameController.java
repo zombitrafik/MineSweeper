@@ -23,13 +23,7 @@ public class GameController {
 	
 	@Autowired
 	RoomsService roomsService;
-	
-	@MessageMapping("/joinRoom/{id}")
-	public ResponseEntity<?> handleJoin(Principal principal, @DestinationVariable Integer id){
-		return roomsService.joinRoom(id, principal.getName());
-		//ретурн не работает, но этой функции тут вообще не будет
-	}
-	
+		
 	@MessageMapping("/right")
 	public void handleRightClick(Point point, Principal principal){
 		gameService.handleGameRightClick(principal.getName(), point);
@@ -40,12 +34,14 @@ public class GameController {
 		gameService.handleGameClick(principal.getName(), point);
 	}	
 	
+	
+	/*
 	//эта функция будет нужна не для отправки присоединившемуся, а для остальных в комнате.
 	@MessageMapping("/connect")
 	public void connectUser(Principal principal){
 		logger.error("connect");
 		String user = principal.getName();
 		//simpMessagingTemplate.convertAndSendToUser(user, "/broker/connect", service.getRooms());
-	}
+	}*/
 	
 }

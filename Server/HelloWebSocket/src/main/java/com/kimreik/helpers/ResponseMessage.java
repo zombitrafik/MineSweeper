@@ -5,16 +5,14 @@ import java.util.HashMap;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ResponseMessage {
-
-	public static final ResponseMessage ERROR = new ResponseMessage("ERROR");
 	
-	public static final ResponseMessage NOT_JOINED_TO_ROOM = ERROR.add("ERROR", "NOT_JOINED_TO_ROOM");
-	public static final ResponseMessage USER_ALREADY_IN_SOME_ROOM = ERROR.add("ERROR","USER_ALREADY_IN_SOME_ROOM");
-	public static final ResponseMessage PLAYER_BOMBED = ERROR.add("ERROR","PLAYER_BOMBED");
+	public static final ResponseMessage NOT_JOINED_TO_ROOM = error("NOT_JOINED_TO_ROOM");
+	public static final ResponseMessage USER_ALREADY_IN_SOME_ROOM = error("USER_ALREADY_IN_SOME_ROOM");
+	public static final ResponseMessage PLAYER_BOMBED = error("PLAYER_BOMBED");
 	
 	
-	public static final ResponseMessage USERNAME_ALREADY_EXIST = ERROR.add("ERROR","USERNAME_ALREADY_EXIST");
-	public static final ResponseMessage PASSWORDS_DONT_MATCH = ERROR.add("ERROR","PASSWORDS_DONT_MATCH");
+	public static final ResponseMessage USERNAME_ALREADY_EXIST = error("USERNAME_ALREADY_EXIST");
+	public static final ResponseMessage PASSWORDS_DONT_MATCH = error("PASSWORDS_DONT_MATCH");
 	
 	public static final ResponseMessage FIELD_UPDATE = new ResponseMessage("FIELD_UPDATE");
 	
@@ -38,6 +36,10 @@ public class ResponseMessage {
 	private String type;
 	private HashMap<String, Object> data = new HashMap<String, Object>();
 
+	public static ResponseMessage error(String error){
+		return new ResponseMessage("ERROR").add("ERROR", error); 
+	}
+	
 	public ResponseMessage(String type) {
 		this.setType(type);
 	}

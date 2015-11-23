@@ -2,9 +2,8 @@ package com.kimreik.services;
 
 import java.security.Principal;
 
-import org.apache.http.protocol.HTTP;
-import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -12,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
 
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
@@ -44,9 +44,7 @@ public class UsersServiceImpl implements UsersService {
 			for (ObjectError err : result.getAllErrors()) {
 				errStr += err.getCode();
 			}
-			ResponseMessage message = ResponseMessage.ERROR;
-			message.add("ERROR", errStr);
-			return new ResponseEntity<ResponseMessage>(message, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ResponseMessage>(ResponseMessage.error(errStr), HttpStatus.BAD_REQUEST);
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole("ROLE_USER");
@@ -90,14 +88,23 @@ public class UsersServiceImpl implements UsersService {
 		return ResponseWrapper.wrap(ResponseMessage.FRIEND_REMOVED_SUCCESFULLY, HttpStatus.OK);
 	}
 
-	public ResponseEntity<?> sendMessage(String username, String friendName, String messageText) {
-		ResponseMessage message = ResponseMessage.PRIVATE_MESSAGE
-				.add("sender", username)
-				.add("message", messageText);
+	public void sendMessage(String username, String friendName, String messageText) {
 		
-		simpMessagingTemplate.convertAndSendToUser(friendName, "/messages", message);
+
+		//TODO: егор если юзер офлайн или игнорит или типа того.
+		boolean recipientOnline = true; //TODO заглушка
 		
-		return null; //TODO: егор если юзер офлайн или игнорит или типа того.
+		if(recipientOnline){
+			ResponseMessage message = ResponseMessage.PRIVATE_MESSAGE
+					.add("sender", username)
+					.add("recipient", friendName)
+					.add("message", messageText);
+			simpMessagingTemplate.convertAndSendToUser(friendName, "/messages", message);
+			simpMessagingTemplate.convertAndSendToUser(friendName, "/messages", message);
+		}else{
+			//send error to sender
+		}
+		
 	}
 
 	public ResponseEntity<?> getFriends(String username) {
@@ -107,3 +114,4 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 }
+

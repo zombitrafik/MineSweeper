@@ -13,6 +13,6 @@ public interface UsersService {
 	public ResponseEntity<?> find(String username);
 	public ResponseEntity<?> addFriend(String username, String friendName);
 	public ResponseEntity<?> removeFriend(String username, String friendName);
-	public ResponseEntity<?> sendMessage(String username, String friendName, String message);
+	public void sendMessage(String username, String friendName, String message);
 	public ResponseEntity<?> getFriends(String username);
 }

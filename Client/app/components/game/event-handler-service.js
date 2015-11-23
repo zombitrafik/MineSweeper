@@ -16,8 +16,6 @@
             }
         };
 
-
-
         return service;
 
         function init (info, id) {
@@ -50,6 +48,7 @@
                 updateMap(response);
             });*/
             socketService.send('/test/left', data);
+            socketService.send('/users/sendMessage', {username: 'zombitrafik', message: 'hello world!'});
         }
 
 

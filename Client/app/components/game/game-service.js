@@ -39,6 +39,7 @@
                 // connect to socket
                 socketService.connect('game').then(function () {
                     // subscribe
+                    socketService.subscribe('/user/messages', handleSocket, 'messages_' + data.id);
                     socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
                     socketService.subscribe('/user/game-events', handleSocket, 'gameEvt_' + data.id);
 

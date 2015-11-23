@@ -3,9 +3,9 @@
         .module('app')
         .controller('LeftBarController', LeftBarController);
 
-    LeftBarController.$inject = ['pageService', 'LoginService', '$state', 'stateService', 'cacheService'];
+    LeftBarController.$inject = ['pageService', 'LoginService', '$state', 'stateService', 'cacheService', 'friendsDialogService'];
 
-    function LeftBarController (pageService, loginService, $state, stateService, cacheService) {
+    function LeftBarController (pageService, loginService, $state, stateService, cacheService, friendsDialogService) {
         var vm = this;
 
         vm.hideMenu = function () {
@@ -35,6 +35,10 @@
             } else {
                 return false;
             }
+        };
+
+        vm.openFriendsDialog = function () {
+            friendsDialogService.showDialog();
         };
 
         return vm;

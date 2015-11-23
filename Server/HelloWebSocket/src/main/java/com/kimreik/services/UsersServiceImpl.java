@@ -4,7 +4,6 @@ import java.security.Principal;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -12,10 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.socket.messaging.SessionConnectEvent;
 
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
+import com.kimreik.model.PrivateMessage;
 import com.kimreik.model.User;
 import com.kimreik.repositories.UsersRepository;
 import com.kimreik.validators.UserValidator;
@@ -89,20 +88,18 @@ public class UsersServiceImpl implements UsersService {
 		return ResponseWrapper.wrap(ResponseMessage.FRIEND_REMOVED_SUCCESFULLY, HttpStatus.OK);
 	}
 
-	public void sendMessage(String username, String friendName, String messageText) {
+	public void sendMessage(PrivateMessage message) {
 		
-		Logger.getLogger(UsersServiceImpl.class).error("sendMessage "+messageText+" from "+username);
+		Logger.getLogger(UsersServiceImpl.class).error("sendMessage "+message.getMessage()+" from "+message.getSender());
 
 		//TODO: егор если юзер офлайн или игнорит или типа того.
 		boolean recipientOnline = true; //TODO заглушка
 		
 		if(recipientOnline){
-			ResponseMessage message = ResponseMessage.PRIVATE_MESSAGE
-					.add("sender", username)
-					.add("recipient", friendName)
-					.add("message", messageText);
-			simpMessagingTemplate.convertAndSendToUser(friendName, "/messages", message);
-			simpMessagingTemplate.convertAndSendToUser(friendName, "/messages", message);
+			ResponseMessage respMessage = ResponseMessage.PRIVATE_MESSAGE
+					.add("message", message);
+			simpMessagingTemplate.convertAndSendToUser(message.getRecipient(), "/messages", respMessage);
+			simpMessagingTemplate.convertAndSendToUser(message.getSender(), "/messages", respMessage);
 		}else{
 			//send error to sender
 		}

@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+import com.kimreik.model.PrivateMessage;
 import com.kimreik.model.User;
 
 public interface UsersService {
@@ -13,6 +14,6 @@ public interface UsersService {
 	public ResponseEntity<?> find(String username);
 	public ResponseEntity<?> addFriend(String username, String friendName);
 	public ResponseEntity<?> removeFriend(String username, String friendName);
-	public void sendMessage(String username, String friendName, String message);
+	public void sendMessage(PrivateMessage message);
 	public ResponseEntity<?> getFriends(String username);
 }

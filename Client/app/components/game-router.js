@@ -39,7 +39,12 @@
                 requires: [
                     ROUTE_REQUIRES.AUTH,
                     ROUTE_REQUIRES.ROOM
-                ]
+                ],
+                resolve: {
+                    cacheLoad: function (cacheService) {
+                        return cacheService.init();
+                    }
+                }
             })
 
             .state({
@@ -79,6 +84,18 @@
                 requires: [
                     ROUTE_REQUIRES.AUTH
                 ]
+            })
+
+            .state({
+                name: 'messages',
+                url: '/messages',
+                views: {
+                    'mainView': {
+                        templateUrl: 'components/messages/messages-index.html',
+                        controller: 'MessagesController',
+                        controllerAs: 'vm'
+                    }
+                }
             });
 
     }

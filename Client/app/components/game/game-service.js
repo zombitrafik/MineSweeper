@@ -15,9 +15,8 @@
         return service;
 
         function init () {
-
             var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
-
+            console.log(roomId);
             //join to room by id
             gameApiService.joinRoom(roomId).then(function (data) {
 

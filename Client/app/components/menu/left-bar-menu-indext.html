@@ -11,6 +11,9 @@
             <li ng-class="{'active' : vm.isThisPage('lobby')}" ng-click="vm.chooseState('lobby')" ng-if="vm.isLoggined()">
                 <i class="fa fa-users"></i>&nbsp;Lobby
             </li>
+            <li ng-class="{'active' : vm.isThisPage('messages')}" ng-click="vm.chooseState('messages')" ng-if="vm.isLoggined()">
+                <i class="fa fa-envelope"></i>&nbsp;Messages
+            </li>
             <li ng-if="vm.isLoggined()" ng-click="vm.logout()">
                 <i class="fa fa-sign-out"></i>&nbsp;Logout
             </li>

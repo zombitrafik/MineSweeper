@@ -26,6 +26,7 @@
                     console.log('Iteration has completed');
                     deferred.resolve();
                 }).catch(function () {
+                    service.isInit = true;
                     console.log('CACHE SERVICE INIT ERROR');
                     deferred.reject();
                 });
@@ -47,6 +48,7 @@
             if (value) {
                 var object = angular.copy(value);
                 object = addExpire(object, expire);
+                addLocal(key, object);
                 return $localForage.setItem(key, object);
             } else {
                 var deferred = $q.defer();
@@ -56,7 +58,6 @@
                             deferred.reject();
                         });
                     } else {
-                        addLocal(key, response.data);
                         deferred.resolve(response.data);
                     }
                 }).catch(function () {

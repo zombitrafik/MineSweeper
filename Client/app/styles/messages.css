@@ -1,0 +1,15 @@
+.messages {
+    position: relative;
+}
+
+.messages .tab span {
+    width: 33%;
+    display: inline-block;
+    float: left;
+    text-align: center;
+}
+
+.messages .tab .body {
+    position: absolute;
+    top: 20px;
+}

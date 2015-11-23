@@ -2,5 +2,12 @@
     <div class="menu" ng-click="controller.toggleMenu()">
         <i ng-class="{'fa fa-bars': !pageController.isShowMenu(), 'fa fa-arrow-left': pageController.isShowMenu()}" > Mine Sweeper</i>
     </div>
+    <div class="notification" ng-class="{active: controller.notifications.length > 0}" ng-if="controller.isThisPage('game')">
+        <i class="fa fa-bell"></i>
+        <span class="notification-count" ng-if="controller.notifications.length > 0" ng-bind="controller.notifications.length"></span>
+    </div>
+    <div class="tool" ng-if="controller.isThisPage('game')">
+        <i class="fa fa-ellipsis-v"></i>
+    </div>
 </div>
 <div ng-class="{'hidden': !pageController.isShowMenu()}" ng-include="'components/menu/left-bar-menu-indext.html'"></div>

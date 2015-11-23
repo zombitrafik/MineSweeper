@@ -84,17 +84,24 @@
     }
 
 
-    running.$inject = ['$rootScope', 'routeService', '$q', '$state'];
+    running.$inject = ['$rootScope', 'routeService', '$q', '$state', 'cacheService'];
 
-    function running ($rootScope, routeService, $q, $state) {
+    function running ($rootScope, routeService, $q, $state, cacheService) {
         $rootScope.$on('$stateChangeStart', function(event, toState) {
+
             var deffered = $q.defer();
-            routeService.checkRoute(toState.requires).then(function () {
-                deffered.resolve();
+
+            cacheService.init().then(function () {
+                routeService.checkRoute(toState.requires).then(function () {
+                    deffered.resolve();
+                }).catch(function () {
+                    $state.go('login');
+                    deffered.reject();
+                });
             }).catch(function () {
-                $state.go('login');
                 deffered.reject();
             });
+
             return deffered.promise;
         });
     }

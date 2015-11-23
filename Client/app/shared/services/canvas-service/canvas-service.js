@@ -10,6 +10,7 @@
             init: init,
             handleActions: handleActions,
             blockAllActions: blockAllActions,
+            unlockAllActions: unlockAllActions,
             isBlockActions: false
         };
 
@@ -257,6 +258,10 @@
 
         function blockAllActions () {
             service.isBlockActions = true;
+        }
+
+        function unlockAllActions () {
+            service.isBlockActions = false;
         }
     }
 })();

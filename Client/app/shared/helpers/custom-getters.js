@@ -44,9 +44,12 @@
             var offsetTop = canvas[0].offsetParent.offsetParent.offsetTop,
                 offsetLeft = canvas[0].offsetParent.offsetParent.offsetLeft;
 
+            var scrollLeft = e.srcElement.offsetParent.parentNode.scrollLeft,
+                scrollTop = e.srcElement.offsetParent.parentNode.scrollTop;
+
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var x = e.pageX - offsetLeft,
-                y = e.pageY - offsetTop;
+            var x = (e.pageX + scrollLeft) - offsetLeft,
+                y = (e.pageY + scrollTop) - offsetTop;
             x = Math.floor(x / cellSize);
             y = Math.floor(y / cellSize);
             return {

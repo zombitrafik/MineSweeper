@@ -16,45 +16,41 @@
 
         function init () {
 
-            //load room id from cache
-            cacheService.item(ROUTE_REQUIRES.ROOM).then(function (roomId) {
+            var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
 
-                //join to room by id
-                gameApiService.joinRoom(roomId).then(function (data) {
+            //join to room by id
+            gameApiService.joinRoom(roomId).then(function (data) {
 
-                    var rows = data.game.mineField.width,
-                        cols = data.game.mineField.height;
-                    generateMap(rows, cols);
+                var rows = data.game.mineField.width,
+                    cols = data.game.mineField.height;
+                generateMap(rows, cols);
 
-                    cacheService.item(ROUTE_REQUIRES.AUTH).then(function (user) {
-                        var players = data.players;
-                        for(var i in players) {
-                            if(players[i].username.toUpperCase() === user.username.toUpperCase()) {
-                                if(players[i].bombed) {
-                                    canvasService.blockAllActions();
-                                }
-                                break;
-                            }
+                var user = cacheService.local[ROUTE_REQUIRES.AUTH].data;
+
+                var players = data.players;
+                for(var i in players) {
+                    if(players[i].username.toUpperCase() === user.username.toUpperCase()) {
+                        if(players[i].bombed) {
+                            canvasService.blockAllActions();
                         }
-                    });
+                        break;
+                    }
+                }
 
-                    // connect to socket
-                    socketService.connect('game').then(function () {
-                        // subscribe
-                        socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
-                        socketService.subscribe('/user/game-events', handleSocket, 'gameEvt_' + data.id);
+                // connect to socket
+                socketService.connect('game').then(function () {
+                    // subscribe
+                    socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
+                    socketService.subscribe('/user/game-events', handleSocket, 'gameEvt_' + data.id);
 
-                        canvasService.init('field').then(function () {
-                            canvasService.handleActions(data.game.flags);
-                            canvasService.handleActions(data.game.openedField);
-                        });
-
+                    canvasService.init('field').then(function () {
+                        canvasService.handleActions(data.game.flags);
+                        canvasService.handleActions(data.game.openedField);
                     });
 
                 });
 
             });
-
         }
 
         function generateMap (rows, cols) {
@@ -123,6 +119,7 @@
             var deferred = $q.defer();
             //console.log(ROUTE_REQUIRES.ROOM);
             //socketService.unsubscribe('room_' + ROUTE_REQUIRES.ROOM);
+            canvasService.unlockAllActions();
             cacheService.remove(ROUTE_REQUIRES.ROOM).finally(function () {
                 gameApiService.leaveRoom().finally(function () {
                     deferred.resolve();

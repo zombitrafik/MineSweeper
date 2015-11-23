@@ -17,6 +17,7 @@
 
         function checkRoute (requires) {
             var deferred = $q.defer();
+            console.log(cacheService.local);
             if(_.isEmpty(requires)) {
                 deferred.resolve();
             } else {

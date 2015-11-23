@@ -1,6 +1,6 @@
 <div ng-init="vm.refreshRooms()">
 
-    <div class="create-btn" ng-click="vm.createRoom()" >
+    <div class="create-btn" ng-click="vm.createRoom()" ng-if="!pageController.isShowMenu()" >
         <i class="fa fa-plus"></i>
     </div>
     <div class="room-list-block">

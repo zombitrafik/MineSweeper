@@ -3,9 +3,9 @@
         .module('app')
         .controller('LeftBarController', LeftBarController);
 
-    LeftBarController.$inject = ['pageService', 'LoginService', '$state'];
+    LeftBarController.$inject = ['pageService', 'LoginService', '$state', 'stateService', 'cacheService'];
 
-    function LeftBarController (pageService, loginService, $state) {
+    function LeftBarController (pageService, loginService, $state, stateService, cacheService) {
         var vm = this;
 
         vm.hideMenu = function () {
@@ -13,11 +13,7 @@
         };
 
         vm.isThisPage = function (page) {
-            if(_.isArray(page)) {
-                return _.includes(page, $state.current.name)
-            }   else {
-                return $state.current.name === page;
-            }
+            return stateService.isThisPage(page);
         };
 
         vm.chooseState = function (state) {
@@ -34,7 +30,11 @@
         };
 
         vm.isLoggined = function () {
-            return loginService.isLoggined;
+            if(cacheService.isInit) {
+                return cacheService.local[ROUTE_REQUIRES.AUTH];
+            } else {
+                return false;
+            }
         };
 
         return vm;

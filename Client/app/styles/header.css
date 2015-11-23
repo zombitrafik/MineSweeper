@@ -6,6 +6,8 @@
 }
 .header .menu {
     margin-left: 15px;
+    width: 120px;
+    display: inline-block;
 }
 
 .dark-layer {
@@ -46,4 +48,33 @@
 
 .left-bar ul li:first-child {
     border-top: 1px solid #151519;
+}
+
+.notification {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    position: absolute;
+    right: 50px;
+}
+
+.notification.active {
+    color: #03A9F4;
+}
+
+.notification-count {
+    position: absolute;
+    bottom: -15px;
+    text-align: center;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+}
+
+.tool {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    position: absolute;
+    right: 10px;
 }

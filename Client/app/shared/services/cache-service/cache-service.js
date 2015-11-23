@@ -9,9 +9,39 @@
         var service = {
             item: item,
             clear: clear,
-            remove: remove
+            remove: remove,
+            local: [],
+            init: init,
+            isInit: false
         };
         return service;
+
+        function init () {
+            var deferred = $q.defer();
+            if(!service.isInit) {
+                $localForage.iterate(function(value, key) {
+                    service.local[key] = value;
+                }).then(function () {
+                    service.isInit = true;
+                    console.log('Iteration has completed');
+                    deferred.resolve();
+                }).catch(function () {
+                    console.log('CACHE SERVICE INIT ERROR');
+                    deferred.reject();
+                });
+            } else {
+                deferred.resolve();
+            }
+            return deferred.promise;
+        }
+
+        function addLocal (key, value) {
+            service.local[key] = value;
+        }
+
+        function removeLocal (key) {
+            service.local[key] = undefined;
+        }
 
         function item(key, value, expire) {
             if (value) {
@@ -26,6 +56,7 @@
                             deferred.reject();
                         });
                     } else {
+                        addLocal(key, response.data);
                         deferred.resolve(response.data);
                     }
                 }).catch(function () {
@@ -52,10 +83,12 @@
         }
 
         function clear() {
+            service.local = [];
             return $localForage.clear();
         }
 
         function remove (key) {
+            removeLocal(key);
             return $localForage.removeItem(key);
         }
     }

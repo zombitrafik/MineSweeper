@@ -22,16 +22,29 @@
         return directive;
 
         function link (scope, element, attrs) {
-            console.log(scope);
+
         }
     }
 
-    TabController.$inject = ['$scope'];
+    TabController.$inject = ['$scope', 'messagesService'];
 
-    function TabController ($scope) {
+    function TabController ($scope, messagesService) {
         var vm = this;
         vm.header = $scope.header;
         vm.messages = $scope.messages;
+
+        vm.selectTab = function () {
+            messagesService.selectTab(vm.header);
+        };
+
+        vm.isSelected = function () {
+            return messagesService.isSelectedTab(vm.header);
+        };
+
+        vm.getMessages = function () {
+            return vm.messages;
+        };
+
         return vm;
     }
 })();

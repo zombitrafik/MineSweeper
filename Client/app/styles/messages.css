@@ -2,14 +2,25 @@
     position: relative;
 }
 
-.messages .tab span {
+.messages .tab>span {
     width: 33%;
     display: inline-block;
     float: left;
     text-align: center;
+    border-bottom: 4px solid white;
+    height: 30px;
+    line-height: 30px;
+    background: #2A2A31;
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.messages .tab>span.active {
+    border-bottom: 4px solid #03A9F4;
 }
 
 .messages .tab .body {
     position: absolute;
-    top: 20px;
+    top: 40px;
 }

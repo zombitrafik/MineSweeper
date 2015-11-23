@@ -1,6 +1,8 @@
 <div class="tab">
-    <span ng-bind="vm.header"></span>
-    <div class="body">
-        <div ng-bind="vm.messages"></div>
+    <span ng-bind="vm.header" ng-click="vm.selectTab()" ng-class="{'active': vm.isSelected()}"></span>
+    <div class="body" ng-if="vm.isSelected()">
+        <div ng-repeat="message in vm.getMessages()">
+            <span ng-bind="message.test"></span>
+        </div>
     </div>
 </div>

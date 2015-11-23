@@ -2,6 +2,7 @@ package com.kimreik.services;
 
 import java.security.Principal;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpStatus;
@@ -90,6 +91,7 @@ public class UsersServiceImpl implements UsersService {
 
 	public void sendMessage(String username, String friendName, String messageText) {
 		
+		Logger.getLogger(UsersServiceImpl.class).error("sendMessage "+messageText+" from "+username);
 
 		//TODO: егор если юзер офлайн или игнорит или типа того.
 		boolean recipientOnline = true; //TODO заглушка

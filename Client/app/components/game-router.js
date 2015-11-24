@@ -95,7 +95,25 @@
                         controller: 'MessagesController',
                         controllerAs: 'vm'
                     }
-                }
+                },
+                requires: [
+                    ROUTE_REQUIRES.AUTH
+                ]
+            })
+
+            .state({
+                name: 'friends',
+                url: '/friends?action',
+                views: {
+                    'mainView': {
+                        templateUrl: 'components/friends/friends-index.html',
+                        controller: 'FriendsController',
+                        controllerAs: 'vm'
+                    }
+                },
+                requires: [
+                    ROUTE_REQUIRES.AUTH
+                ]
             });
 
     }

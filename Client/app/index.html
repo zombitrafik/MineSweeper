@@ -18,7 +18,6 @@
         <div ng-include="'components/header/header-index.html'"></div>
         <div ui-view="mainView"></div>
 
-        <div class="dialog-layer" ng-class="{'hidden': !pageController.isShowFriendMenuDialog()}" ng-include="'components/dialogs/friends/friends-dialog-index.html'"></div>
     </div>
 </body>
 
@@ -47,8 +46,6 @@
     <!-- Dialogs -->
     <script type="text/javascript" src="components/dialogs/create-room/create-room-controller.js"></script>
     <script type="text/javascript" src="components/dialogs/create-room/create-room-service.js"></script>
-    <script type="text/javascript" src="components/dialogs/friends/friends-dialog-controller.js"></script>
-    <script type="text/javascript" src="components/dialogs/friends/friends-dialog-service.js"></script>
 
     <!-- Controllers -->
 
@@ -69,6 +66,8 @@
     <script type="text/javascript" src="components/home/home-controller.js"></script>
     <!-- Messages -->
     <script type="text/javascript" src="components/messages/messages-controller.js"></script>
+    <!-- Friends -->
+    <script type="text/javascript" src="components/friends/friends-controller.js"></script>
 
     <!-- Services -->
     <script type="text/javascript" src="components/page-service.js"></script>

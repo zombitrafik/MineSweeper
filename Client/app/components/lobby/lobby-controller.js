@@ -5,9 +5,9 @@
         .module('app')
         .controller('LobbyController', LobbyController);
 
-    LobbyController.$inject = ['lobbyService', '$state', 'createRoomService', 'friendsDialogService'];
+    LobbyController.$inject = ['lobbyService', '$state', 'createRoomService'];
 
-    function LobbyController (lobbyService, $state, createRoomService, friendsDialogService) {
+    function LobbyController (lobbyService, $state, createRoomService) {
         var vm = this;
 
         vm.newRoomModel = {

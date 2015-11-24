@@ -14,7 +14,7 @@
             <li ng-class="{'active' : vm.isThisPage('messages')}" ng-click="vm.chooseState('messages')" ng-if="vm.isLoggined()">
                 <i class="fa fa-envelope"></i>&nbsp;Messages
             </li>
-            <li ng-if="vm.isLoggined()" ng-click="vm.openFriendsDialog()">
+            <li ng-class="{'active' : vm.isThisPage('friends')}" ng-click="vm.chooseState('friends')" ng-if="vm.isLoggined()">
                 <i class="fa fa-user"></i>&nbsp;Friends
             </li>
             <li ng-if="vm.isLoggined()" ng-click="vm.logout()">

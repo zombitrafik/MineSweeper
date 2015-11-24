@@ -9,5 +9,8 @@
     <div class="tool" ng-if="controller.isThisPage('game')">
         <i class="fa fa-ellipsis-v"></i>
     </div>
+    <div class="tool" ng-if="controller.isThisPage('friends')">
+        <i class="fa fa-search" ng-click=""></i>
+    </div>
 </div>
 <div ng-class="{'hidden': !pageController.isShowMenu()}" ng-include="'components/menu/left-bar-menu-indext.html'"></div>

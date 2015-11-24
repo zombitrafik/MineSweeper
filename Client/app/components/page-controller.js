@@ -3,17 +3,13 @@
         .module('app')
         .controller('PageController', PageController);
 
-    PageController.$inject = ['pageService', 'friendsDialogService'];
+    PageController.$inject = ['pageService'];
 
-    function PageController(pageService, friendsDialogService) {
+    function PageController(pageService) {
         var pageController = this;
 
         pageController.isShowMenu = function () {
             return pageService.isShowMenu;
-        };
-
-        pageController.isShowFriendMenuDialog = function () {
-            return friendsDialogService.isShow;
         };
 
         return pageController;

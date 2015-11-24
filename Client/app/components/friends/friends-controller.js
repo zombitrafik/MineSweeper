@@ -3,10 +3,12 @@
         .module('app')
         .controller('FriendsController', FriendsController);
 
-    FriendsController.$inject = [];
+    FriendsController.$inject = ['friendsService'];
 
-    function FriendsController () {
+    function FriendsController (friendsService) {
         var vm = this;
+
+        vm.isShow
 
         vm.isShowSearch = true;
 

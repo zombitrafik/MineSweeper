@@ -9,7 +9,7 @@
     <div class="tool" ng-if="controller.isThisPage('game')">
         <i class="fa fa-ellipsis-v"></i>
     </div>
-    <div class="tool" ng-if="controller.isThisPage('friends')">
+    <div class="tool" ng-if="controller.isThisPage('friends')" ng-class="{'active': controller.isShowFriendsSearch()}" ng-click="controller.toggleFriendSearch()">
         <i class="fa fa-search" ng-click=""></i>
     </div>
 </div>

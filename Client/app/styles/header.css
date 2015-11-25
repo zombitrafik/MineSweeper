@@ -61,6 +61,9 @@
 .notification.active {
     color: #03A9F4;
 }
+.tool.active {
+    color: #03A9F4;
+}
 
 .notification-count {
     position: absolute;

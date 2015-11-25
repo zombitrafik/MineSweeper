@@ -8,9 +8,22 @@
     function FriendsController (friendsService) {
         var vm = this;
 
-        vm.isShow
+        vm.data = [];
+        vm.searchModel = {
+            username: ''
+        };
 
-        vm.isShowSearch = true;
+        vm.isShowSearch = function () {
+            return friendsService.isShowFriendsSearch;
+        };
+
+        vm.search = function () {
+            var promise = friendsService.search(vm.searchModel);
+
+            promise.then(function (response) {
+                vm.data = response;
+            });
+        };
 
         return vm;
     }

@@ -8,12 +8,17 @@
     function friendsService () {
         var service = {
             toggleSearch: toggleSearch,
-            isShowFriendsSearch: false
+            isShowFriendsSearch: false,
+            search: search
         };
         return service;
 
         function toggleSearch () {
             service.isShowFriendsSearch = !service.isShowFriendsSearch;
+        }
+
+        function search () {
+
         }
     }
 })();

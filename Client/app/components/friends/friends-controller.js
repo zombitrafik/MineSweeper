@@ -3,12 +3,12 @@
         .module('app')
         .controller('FriendsController', FriendsController);
 
-    FriendsController.$inject = ['friendsService'];
+    FriendsController.$inject = ['friendsService', '$stateParams'];
 
-    function FriendsController (friendsService) {
+    function FriendsController (friendsService, $stateParams) {
         var vm = this;
 
-        vm.data = [];
+        vm.users = [];
         vm.searchModel = {
             username: ''
         };
@@ -21,8 +21,13 @@
             var promise = friendsService.search(vm.searchModel);
 
             promise.then(function (response) {
-                vm.data = response;
+                console.log(response);
+                vm.users = response.data.userList;
             });
+        };
+
+        vm.getAction = function () {
+            return $stateParams.action;
         };
 
         return vm;

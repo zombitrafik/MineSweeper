@@ -1,12 +1,17 @@
 <div>
     <div class="search-block" ng-if="vm.isShowSearch()">
-        <input type="text" class="search-field" />
-        <button class="search-btn">FIND</button>
+        <input type="text" class="search-field" ng-model="vm.searchModel.username"/>
+        <button class="search-btn" ng-click="vm.search()">FIND</button>
         <div class="search-result-label">SEARCH RESULTS</div>
     </div>
 
     <div class="friends-list">
-
+        <div class="user" ng-repeat="user in vm.users">
+            <span ng-bind="user.username"></span>
+            <span class="add-to-friend" ng-if="vm.getAction() === 'ADD_FRIEND'">
+                <i class="fa fa-plus"></i>
+            </span>
+        </div>
     </div>
     <div class="spinner"></div>
 </div>

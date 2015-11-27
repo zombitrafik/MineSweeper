@@ -3,9 +3,9 @@
         .module('app')
         .service('friendsService', friendsService);
 
-    friendsService.$inject = [];
+    friendsService.$inject = ['friendsApiService'];
 
-    function friendsService () {
+    function friendsService (friendsApiService) {
         var service = {
             toggleSearch: toggleSearch,
             isShowFriendsSearch: false,
@@ -17,8 +17,8 @@
             service.isShowFriendsSearch = !service.isShowFriendsSearch;
         }
 
-        function search () {
-
+        function search (searchModel) {
+            return friendsApiService.search(searchModel);
         }
     }
 })();

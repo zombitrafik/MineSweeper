@@ -12,7 +12,7 @@
         return service;
         
         function search (model) {
-            return Restangular.one('users/find', model).customGET();
+            return Restangular.one('users').customGET('find', model);
         }
     }
 })();

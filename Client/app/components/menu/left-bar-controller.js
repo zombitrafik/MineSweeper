@@ -3,7 +3,7 @@
         .module('app')
         .controller('LeftBarController', LeftBarController);
 
-    LeftBarController.$inject = ['pageService', 'LoginService', '$state', 'stateService', 'cacheService'];
+    LeftBarController.$inject = ['pageService', 'loginService', '$state', 'stateService', 'cacheService'];
 
     function LeftBarController (pageService, loginService, $state, stateService, cacheService) {
         var vm = this;

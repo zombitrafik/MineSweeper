@@ -9,6 +9,9 @@
     <div class="tool" ng-if="controller.isThisPage('game')">
         <i class="fa fa-ellipsis-v"></i>
     </div>
+    <div class="tool-search-field" ng-if="controller.isThisPage('friends') && controller.isShowFriendsSearch()">
+        <input type="text" ng-model="controller.getSearchFieldModel().username"/>
+    </div>
     <div class="tool" ng-if="controller.isThisPage('friends')" ng-class="{'active': controller.isShowFriendsSearch()}" ng-click="controller.toggleFriendSearch()">
         <i class="fa fa-search" ng-click=""></i>
     </div>

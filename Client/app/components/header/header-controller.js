@@ -31,6 +31,10 @@
             return friendsService.isShowFriendsSearch;
         };
 
+        vm.getSearchFieldModel = function () {
+            return friendsService.searchModel;
+        };
+
 
         return vm;
     }

@@ -10,7 +10,8 @@
     function loginApiService (Restangular) {
         var service = {
             login: login,
-            logout: logout
+            logout: logout,
+            current: current
         };
 
         return service;
@@ -21,6 +22,10 @@
 
         function logout () {
             return Restangular.one('logout').customPOST();
+        }
+
+        function current () {
+            return Restangular.one('user').customGET();
         }
 
     }

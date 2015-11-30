@@ -81,3 +81,19 @@
     position: absolute;
     right: 10px;
 }
+
+.tool-search-field {
+    display: inline-block;
+}
+
+.tool-search-field input {
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    border: 0 solid black;
+    background: rgba(138, 138, 138, 0.28);
+    color: white;
+    padding: 0 10px;
+    font-size: 15px;
+    margin-left: 10%;
+}

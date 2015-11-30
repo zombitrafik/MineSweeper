@@ -3,7 +3,7 @@
 
     angular
         .module('app')
-        .service('LoginService', loginService);
+        .service('loginService', loginService);
 
     loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'cacheService'];
 
@@ -12,28 +12,42 @@
         var service = {
             login: login,
             logout: logout,
-            isLoggined: false
+            current: current,
+            isLoggined: false,
+            isInit: false
         };
 
 
         return service;
 
         function login (model) {
-            var defered = $q.defer();
+            var deferred = $q.defer();
             var credentials = { authorization: 'Basic ' + $window.btoa(model.username + ':' + model.password)};
             var promise = loginApiService.login(credentials);
             promise.then(function (user) {
                 console.log(user);
                 cacheService.item(ROUTE_REQUIRES.AUTH, user.plain()).then(function () {
                     service.isLoggined = true;
-                    defered.resolve();
+                    deferred.resolve();
                 }).catch(function () {
-                    defered.reject();
+                    deferred.reject();
                 });
             }).catch(function () {
-                defered.reject();
+                deferred.reject();
             });
-            return defered.promise;
+            return deferred.promise;
+        }
+
+        function current () {
+            var deferred = $q.defer();
+            var promise = loginApiService.current();
+            promise.then(function () {
+                service.isInit = true;
+                deferred.resolve();
+            }).catch(function () {
+                deferred.reject();
+            });
+            return deferred.promise;
         }
 
         function  logout () {

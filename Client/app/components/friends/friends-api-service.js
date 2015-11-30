@@ -7,12 +7,17 @@
         
     function friendsApiService (Restangular) {
         var service = {
-            search: search
+            search: search,
+            getFriendsList: getFriendsList
         };
         return service;
         
         function search (model) {
             return Restangular.one('users').customGET('find', model);
+        }
+
+        function getFriendsList () {
+            return Restangular.one('friends').customGET();
         }
     }
 })();

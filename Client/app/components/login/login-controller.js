@@ -5,9 +5,9 @@
         .module('app')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['LoginService', '$state'];
+    LoginController.$inject = ['loginService', '$state'];
 
-    function LoginController (LoginService, $state) {
+    function LoginController (loginService, $state) {
 
         var vm = this;
 
@@ -24,7 +24,7 @@
                 return;
             }
 
-            LoginService.login(vm.model).then(function () {
+            loginService.login(vm.model).then(function () {
                 $state.go('lobby');
             }).catch(function () {
                 vm.errors.username = 'Wrong username or password';
@@ -36,7 +36,7 @@
         };
 
         vm.logout = function () {
-            LoginService.logout().then(function () {
+            loginService.logout().then(function () {
                 $state.go('login');
             }, function () {
                 console.log('fail');

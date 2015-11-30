@@ -9,9 +9,9 @@ import com.kimreik.helpers.ResponseMessage;
 @Service
 public class SocketMessagingServiceImpl implements SocketMessagingService {
 
-	private final String HEARTBEAT_PREFIX = "broker/heartBeat";
+	private final String HEARTBEAT_PREFIX = "/broker/heartBeat";
 	private final String GAME_EVENT_PREFIX = "/game-events";
-	private final String ROOM_PREFIX = "broker/rooms/";
+	private final String ROOM_PREFIX = "/broker/rooms/";
 	
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;

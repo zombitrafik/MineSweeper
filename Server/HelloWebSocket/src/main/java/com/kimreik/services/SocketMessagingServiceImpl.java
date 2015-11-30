@@ -25,7 +25,7 @@ public class SocketMessagingServiceImpl implements SocketMessagingService {
 	}
 
 	public void sendHeartbeat() {
-		sendToSubscribers(HEARTBEAT_PREFIX, null);
+		sendToSubscribers(HEARTBEAT_PREFIX, ResponseMessage.HEARTBEAT);
 	}
 	
 	

@@ -4,8 +4,6 @@ import java.security.Principal;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
@@ -25,12 +23,12 @@ public class GameController {
 	RoomsService roomsService;
 		
 	@MessageMapping("/right")
-	public void handleRightClick(Point point, Principal principal){
+	public void handleRightClick(Principal principal, Point point){
 		gameService.handleGameRightClick(principal.getName(), point);
 	}
 	
 	@MessageMapping("/left")
-	public void handleClick(Point point, Principal principal){
+	public void handleClick(Principal principal, Point point){
 		gameService.handleGameClick(principal.getName(), point);
 	}	
 	

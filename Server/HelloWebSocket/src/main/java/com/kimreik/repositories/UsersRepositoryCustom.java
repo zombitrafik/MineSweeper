@@ -5,5 +5,6 @@ import java.util.List;
 import com.kimreik.model.User;
 
 public interface UsersRepositoryCustom {
-	public List<User> find(String username);
+	public List<User> findByName(String username);
+	public List<User> findOnline();
 }

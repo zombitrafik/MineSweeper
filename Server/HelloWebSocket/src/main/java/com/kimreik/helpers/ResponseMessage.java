@@ -22,10 +22,10 @@ public class ResponseMessage {
 	
 	public static final ResponseMessage FIND_USER_RESULT = new ResponseMessage("FIND_USER_RESULT");
 	
-	public static final ResponseMessage FRIEND_ADDED_SUCCESFULLY = new ResponseMessage("FRIEND_ADDED_SUCCESFULLY");
+	public static final ResponseMessage FRIEND_ADDED_SUCCESSFULLY = new ResponseMessage("FRIEND_ADDED_SUCCESSFULLY");
 	public static final ResponseMessage FRIEND_ADDING_ERROR = new ResponseMessage("FRIEND_ADDING_ERROR");
 	
-	public static final ResponseMessage FRIEND_REMOVED_SUCCESFULLY = new ResponseMessage("FRIEND_REMOVED_SUCCESFULLY");
+	public static final ResponseMessage FRIEND_REMOVED_SUCCESSFULLY = new ResponseMessage("FRIEND_REMOVED_SUCCESSFULLY");
 	public static final ResponseMessage FRIEND_REMOVNG_ERROR = new ResponseMessage("FRIEND_REMOVNG_ERROR");
 	
 	public static final ResponseMessage FRIENDS = new ResponseMessage("FRIENDS");

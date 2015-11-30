@@ -5,7 +5,7 @@
     <div class="friends-list">
         <div class="user" ng-repeat="friend in vm.friends" ng-click="vm.selectUser(friend.username)" ng-class="{'selected': vm.getAction() === 'INVITE_USER' && vm.isSelectedUser(friend.username)}">
             <span ng-bind="friend.username"></span>
-            <span class="remove-from-friends">
+            <span class="remove-from-friends" ng-click="vm.removeFromFriend(friend)">
                 <i class="fa fa-times"></i>
             </span>
         </div>
@@ -18,7 +18,7 @@
     <div class="friends-list" ng-if="vm.isShowSearch()">
         <div class="user" ng-repeat="user in vm.users" ng-click="vm.selectUser(user.username)" ng-class="{'selected': vm.getAction() === 'INVITE_USER' && vm.isSelectedUser(user.username)}">
             <span ng-bind="user.username"></span>
-            <span class="add-to-friend" ng-if="vm.getAction() === 'ADD_FRIEND'">
+            <span class="add-to-friend" ng-click="vm.addToFriend(user)">
                 <i class="fa fa-plus"></i>
             </span>
         </div>

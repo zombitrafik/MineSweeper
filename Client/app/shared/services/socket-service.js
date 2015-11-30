@@ -3,8 +3,8 @@
         .module('app')
         .service('socketService', socketService);
 
-    socketService.$inject = ['cacheService', '$q'];
-    function socketService (cacheService, $q) {
+    socketService.$inject = ['$q'];
+    function socketService ($q) {
 
         var BASE_URL = 'http://52.28.17.161:8080/';
 

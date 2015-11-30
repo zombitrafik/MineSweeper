@@ -41,8 +41,16 @@
             return messagesService.isSelectedTab(vm.header);
         };
 
-        vm.getMessages = function () {
-            return vm.messages;
+        vm.getTemplate = function () {
+            return 'components/messages/templates/' + vm.header.toLowerCase() + '-template.html';
+        };
+
+
+        var messagesList = [
+            {list: 'list'}
+        ];
+        vm.getMessagesList = function () {
+            return messagesList;
         };
 
         return vm;

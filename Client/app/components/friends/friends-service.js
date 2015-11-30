@@ -11,6 +11,8 @@
             isShowFriendsSearch: false,
             search: search,
             getFriendsList: getFriendsList,
+            addToFriend: addToFriend,
+            removeFromFriend: removeFromFriend,
             searchModel: {
                 username: ''
             }
@@ -47,6 +49,14 @@
                 deferred.reject();
             });
             return deferred.promise;
+        }
+
+        function addToFriend (username) {
+            return friendsApiService.addToFriend(username);
+        }
+
+        function removeFromFriend (username) {
+            return friendsApiService.removeFromFriend(username);
         }
     }
 })();

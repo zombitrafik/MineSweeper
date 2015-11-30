@@ -7,7 +7,7 @@
 
     function MessagesController () {
         var vm = this;
-        vm.worldMessages = [
+        vm.privateMessages = [
             {test: 'test'}
         ];
         return vm;

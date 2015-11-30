@@ -31,7 +31,6 @@
                     return;
                 }
                 vm.users = response.data.userList;
-                vm.friends = response.data.userList;
             });
         };
 
@@ -53,6 +52,26 @@
             return _.include(vm.selectedUsers, username);
         };
 
+        vm.addToFriend = function (user) {
+            var promise = friendsService.addToFriend(user.username);
+            promise.then(function () {
+                console.log('prock');
+                _.remove(vm.users, function (existUser) {
+                    return existUser.username === user.username;
+                });
+                vm.friends.push(user);
+            });
+        };
+
+        vm.removeFromFriend = function (user) {
+            var promise = friendsService.removeFromFriend(user.username);
+            promise.then(function () {
+                _.remove(vm.friends, function (existFriend) {
+                    return existFriend.username === user.username;
+                });
+                vm.users.push(user);
+            });
+        };
 
         $rootScope.$watch(function () {
             return friendsService.searchModel.username;

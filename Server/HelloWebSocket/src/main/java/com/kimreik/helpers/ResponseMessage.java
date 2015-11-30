@@ -33,6 +33,8 @@ public class ResponseMessage {
 	
 	public static final ResponseMessage PRIVATE_MESSAGE = new ResponseMessage("PRIVATE_MESSAGE");
 	
+	public static final ResponseMessage HEARTBEAT = new ResponseMessage("HEARTBEAT");
+	
 	private String type;
 	private HashMap<String, Object> data = new HashMap<String, Object>();
 

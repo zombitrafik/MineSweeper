@@ -13,9 +13,16 @@ public class UsersRepositoryImpl implements UsersRepositoryCustom {
 	private EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
-	public List<User> find(String username) {
+	public List<User> findByName(String username) {
 		return this.entityManager
 				.createQuery("select user from User user where user.username like '%"+username+"%'")
+				.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> findOnline() {
+		return this.entityManager
+				.createQuery("select user from User user where user.status !='OFFLINE'")
 				.getResultList();
 	}
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,8 +34,19 @@ public class User {
 	private int currentRoomid;
 
 	@JsonIgnore
+	@Column
+	private long lastActivity;
+	
+	@JsonIgnore
+	@Column
+	private long lastHeartBeat;
+	
+	@JsonIgnore
 	@ElementCollection
 	private List<String> friends;
+	
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
 	
 	public String getUsername(){
 		return username;
@@ -105,6 +118,30 @@ public class User {
 	
 	public void removeFriend(String username){
 		friends.remove(username);
+	}
+
+	public long getLastActivity() {
+		return lastActivity;
+	}
+
+	public void setLastActivity(long lastActivity) {
+		this.lastActivity = lastActivity;
+	}
+
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
+	}
+
+	public long getLastHeartBeat() {
+		return lastHeartBeat;
+	}
+
+	public void setLastHeartBeat(long lastHeartBeat) {
+		this.lastHeartBeat = lastHeartBeat;
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.kimreik.services;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,13 @@ public class UsersServiceImpl implements UsersService {
 		return usersRepo.findOne(principal.getName());
 	}
 
-	public ResponseEntity<?> find(String username) {
+	public ResponseEntity<?> find(String finder, String username) {
+		List<User> result = usersRepo.findByName(username);
+		result.remove(finder);
+		
+		result.remove(usersRepo.findOne(finder).getFriends());
 		ResponseMessage message = ResponseMessage.FIND_USER_RESULT
-				.add("userList", usersRepo.find(username));
+				.add("userList", usersRepo.findByName(username));
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
@@ -70,28 +75,33 @@ public class UsersServiceImpl implements UsersService {
 		if(friend!=null){
 			user.addFriend(friendName);
 			usersRepo.save(user);
-			message = ResponseMessage.FRIEND_ADDED_SUCCESFULLY;
+			message = ResponseMessage.FRIEND_ADDED_SUCCESSFULLY;
+			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}else{
 			message = ResponseMessage.FRIEND_ADDING_ERROR
 					.add("error", "USER '"+friendName+"' NOT FOUND");
+			return ResponseWrapper.wrap(message, HttpStatus.NOT_FOUND);
 		}
 		//TODO какие-то ограничения и FRIEND_ADDING_ERROR
-		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
 	public ResponseEntity<?> removeFriend(String username, String friendName) {
 		User user = usersRepo.findOne(username);
+		
 		user.removeFriend(friendName);
 		
 		usersRepo.save(user);
 		
-		return ResponseWrapper.wrap(ResponseMessage.FRIEND_REMOVED_SUCCESFULLY, HttpStatus.OK);
+		return ResponseWrapper.wrap(ResponseMessage.FRIEND_REMOVED_SUCCESSFULLY, HttpStatus.OK);
 	}
 
-	public void sendMessage(PrivateMessage message) {
+	public void sendMessage(String sender, PrivateMessage message) {
+		
+		message.setSender(sender);
 		
 		Logger.getLogger(UsersServiceImpl.class).error("sendMessage "+message.getMessage()+" from "+message.getSender());
 
+		
 		//TODO: егор если юзер офлайн или игнорит или типа того.
 		boolean recipientOnline = true; //TODO заглушка
 		
@@ -110,6 +120,10 @@ public class UsersServiceImpl implements UsersService {
 		ResponseMessage message = ResponseMessage.FRIENDS
 				.add("friends", usersRepo.findOne(username).getFriends());
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
+	}
+
+	public void heartbeat(String username) {
+		usersRepo.findOne(username).setLastHeartBeat(System.currentTimeMillis());
 	}
 
 }

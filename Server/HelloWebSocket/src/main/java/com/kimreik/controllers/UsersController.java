@@ -22,14 +22,18 @@ public class UsersController {
 	
 	//@MessageMapping("/find")
 	@RequestMapping(value="/find", method = RequestMethod.GET)
-	public ResponseEntity<?> findUser(@RequestParam String username){
-		return usersService.find(username);
+	public ResponseEntity<?> findUser(Principal principal, @RequestParam(value="username") String username){
+		return usersService.find(principal.getName(), username);
 	}
 	
 	@MessageMapping("/sendMessage")
 	public void sendMessage(Principal principal, PrivateMessage message){
-		message.setSender(principal.getName());
-		usersService.sendMessage(message);
+		usersService.sendMessage(principal.getName(),message);
 	}	
+	
+	@MessageMapping("/heartbeat")
+	public void heartbeat(Principal principal){
+		usersService.heartbeat(principal.getName());;
+	}
 	
 }

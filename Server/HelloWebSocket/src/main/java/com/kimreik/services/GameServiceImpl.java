@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	GameRoomRepository roomRepo;
 
 	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
+	private SocketMessagingService socketMessagingService;
 	
 	@Autowired
 	@Qualifier("simpleGenerator")
@@ -55,7 +54,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		User user = userRepo.findOne(username);
 
 		if (user.getCurrentRoomid() == 0) {
-			sendToUser(username, ResponseMessage.NOT_JOINED_TO_ROOM);
+			socketMessagingService.sendGameEventToUser(username, ResponseMessage.NOT_JOINED_TO_ROOM);
 			return ResponseWrapper.wrap(ResponseMessage.NOT_JOINED_TO_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
@@ -69,7 +68,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		if(getPlayer(room, user.getUsername()).isBombed()){
 			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
 			message.add("username", user.getUsername());
-			sendToUser(username, message);
+			socketMessagingService.sendGameEventToUser(username, message);
 			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}
 		
@@ -108,7 +107,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		message.add("field", result);
 		message.add("username", user.getUsername());
 		message.add("points", result.size());
-		sendToRoom(room.getId(), message);
+		socketMessagingService.sendToRoom(room.getId(), message);
 		
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
@@ -123,7 +122,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
 			message.add("username", user.getUsername());
 			
-			sendToUser(username, message);
+			socketMessagingService.sendGameEventToUser(username, message);
 			
 			return ResponseWrapper.wrap(message, HttpStatus.OK);
 		}
@@ -166,7 +165,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		message.add("field", result);
 		message.add("username", user.getUsername());
 		
-		sendToRoom(room.getId(), message);
+		socketMessagingService.sendToRoom(room.getId(), message);
 		
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
@@ -183,7 +182,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			player.setBombed(true);
-			sendToUser(playerName, ResponseMessage.YOU_BOMBED);
+			socketMessagingService.sendGameEventToUser(playerName, ResponseMessage.YOU_BOMBED);
 		}
 	}
 	
@@ -197,7 +196,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 		if(isFinished){
 			room.setFinished(true);
-			sendToRoom(room.getId(), ResponseMessage.GAME_LOSE);
+			socketMessagingService.sendToRoom(room.getId(), ResponseMessage.GAME_LOSE);
 			return;
 		}
 		
@@ -205,7 +204,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		if(fieldSize - game.getOpenedField().size() - (game.getMineField().getMinesCount()-game.getExplodedBombs().size())==0){
 			room.setFinished(true);
 			room.setWin(true);
-			sendToRoom(room.getId(), ResponseMessage.GAME_WIN);
+			socketMessagingService.sendToRoom(room.getId(), ResponseMessage.GAME_WIN);
 		}
 		
 	}
@@ -219,12 +218,5 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		return null;
 	}
 	
-	private void sendToUser(String username, ResponseMessage message){
-		simpMessagingTemplate.convertAndSendToUser(username, "/game-events", message);
-	}
-	
-	private void sendToRoom(int roomId, ResponseMessage message){
-		simpMessagingTemplate.convertAndSend("/broker/rooms/"+roomId, message);
-	}
 	
 }

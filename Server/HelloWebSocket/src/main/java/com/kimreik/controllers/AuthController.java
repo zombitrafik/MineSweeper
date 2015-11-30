@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kimreik.model.User;
 import com.kimreik.services.UsersService;
-import com.kimreik.validators.UserValidator;
 
 @RestController
 public class AuthController {

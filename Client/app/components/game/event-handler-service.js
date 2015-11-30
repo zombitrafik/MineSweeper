@@ -48,7 +48,7 @@
                 updateMap(response);
             });*/
             socketService.send('/test/left', data);
-            socketService.send('/users/sendMessage', {username: 'zombitrafik', message: 'hello world!'});
+            socketService.send('/users/sendMessage', {recipient: 'kimreik', message: 'hello world!'});
         }
 
 

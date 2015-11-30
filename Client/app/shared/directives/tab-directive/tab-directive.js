@@ -15,7 +15,8 @@
                 messages: '='
             },
             templateUrl: 'shared/directives/tab-directive/template/template.html',
-            controller: TabController,
+            controller: '@',
+            name: 'controllerName',
             controllerAs: 'vm'
         };
 
@@ -30,28 +31,6 @@
 
     function TabController ($scope, messagesService) {
         var vm = this;
-        vm.header = $scope.header;
-        vm.messages = $scope.messages;
-
-        vm.selectTab = function () {
-            messagesService.selectTab(vm.header);
-        };
-
-        vm.isSelected = function () {
-            return messagesService.isSelectedTab(vm.header);
-        };
-
-        vm.getTemplate = function () {
-            return 'components/messages/templates/' + vm.header.toLowerCase() + '-template.html';
-        };
-
-
-        var messagesList = [
-            {list: 'list'}
-        ];
-        vm.getMessagesList = function () {
-            return messagesList;
-        };
 
         return vm;
     }

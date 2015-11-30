@@ -41,6 +41,7 @@
                     // subscribe
                     socketService.subscribe('/user/messages', handleSocket, 'messages_' + data.id);
                     socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
+                    //socketService.subscribe('/broker/heartBeat', handleSocketHeartbeat, 'heartbeat_' + data.id);
                     socketService.subscribe('/user/game-events', handleSocket, 'gameEvt_' + data.id);
 
                     canvasService.init('field').then(function () {
@@ -130,6 +131,7 @@
 
         function handleSocket (data) {
             //parseData
+            console.log(data);
             switch (data.type) {
                 case 'FIELD_UPDATE': {
                     canvasService.handleActions(data.data);
@@ -143,7 +145,16 @@
                     console.log('win');
                     break;
                 }
+                case 'PRIVATE_MESSAGE': {
+                    console.log(data);
+                    break;
+                }
             }
+        }
+
+
+        function handleSocketHeartbeat () {
+            //socketService.send('/users/heartbeat', {});
         }
 
     }

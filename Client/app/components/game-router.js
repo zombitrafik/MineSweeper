@@ -127,11 +127,12 @@
             var deffered = $q.defer();
 
             cacheService.init().then(function () {
-                if(!loginService.isInit) {
+                if(!loginService.isInit && !_.isEmpty(toState.requires)) {
                     loginService.current().then(function () {
                         deffered.resolve();
                     }).catch(function () {
                         $state.go('login');
+                        cacheService.clear();
                         deffered.reject();
                     });
                 } else {

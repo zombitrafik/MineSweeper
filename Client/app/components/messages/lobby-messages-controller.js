@@ -1,25 +1,24 @@
 (function () {
     angular
         .module('app')
-        .controller('MessagesController', MessagesController);
+        .controller('LobbyMessagesController', LobbyMessagesController);
 
-    MessagesController.$inject = ['messagesService'];
+    LobbyMessagesController.$inject = ['messagesService'];
 
-    function MessagesController (messagesService) {
+    function LobbyMessagesController (messagesService) {
         var vm = this;
         vm.privateMessages = [
             {test: 'test'}
         ];
 
-        vm.header = 'private';
+        vm.header = 'lobby';
 
-        vm.selectTab = function (header) {
-            console.log(header);
-            messagesService.selectTab(header);
+        vm.selectTab = function () {
+            messagesService.selectTab(vm.header);
         };
 
-        vm.isSelected = function (header) {
-            return messagesService.isSelectedTab(header);
+        vm.isSelected = function () {
+            return messagesService.isSelectedTab(vm.header);
         };
 
         vm.getTemplate = function () {

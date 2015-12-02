@@ -26,12 +26,4 @@
 
         }
     }
-
-    TabController.$inject = ['$scope', 'messagesService'];
-
-    function TabController ($scope, messagesService) {
-        var vm = this;
-
-        return vm;
-    }
 })();

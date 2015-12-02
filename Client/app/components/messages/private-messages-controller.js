@@ -1,11 +1,11 @@
 (function () {
     angular
         .module('app')
-        .controller('MessagesController', MessagesController);
+        .controller('PrivateMessagesController', PrivateMessagesController);
 
-    MessagesController.$inject = ['messagesService'];
+    PrivateMessagesController.$inject = ['messagesService'];
 
-    function MessagesController (messagesService) {
+    function PrivateMessagesController (messagesService) {
         var vm = this;
         vm.privateMessages = [
             {test: 'test'}
@@ -13,13 +13,12 @@
 
         vm.header = 'private';
 
-        vm.selectTab = function (header) {
-            console.log(header);
-            messagesService.selectTab(header);
+        vm.selectTab = function () {
+            messagesService.selectTab(vm.header);
         };
 
-        vm.isSelected = function (header) {
-            return messagesService.isSelectedTab(header);
+        vm.isSelected = function () {
+            return messagesService.isSelectedTab(vm.header);
         };
 
         vm.getTemplate = function () {
@@ -27,6 +26,7 @@
         };
 
         var messagesList = [
+            {list: 'list'},
             {list: 'list'}
         ];
 

@@ -23,4 +23,50 @@
 .messages .tab .body {
     position: absolute;
     top: 40px;
+    width: 100%;
+}
+
+.message-list .message {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    width: calc(100% - 20px);
+    border-bottom: 1px solid whitesmoke;
+    height: 55px;
+    padding-top: 5px;
+}
+.message-list .message .icon {
+    display: inline-block;
+    float: left;
+    position: relative;
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+.message-list .message .icon .image {
+    width: 40px;
+    height: 40px;
+    background: #BB7373;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.message-list .message .icon .status {
+    position: absolute;
+    left: 45px;
+    top: 20px;
+    color: white;
+}
+
+.message-list .message .author {
+    float: left;
+    margin-top: 0;
+    color: bisque;
+}
+
+.message-list .message .last-message {
+    margin-top: 16px;
+    display: inline-block;
+    margin-left: 10px;
+    color: silver;
 }

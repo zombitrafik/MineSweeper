@@ -5,9 +5,9 @@ import java.util.Set;
 
 import com.kimreik.helpers.FieldGenerator;
 import com.kimreik.model.Game;
-import com.kimreik.model.GameRoom;
 import com.kimreik.model.MineField;
 import com.kimreik.model.Point;
+import com.kimreik.room.Room;
 
 public class BasicGameEventsImpl {
 
@@ -91,7 +91,7 @@ public class BasicGameEventsImpl {
 				|| point.getValue() == -1);
 	}
 	
-	protected void generateField(GameRoom room, Point point, FieldGenerator fieldGenerator) {
+	protected void generateField(Room room, Point point, FieldGenerator fieldGenerator) {
 		Game game = room.getGame();
 		if (game.getOpenedField().size() != 0 || game.getFlags().size() != 0)
 			return;

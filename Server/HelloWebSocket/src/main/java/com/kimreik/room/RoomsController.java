@@ -1,7 +1,6 @@
-package com.kimreik.controllers;
+package com.kimreik.room;
 
 import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kimreik.model.GameRoom;
-import com.kimreik.model.MineField;
 import com.kimreik.model.Point;
 import com.kimreik.services.GameService;
-import com.kimreik.services.RoomsService;
 
 @RestController
 @RequestMapping("/rooms")
@@ -28,17 +24,17 @@ public class RoomsController {
 	GameService gameService;
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public ResponseEntity<?> createRoom(Principal principal, @RequestBody MineField mineField){
-		return roomsService.createRoom(principal.getName(), mineField);
+	public ResponseEntity<?> createRoom(Principal principal, @RequestBody RoomDTO roomDTO){
+		return roomsService.createRoom(principal.getName(), roomDTO);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<GameRoom> getRooms(){
+	public ResponseEntity<?> getRooms(){
 		return roomsService.getRooms();
 	}	
 	
 	@RequestMapping(value="/current", method = RequestMethod.GET)
-	public GameRoom getCurrentRoom(Principal principal){
+	public Room getCurrentRoom(Principal principal){
 		return roomsService.getCurrentRoom(principal.getName());
 	}
 	

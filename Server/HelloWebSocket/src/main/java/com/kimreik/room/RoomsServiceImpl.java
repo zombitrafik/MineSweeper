@@ -1,4 +1,4 @@
-package com.kimreik.services;
+package com.kimreik.room;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
-import com.kimreik.model.GameRoom;
 import com.kimreik.model.MineField;
-import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
 import com.kimreik.repositories.UsersRepository;
+import com.kimreik.user.User;
 
 @Service
 public class RoomsServiceImpl implements RoomsService {
@@ -31,7 +30,7 @@ public class RoomsServiceImpl implements RoomsService {
 	UsersRepository userRepo;
 
 	
-	public ResponseEntity<?> createRoom(String username, MineField mineField) {
+	public ResponseEntity<?> createRoom(String username, RoomDTO roomDTO) {
 
 		
 		User user = userRepo.findOne(username);
@@ -40,18 +39,10 @@ public class RoomsServiceImpl implements RoomsService {
 			return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
-		GameRoom newRoom = new GameRoom();
-		newRoom.setName(user.getUsername() + "'s game");
+		Room newRoom = new Room(roomDTO);
 		newRoom.setId(null);
 		newRoom.addPlayer(user.getUsername());
-		Game newGame = new Game();
-		MineField newMineField = new MineField();
-		newMineField.setHeight(mineField.getHeight());
-		newMineField.setWidth(mineField.getWidth());
-		newMineField.setMinesCount(mineField.getMinesCount());
-		newGame.setMineField(newMineField);
-		newRoom.setGame(newGame);
-
+		
 		newRoom = roomRepo.save(newRoom);
 		user.setCurrentRoomid(newRoom.getId());
 		userRepo.save(user);
@@ -59,16 +50,14 @@ public class RoomsServiceImpl implements RoomsService {
 		return ResponseWrapper.wrap(newRoom,HttpStatus.OK);
 	}
 
-	public List<GameRoom> getRooms() {
-		List<GameRoom> rooms = new ArrayList<GameRoom>();
+	public ResponseEntity<?> getRooms() {
+		List<RoomDTO> rooms = new ArrayList<RoomDTO>();
 
-		for (GameRoom room : roomRepo.findAll()) {
-			GameRoom newRoom = new GameRoom();
-			newRoom.setId(room.getId());
-			newRoom.setName(room.getName());
-			rooms.add(newRoom);
+		for (Room room : roomRepo.findAll()) {
+			if(!room.isStarted()) 
+				rooms.add(new RoomDTO(room));
 		}
-		return rooms;
+		return ResponseWrapper.wrap(rooms, HttpStatus.OK);
 	}
 
 	public ResponseEntity<?> joinRoom(Integer id, String username) {
@@ -78,7 +67,7 @@ public class RoomsServiceImpl implements RoomsService {
 			return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
 		}
 		
-		GameRoom joinedRoom = roomRepo.findOne(id);
+		Room joinedRoom = roomRepo.findOne(id);
 
 		if(user.getCurrentRoomid()!=id){
 			joinedRoom.addPlayer(username);
@@ -99,7 +88,7 @@ public class RoomsServiceImpl implements RoomsService {
 		if(user==null || user.getCurrentRoomid()==0){
 			return;//мб какой-то ответ отсылать
 		}
-		GameRoom leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
+		Room leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
 		
 		
 		leavedRoom.removePlayer(username);
@@ -115,7 +104,7 @@ public class RoomsServiceImpl implements RoomsService {
 		
 	}
 
-	public GameRoom getCurrentRoom(String username) {
+	public Room getCurrentRoom(String username) {
 		User user = userRepo.findOne(username);
 		return roomRepo.findOne(user.getCurrentRoomid());
 		

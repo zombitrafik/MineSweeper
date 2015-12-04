@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kimreik.model.User;
-import com.kimreik.services.UsersService;
+import com.kimreik.user.User;
+import com.kimreik.user.UsersService;
 
 @RestController
 public class AuthController {

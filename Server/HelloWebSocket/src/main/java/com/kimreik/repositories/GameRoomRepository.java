@@ -2,8 +2,8 @@ package com.kimreik.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.kimreik.model.GameRoom;
+import com.kimreik.room.Room;
 
-public interface GameRoomRepository extends JpaRepository<GameRoom, Integer>{
+public interface GameRoomRepository extends JpaRepository<Room, Integer>{
 
 }

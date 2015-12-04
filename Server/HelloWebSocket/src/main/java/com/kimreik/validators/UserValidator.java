@@ -4,8 +4,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.kimreik.helpers.ResponseMessage;
-import com.kimreik.model.User;
 import com.kimreik.repositories.UsersRepository;
+import com.kimreik.user.User;
 
 public class UserValidator  implements Validator{
 	

@@ -22,14 +22,14 @@ public class UserDetailServiceImpl implements UserDetailsService{
 	
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		com.kimreik.model.User user=userRepo.findOne(username);
+		com.kimreik.user.User user=userRepo.findOne(username);
 		if(user==null){
 			throw new UsernameNotFoundException("user name not found");
 		}
 		return buildUserFromUserEntity(user);
 	}
 	
-	private User buildUserFromUserEntity(com.kimreik.model.User user){
+	private User buildUserFromUserEntity(com.kimreik.user.User user){
 		String username = user.getUsername();
 		String password = user.getPassword();
 		boolean enabled = true;

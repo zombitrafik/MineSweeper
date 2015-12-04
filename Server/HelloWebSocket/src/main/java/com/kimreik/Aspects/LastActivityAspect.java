@@ -10,9 +10,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kimreik.model.User;
-import com.kimreik.model.UserStatus;
 import com.kimreik.repositories.UsersRepository;
+import com.kimreik.user.User;
+import com.kimreik.user.UserStatus;
 
 @Aspect
 @Component

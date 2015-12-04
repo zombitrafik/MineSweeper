@@ -36,7 +36,7 @@ public class LastActivityAspect {
 	public void myPackages(){
 	}
 	
-	@Pointcut("execution(* heartbeat(..))")
+	@Pointcut("execution(* com.kimreik.user.UsersController.heartbeat(..))")
 	public void heartbeat(){
 		logger.error("heartbeat");
 	}
@@ -56,7 +56,5 @@ public class LastActivityAspect {
 		user.setLastActivity(System.currentTimeMillis());
 		user.setLastHeartBeat(System.currentTimeMillis());
 		userRepo.save(user);
-		
-		//return pjp.proceed();
 	}
 }

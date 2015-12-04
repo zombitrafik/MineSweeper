@@ -2,6 +2,7 @@ package com.kimreik.user;
 
 import java.security.Principal;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -32,6 +33,7 @@ public class UsersController {
 	
 	@MessageMapping("/heartbeat")
 	public void heartbeat(Principal principal){
+		Logger.getLogger(UsersController.class).error("heartbeat_controller");
 		usersService.heartbeat(principal.getName());;
 	}
 	

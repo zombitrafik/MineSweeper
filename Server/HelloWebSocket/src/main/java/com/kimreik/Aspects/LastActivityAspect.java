@@ -38,12 +38,11 @@ public class LastActivityAspect {
 	
 	@Pointcut("execution(* com.kimreik.user.UsersController.heartbeat(..))")
 	public void heartbeat(){
-		logger.error("heartbeat");
 	}
 	
 	@After("!heartbeat() && (requestMapping() || messageMapping()) && myPackages()")
 	public void updateLastActivity(JoinPoint joinPoint){
-		
+		logger.error("!heartbeat");
 		if (joinPoint.getArgs().length==0 || !(joinPoint.getArgs()[0] instanceof Principal)) {
 			logger.error("principal not first at "+joinPoint.getSignature());
 			return;

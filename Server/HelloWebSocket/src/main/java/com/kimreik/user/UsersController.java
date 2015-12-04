@@ -33,7 +33,6 @@ public class UsersController {
 	
 	@MessageMapping("/heartbeat")
 	public void heartbeat(Principal principal){
-		Logger.getLogger(UsersController.class).error("heartbeat_controller");
 		usersService.heartbeat(principal.getName());;
 	}
 	

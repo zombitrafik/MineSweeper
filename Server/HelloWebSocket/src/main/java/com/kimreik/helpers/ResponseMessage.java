@@ -8,7 +8,7 @@ public class ResponseMessage {
 	
 	public static final ResponseMessage NOT_JOINED_TO_ROOM = error("NOT_JOINED_TO_ROOM");
 	public static final ResponseMessage USER_ALREADY_IN_SOME_ROOM = error("USER_ALREADY_IN_SOME_ROOM");
-	public static final ResponseMessage PLAYER_BOMBED = error("PLAYER_BOMBED");
+	public static final ResponseMessage YOU_BOMBED = error("YOU_BOMBED");
 	
 	
 	public static final ResponseMessage USERNAME_ALREADY_EXIST = error("USERNAME_ALREADY_EXIST");
@@ -16,7 +16,7 @@ public class ResponseMessage {
 	
 	public static final ResponseMessage FIELD_UPDATE = new ResponseMessage("FIELD_UPDATE");
 	
-	public static final ResponseMessage YOU_BOMBED = new ResponseMessage("YOU_BOMBED");
+	public static final ResponseMessage PLAYER_BOMBED = new ResponseMessage("PLAYER_BOMBED");
 	public static final ResponseMessage GAME_LOSE = new ResponseMessage("GAME_LOSE");
 	public static final ResponseMessage GAME_WIN = new ResponseMessage("GAME_WIN");
 	

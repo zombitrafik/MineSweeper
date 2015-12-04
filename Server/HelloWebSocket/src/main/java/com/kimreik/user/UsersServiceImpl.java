@@ -17,7 +17,6 @@ import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.PrivateMessage;
 import com.kimreik.repositories.UsersRepository;
 import com.kimreik.services.SocketMessagingService;
-import com.kimreik.validators.UserValidator;
 
 @Service
 public class UsersServiceImpl implements UsersService {

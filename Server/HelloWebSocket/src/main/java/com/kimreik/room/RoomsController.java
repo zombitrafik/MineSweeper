@@ -29,7 +29,7 @@ public class RoomsController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<?> getRooms(){
+	public ResponseEntity<?> getRooms(Principal principal){ //principal for Aspect
 		return roomsService.getRooms();
 	}	
 	

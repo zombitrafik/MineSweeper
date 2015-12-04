@@ -54,7 +54,7 @@ public class RoomsServiceImpl implements RoomsService {
 		List<RoomDTO> rooms = new ArrayList<RoomDTO>();
 
 		for (Room room : roomRepo.findAll()) {
-			if(!room.isStarted()) 
+			//if(!room.isStarted()) 
 				rooms.add(new RoomDTO(room));
 		}
 		return ResponseWrapper.wrap(rooms, HttpStatus.OK);

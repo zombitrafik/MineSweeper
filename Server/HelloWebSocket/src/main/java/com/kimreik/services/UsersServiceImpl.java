@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -30,7 +29,7 @@ public class UsersServiceImpl implements UsersService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	SimpMessagingTemplate simpMessagingTemplate;
+	SocketMessagingService socketMessagingService;
 	
 	public ResponseEntity<?> addUser(User user, BindingResult result) {
 		user.setEnabled(true);
@@ -108,8 +107,8 @@ public class UsersServiceImpl implements UsersService {
 		if(recipientOnline){
 			ResponseMessage respMessage = ResponseMessage.PRIVATE_MESSAGE
 					.add("message", message);
-			simpMessagingTemplate.convertAndSendToUser(message.getRecipient(), "/messages", respMessage);
-			simpMessagingTemplate.convertAndSendToUser(message.getSender(), "/messages", respMessage);
+			socketMessagingService.sendPrivateMessage(message.getRecipient(), respMessage);
+			socketMessagingService.sendPrivateMessage(message.getSender(), respMessage);
 		}else{
 			//send error to sender
 		}

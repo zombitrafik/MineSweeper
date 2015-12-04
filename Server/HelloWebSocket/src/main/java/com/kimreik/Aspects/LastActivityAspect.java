@@ -36,12 +36,12 @@ public class LastActivityAspect {
 	public void myPackages(){
 	}
 	
-	@Pointcut("execution(* com.kimreik.user.UserController.heartbeat(..))")
+	@Pointcut("execution(* heartbeat(..))")
 	public void heartbeat(){
 		logger.error("heartbeat");
 	}
 	
-	@After("!hearbeat() && (requestMapping() || messageMapping()) && myPackages()")
+	@After("!heartbeat() && (requestMapping() || messageMapping()) && myPackages()")
 	public void updateLastActivity(JoinPoint joinPoint){
 		
 		if (joinPoint.getArgs().length==0 || !(joinPoint.getArgs()[0] instanceof Principal)) {

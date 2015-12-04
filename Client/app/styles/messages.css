@@ -1,9 +1,10 @@
 .messages {
     position: relative;
+    height: 100%;
 }
 
 .messages .tab>span {
-    width: 33%;
+    width: 33.3%;
     display: inline-block;
     float: left;
     text-align: center;
@@ -16,6 +17,7 @@
     font-size: 12px;
 }
 
+
 .messages .tab>span.active {
     border-bottom: 4px solid #03A9F4;
 }
@@ -24,6 +26,8 @@
     position: absolute;
     top: 40px;
     width: 100%;
+    height: calc(100% - 40px);
+    overflow: auto;
 }
 
 .message-list .message {
@@ -72,6 +76,14 @@
     color: silver;
 }
 
+.chat-block {
+    height: 100%;
+}
+
+.chat-block .container {
+    height: calc(100% - 36px);
+}
+
 .chat-block .chat-header {
     color: white;
     height: 30px;
@@ -86,4 +98,14 @@
 
 .chat-block .chat-header .username {
     margin-left: 20px;
+}
+
+.message.right {
+    color: black;
+    background: red;
+}
+
+.messages-box {
+    height: calc(100% - 30px);
+    overflow: auto;
 }

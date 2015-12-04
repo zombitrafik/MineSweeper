@@ -1,0 +1,9 @@
+<div class="message" ng-class="{'right': vm.isMyMessage(message)}">
+    <div class="icon">
+        <span class="image">
+            <i class="fa fa-user fa-2x"></i>
+        </span>
+    </div>
+    <span class="username" ng-bind="message.sender"></span>
+    <span class="message-content" ng-bind="message.message"></span>
+</div>

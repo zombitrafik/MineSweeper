@@ -17,8 +17,7 @@
 <body>
     <div class="mainView" ng-controller="PageController as pageController">
         <div ng-include="'components/header/header-index.html'"></div>
-        <div ui-view="mainView"></div>
-
+        <div class="content" ui-view="mainView"></div>
     </div>
 </body>
 
@@ -67,9 +66,9 @@
     <script type="text/javascript" src="components/home/home-controller.js"></script>
     <!-- Messages -->
     <script type="text/javascript" src="components/messages/messages-controller.js"></script>
-    <script type="text/javascript" src="components/messages/private-messages-controller.js"></script>
-    <script type="text/javascript" src="components/messages/lobby-messages-controller.js"></script>
-    <script type="text/javascript" src="components/messages/world-messages-controller.js"></script>
+    <script type="text/javascript" src="components/messages/private/private-messages-controller.js"></script>
+    <script type="text/javascript" src="components/messages/lobby/lobby-messages-controller.js"></script>
+    <script type="text/javascript" src="components/messages/world/world-messages-controller.js"></script>
     <!-- Friends -->
     <script type="text/javascript" src="components/friends/friends-controller.js"></script>
 
@@ -92,6 +91,7 @@
     <script type="text/javascript" src="components/game/event-handler-service.js"></script>
     <!-- Messages -->
     <script type="text/javascript" src="components/messages/messages-service.js"></script>
+    <script type="text/javascript" src="components/messages/private/private-messages-service.js"></script>
     <!-- Friends -->
     <script type="text/javascript" src="components/friends/friends-service.js"></script>
     <script type="text/javascript" src="components/friends/friends-api-service.js"></script>
@@ -116,5 +116,5 @@
     <script type="text/javascript" src="shared/directives/tab-directive/tab-directive.js"></script>
     <script type="text/javascript" src="shared/services/heartbeat-service.js"></script>
     <script type="text/javascript" src="shared/services/global-init-service.js"></script>
-
+    <script type="text/javascript" src="shared/directives/message-directive/message-directive.js"></script>
 </html>

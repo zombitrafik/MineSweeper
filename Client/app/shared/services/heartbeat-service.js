@@ -15,7 +15,6 @@
         function handleHeartbeat () {
             socketService.send('/users/heartbeat', {});
         }
-        
 
     }
 })();

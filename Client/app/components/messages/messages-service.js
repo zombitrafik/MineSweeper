@@ -27,7 +27,7 @@
 
         }
 
-        function handleMessages () {
+        function handleMessages (message) {
 
         }
     }

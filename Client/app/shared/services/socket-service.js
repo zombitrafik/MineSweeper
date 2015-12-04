@@ -58,9 +58,9 @@
         function unsubscribeAll () {
             var prefixes = service.subscriptions;
             for(var i in prefixes) {
-                service.subscriptions[prefixes[i]].unsubscribe();
-                service.subscriptions[prefixes[i]] = undefined;
+                prefixes[i].unsubscribe();
             }
+            service.subscriptions = [];
         }
 
         function send(url, data) {

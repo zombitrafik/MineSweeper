@@ -108,7 +108,7 @@
 
             .state({
                 name: 'messages',
-                url: '/messages',
+                url: '/messages/:recipient',
                 views: {
                     'mainView': {
                         templateUrl: 'components/messages/messages-index.html',
@@ -152,23 +152,17 @@
         var deferred = $q.defer();
 
         cacheService.init().then(function () {
+
             if(!loginService.isInit && !_.isEmpty(requires)) {
 
-                //TODO: сделать главную инициализацию
-                /*
-
-                 if(!globalInitService.isInit) {
-                 globalInitService.init().then(function () {
-                 deferred.resolve();
-                 })
-                 } else {
-                 deferred.resolve();
-                 }
-                 */
-
-
                 loginService.current().then(function () {
-                    deferred.resolve();
+                    if(!globalInitService.isInit) {
+                        globalInitService.init().then(function () {
+                            deferred.resolve();
+                        });
+                    } else {
+                        deferred.resolve();
+                    }
                 }).catch(function () {
                     $state.go('login');
                     cacheService.clear();
@@ -176,7 +170,13 @@
                 });
             } else {
                 routeService.checkRoute(requires).then(function () {
-                    deferred.resolve();
+                    if(!globalInitService.isInit && !_.isEmpty(requires)) {
+                        globalInitService.init().then(function () {
+                            deferred.resolve();
+                        })
+                    } else {
+                        deferred.resolve();
+                    }
                 }).catch(function () {
                     $state.go('login');
                     deferred.reject();

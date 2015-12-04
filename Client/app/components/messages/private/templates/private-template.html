@@ -1,4 +1,4 @@
-<div class="message-list" ng-if="vm.isMessageList">
+<div class="message-list" ng-if="vm.isMessageList()">
     <div class="message" ng-repeat="messages in vm.getMessagesList()" ng-click="vm.goToChat(messages.username)">
         <div class="icon">
             <div class="fa fa-user fa-3x"></div>
@@ -9,12 +9,12 @@
     </div>
 </div>
 
-<div class="chat-block" ng-if="!vm.isMessageList">
+<div class="chat-block" ng-if="!vm.isMessageList()">
     <div class="chat-header">
         <span class="back-btn" ng-click="vm.backToList()">
             <i class="fa fa-arrow-left"></i>
         </span>
         <span class="username">username</span>
     </div>
-    <div ng-include="'components/messages/templates/chat-template.html'"></div>
+    <div class="container" ng-include="'components/messages/templates/chat-template.html'"></div>
 </div>

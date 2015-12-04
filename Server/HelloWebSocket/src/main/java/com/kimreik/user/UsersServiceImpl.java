@@ -121,7 +121,6 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	public void heartbeat(String username) {
-		Logger.getLogger(UsersServiceImpl.class).error(username+" heartbeat");
 		User user = usersRepo.findOne(username);
 		user.setLastHeartBeat(System.currentTimeMillis());
 		usersRepo.save(user);

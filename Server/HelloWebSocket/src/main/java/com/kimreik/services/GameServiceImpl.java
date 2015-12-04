@@ -119,7 +119,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Room room = roomRepo.findOne(user.getCurrentRoomid());
 
 		if(getPlayer(room, user.getUsername()).isBombed()){
-			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
+			ResponseMessage message = ResponseMessage.YOU_BOMBED;
 			message.add("username", user.getUsername());
 			
 			socketMessagingService.sendGameEventToUser(username, message);
@@ -182,7 +182,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			player.setBombed(true);
-			socketMessagingService.sendGameEventToUser(playerName, ResponseMessage.YOU_BOMBED);
+			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
+			message.add("username", player.getUsername());
+			socketMessagingService.sendToRoom(room.getId(), message);
 		}
 	}
 	

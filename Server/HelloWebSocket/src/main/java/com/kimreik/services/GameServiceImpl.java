@@ -16,13 +16,13 @@ import com.kimreik.helpers.FieldGenerator;
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.Game;
-import com.kimreik.model.GameRoom;
 import com.kimreik.model.MineField;
 import com.kimreik.model.Player;
 import com.kimreik.model.Point;
-import com.kimreik.model.User;
 import com.kimreik.repositories.GameRoomRepository;
 import com.kimreik.repositories.UsersRepository;
+import com.kimreik.room.Room;
+import com.kimreik.user.User;
 
 @Service
 public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
@@ -62,7 +62,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 		Set<Point> result = new LinkedHashSet<Point>();
 
-		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
+		Room room = roomRepo.findOne(user.getCurrentRoomid());
 		
 		
 		if(getPlayer(room, user.getUsername()).isBombed()){
@@ -116,7 +116,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	public ResponseEntity<?> handleGameRightClick(String username, Point point) {
 		User user = userRepo.findOne(username);
 
-		GameRoom room = roomRepo.findOne(user.getCurrentRoomid());
+		Room room = roomRepo.findOne(user.getCurrentRoomid());
 
 		if(getPlayer(room, user.getUsername()).isBombed()){
 			ResponseMessage message = ResponseMessage.PLAYER_BOMBED;
@@ -170,7 +170,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 	
-	private void addPointsToPlayer(GameRoom room, String playerName, int scoreToAdd){
+	private void addPointsToPlayer(Room room, String playerName, int scoreToAdd){
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			int currentScore = player.getCurrentScore();
@@ -178,7 +178,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 	}
 	
-	private void bombPlayer(GameRoom room, String playerName){
+	private void bombPlayer(Room room, String playerName){
 		Player player = getPlayer(room, playerName);
 		if(player!=null){
 			player.setBombed(true);
@@ -186,7 +186,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 	}
 	
-	private void checkGameEnd(GameRoom room){
+	private void checkGameEnd(Room room){
 		Game game = room.getGame();
 		boolean isFinished = true;
 		for(Player p : room.getPlayers()){
@@ -209,7 +209,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		
 	}
 	
-	private Player getPlayer(GameRoom room, String playerName){
+	private Player getPlayer(Room room, String playerName){
 		for(Player p :room.getPlayers()){
 			if(p.getUsername().equals(playerName)){
 				return p;

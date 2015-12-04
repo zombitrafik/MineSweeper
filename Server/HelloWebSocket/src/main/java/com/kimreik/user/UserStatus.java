@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.user;
 
 public enum UserStatus {
 	ONLINE,

@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.kimreik.model.User;
-import com.kimreik.model.UserStatus;
 import com.kimreik.repositories.UsersRepository;
 import com.kimreik.services.SocketMessagingService;
+import com.kimreik.user.User;
+import com.kimreik.user.UserStatus;
 
 @Component
 public class HeartBeatScheduler {

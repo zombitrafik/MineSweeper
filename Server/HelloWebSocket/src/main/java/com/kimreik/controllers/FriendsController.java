@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kimreik.services.UsersService;
+import com.kimreik.user.UserDTO;
+import com.kimreik.user.UsersService;
 
 @RestController
 @RequestMapping("/friends")
@@ -24,13 +25,13 @@ public class FriendsController {
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
-	public ResponseEntity<?> addFriend(Principal principal, @RequestBody String username){
-		return usersService.addFriend(principal.getName(), username);
+	public ResponseEntity<?> addFriend(Principal principal, @RequestBody UserDTO userDTO){
+		return usersService.addFriend(principal.getName(), userDTO.getUsername());
 	}
 	
 	@RequestMapping(value="/remove", method=RequestMethod.POST)
-	public ResponseEntity<?> removeFriend(Principal principal, @RequestBody String username){
-		return usersService.removeFriend(principal.getName(), username);
+	public ResponseEntity<?> removeFriend(Principal principal, @RequestBody UserDTO userDTO){
+		return usersService.removeFriend(principal.getName(), userDTO.getUsername());
 	}
 	
 	

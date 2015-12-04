@@ -1,4 +1,4 @@
-package com.kimreik.services;
+package com.kimreik.user;
 
 import java.security.Principal;
 
@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 import com.kimreik.model.PrivateMessage;
-import com.kimreik.model.User;
 
 public interface UsersService {
 	public ResponseEntity<?> addUser(User user, BindingResult result);

@@ -8,8 +8,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
 import com.kimreik.model.Point;
+import com.kimreik.room.RoomsService;
 import com.kimreik.services.GameService;
-import com.kimreik.services.RoomsService;
 
 @Controller("/test")
 public class GameController {

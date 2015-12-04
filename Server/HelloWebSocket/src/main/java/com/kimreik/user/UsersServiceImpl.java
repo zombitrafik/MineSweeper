@@ -1,4 +1,4 @@
-package com.kimreik.services;
+package com.kimreik.user;
 
 import java.security.Principal;
 import java.util.List;
@@ -15,8 +15,8 @@ import org.springframework.validation.ObjectError;
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
 import com.kimreik.model.PrivateMessage;
-import com.kimreik.model.User;
 import com.kimreik.repositories.UsersRepository;
+import com.kimreik.services.SocketMessagingService;
 import com.kimreik.validators.UserValidator;
 
 @Service

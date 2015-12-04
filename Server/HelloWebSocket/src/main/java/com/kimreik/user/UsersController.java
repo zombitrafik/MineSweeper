@@ -1,4 +1,4 @@
-package com.kimreik.controllers;
+package com.kimreik.user;
 
 import java.security.Principal;
 
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kimreik.model.PrivateMessage;
-import com.kimreik.services.UsersService;
 
 @RestController
 @RequestMapping("/users")

@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.user;
 
 import java.util.List;
 

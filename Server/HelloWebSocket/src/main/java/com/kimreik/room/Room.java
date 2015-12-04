@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.room;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.kimreik.model.Game;
+import com.kimreik.model.MineField;
+import com.kimreik.model.Player;
+
 @Entity
-public class GameRoom {
+public class Room {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +42,21 @@ public class GameRoom {
 	
 	@Column
 	private boolean isWin;
+	
+	public Room(){
+		
+	}
+	
+	public Room(RoomDTO roomDTO){
+		this.name = roomDTO.getName();
+		Game newGame = new Game();
+		MineField newMineField = new MineField();
+		newMineField.setHeight(roomDTO.getHeight());
+		newMineField.setWidth(roomDTO.getWidth());
+		newMineField.setMinesCount(roomDTO.getMinesCount());
+		newGame.setMineField(newMineField);
+		this.game = newGame;
+	}
 	
 	public String getName(){
 		return name;

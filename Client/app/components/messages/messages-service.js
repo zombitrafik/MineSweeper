@@ -8,8 +8,10 @@
     function messagesService () {
         var service = {
             isSelectedTab: isSelectedTab,
+            getMessageList: getMessageList,
             selectTab: selectTab,
-            selectedTab: ''
+            selectedTab: '',
+            handleMessages: handleMessages
         };
         return service;
 
@@ -19,6 +21,14 @@
         
         function isSelectedTab (tab) {
             return service.selectedTab === tab;
+        }
+
+        function getMessageList () {
+
+        }
+
+        function handleMessages () {
+
         }
     }
 })();

@@ -23,7 +23,12 @@
                         controllerAs: 'vm'
                     }
                 },
-                requires: []
+                requires: [],
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
+                }
             })
 
             .state({
@@ -41,8 +46,8 @@
                     ROUTE_REQUIRES.ROOM
                 ],
                 resolve: {
-                    cacheLoad: function (cacheService) {
-                        return cacheService.init();
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
             })
@@ -56,6 +61,11 @@
                         controller: 'LoginController',
                         controllerAs: 'vm'
                     }
+                },
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
                 }
             })
 
@@ -67,6 +77,11 @@
                         templateUrl: 'components/register/register-index.html',
                         controller: 'RegisterController',
                         controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
             })
@@ -83,7 +98,12 @@
                 },
                 requires: [
                     ROUTE_REQUIRES.AUTH
-                ]
+                ],
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
+                }
             })
 
             .state({
@@ -98,7 +118,12 @@
                 },
                 requires: [
                     ROUTE_REQUIRES.AUTH
-                ]
+                ],
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
+                }
             })
 
             .state({
@@ -113,42 +138,65 @@
                 },
                 requires: [
                     ROUTE_REQUIRES.AUTH
-                ]
+                ],
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
+                }
             });
 
+    }
+
+    function checkRoute (routeService, $q, $state, cacheService, loginService, globalInitService, requires) {
+        var deferred = $q.defer();
+
+        cacheService.init().then(function () {
+            if(!loginService.isInit && !_.isEmpty(requires)) {
+
+                //TODO: сделать главную инициализацию
+                /*
+
+                 if(!globalInitService.isInit) {
+                 globalInitService.init().then(function () {
+                 deferred.resolve();
+                 })
+                 } else {
+                 deferred.resolve();
+                 }
+                 */
+
+
+                loginService.current().then(function () {
+                    deferred.resolve();
+                }).catch(function () {
+                    $state.go('login');
+                    cacheService.clear();
+                    deferred.reject();
+                });
+            } else {
+                routeService.checkRoute(requires).then(function () {
+                    deferred.resolve();
+                }).catch(function () {
+                    $state.go('login');
+                    deferred.reject();
+                });
+            }
+        }).catch(function () {
+            deferred.reject();
+        });
+
+        return deferred.promise;
     }
 
 
     running.$inject = ['$rootScope', 'routeService', '$q', '$state', 'cacheService', 'loginService'];
 
     function running ($rootScope, routeService, $q, $state, cacheService, loginService) {
-        $rootScope.$on('$stateChangeStart', function(event, toState) {
+        /*$rootScope.$on('$stateChangeStart', function(event, toState) {
 
-            var deffered = $q.defer();
 
-            cacheService.init().then(function () {
-                if(!loginService.isInit && !_.isEmpty(toState.requires)) {
-                    loginService.current().then(function () {
-                        deffered.resolve();
-                    }).catch(function () {
-                        $state.go('login');
-                        cacheService.clear();
-                        deffered.reject();
-                    });
-                } else {
-                    routeService.checkRoute(toState.requires).then(function () {
-                        deffered.resolve();
-                    }).catch(function () {
-                        $state.go('login');
-                        deffered.reject();
-                    });
-                }
-            }).catch(function () {
-                deffered.reject();
-            });
-
-            return deffered.promise;
-        });
+        });*/
     }
 
 })();

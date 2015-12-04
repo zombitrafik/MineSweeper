@@ -9,15 +9,18 @@
         var service = {
             leaveRoom: leaveRoom,
             init: init,
-            isInit: false
+            isInit: false,
+            socketPrefixes: {
+                ROOM: 'ROOM_',
+                GAMEEVENTS: 'GAMEEVENTS_'
+            }
         };
 
         return service;
 
         function init () {
             var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
-            console.log(roomId);
-            //join to room by id
+
             gameApiService.joinRoom(roomId).then(function (data) {
 
                 var rows = data.game.mineField.width,
@@ -36,21 +39,19 @@
                     }
                 }
 
-                // connect to socket
                 socketService.connect('game').then(function () {
-                    // subscribe
-                    socketService.subscribe('/user/messages', handleSocket, 'messages_' + data.id);
-                    socketService.subscribe('/broker/rooms/'+data.id, handleSocket, 'room_' + data.id);
-                    //socketService.subscribe('/broker/heartBeat', handleSocketHeartbeat, 'heartbeat_' + data.id);
-                    socketService.subscribe('/user/game-events', handleSocket, 'gameEvt_' + data.id);
-
-                    canvasService.init('field').then(function () {
-                        canvasService.handleActions(data.game.flags);
-                        canvasService.handleActions(data.game.openedField);
-                    });
-
+                    //socketService.subscribe('/user/broker/messages', handleSocket, service.socketPrefixes.MESSAGES + data.id);
+                    socketService.subscribe('/broker/rooms/'+data.id, handleSocket, service.socketPrefixes.ROOM + data.id);
+                    //socketService.subscribe('/broker/heartBeat', handleSocketHeartbeat, service.socketPrefixes.HEARTBEAT + data.id);
+                    socketService.subscribe('/user/broker/game-events', handleSocket, service.socketPrefixes.GAMEEVENTS + data.id);
                 });
+                // subscribe
 
+
+                canvasService.init('field').then(function () {
+                    canvasService.handleActions(data.game.flags);
+                    canvasService.handleActions(data.game.openedField);
+                });
             });
         }
 
@@ -118,8 +119,11 @@
 
         function leaveRoom () {
             var deferred = $q.defer();
-            //console.log(ROUTE_REQUIRES.ROOM);
-            //socketService.unsubscribe('room_' + ROUTE_REQUIRES.ROOM);
+
+            var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
+
+            socketService.unsubscribe(service.socketPrefixes, roomId);
+
             canvasService.unlockAllActions();
             cacheService.remove(ROUTE_REQUIRES.ROOM).finally(function () {
                 gameApiService.leaveRoom().finally(function () {
@@ -129,9 +133,9 @@
             return deferred.promise;
         }
 
+
         function handleSocket (data) {
-            //parseData
-            console.log(data);
+
             switch (data.type) {
                 case 'FIELD_UPDATE': {
                     canvasService.handleActions(data.data);
@@ -150,11 +154,6 @@
                     break;
                 }
             }
-        }
-
-
-        function handleSocketHeartbeat () {
-            //socketService.send('/users/heartbeat', {});
         }
 
     }

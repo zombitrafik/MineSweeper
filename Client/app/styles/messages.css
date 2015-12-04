@@ -49,6 +49,7 @@
     background: #BB7373;
     border-radius: 3px;
     display: inline-block;
+    color: #aaa
 }
 
 .message-list .message .icon .status {
@@ -69,4 +70,20 @@
     display: inline-block;
     margin-left: 10px;
     color: silver;
+}
+
+.chat-block .chat-header {
+    color: white;
+    height: 30px;
+    line-height: 30px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid white;
+}
+
+.chat-block .chat-header .back-btn {
+    margin-left: 20px;
+}
+
+.chat-block .chat-header .username {
+    margin-left: 20px;
 }

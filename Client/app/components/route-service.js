@@ -7,17 +7,12 @@
 
     function routeService ($q, cacheService) {
         var service = {
-            checkRoute: checkRoute,
-            REQUIRES: {
-                AUTH: 'AUTH',
-                ROOM: 'ROOM'
-            }
+            checkRoute: checkRoute
         };
         return service;
 
         function checkRoute (requires) {
             var deferred = $q.defer();
-            console.log(cacheService.local);
             if(_.isEmpty(requires)) {
                 deferred.resolve();
             } else {

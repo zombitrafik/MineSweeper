@@ -5,9 +5,9 @@
         .module('app')
         .service('loginService', loginService);
 
-    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'cacheService'];
+    loginService.$inject = ['loginApiService', '$window', 'socketService', '$q', 'cacheService', '$state'];
 
-    function loginService (loginApiService, $window, socketService, $q, cacheService) {
+    function loginService (loginApiService, $window, socketService, $q, cacheService, $state) {
 
         var service = {
             login: login,
@@ -27,6 +27,7 @@
             promise.then(function (user) {
                 cacheService.item(ROUTE_REQUIRES.AUTH, user.plain()).then(function () {
                     service.isLoggined = true;
+                    service.isInit = true;
                     deferred.resolve();
                 }).catch(function () {
                     deferred.reject();
@@ -44,6 +45,7 @@
                 service.isInit = true;
                 deferred.resolve();
             }).catch(function () {
+                $state.go('login');
                 deferred.reject();
             });
             return deferred.promise;
@@ -51,6 +53,7 @@
 
         function  logout () {
             cacheService.clear();
+            socketService.unsubscribeAll();
             service.isLoggined = false;
             return loginApiService.logout();
         }

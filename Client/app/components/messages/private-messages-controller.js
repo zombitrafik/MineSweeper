@@ -7,9 +7,16 @@
 
     function PrivateMessagesController (messagesService) {
         var vm = this;
-        vm.privateMessages = [
+        vm.listOfMessage = [
             {test: 'test'}
         ];
+
+        vm.messages = [
+            {message: 1},
+            {message: 2}
+        ];
+
+        vm.isMessageList = true;
 
         vm.header = 'private';
 
@@ -25,13 +32,21 @@
             return 'components/messages/templates/' + vm.header.toLowerCase() + '-template.html';
         };
 
-        var messagesList = [
-            {list: 'list'},
-            {list: 'list'}
-        ];
-
         vm.getMessagesList = function () {
-            return messagesList;
+            return this.listOfMessage;
+        };
+
+        vm.goToChat = function (username) {
+            vm.isMessageList = false;
+            //request
+        };
+
+        vm.backToList = function () {
+            vm.isMessageList = true;
+        };
+
+        vm.getMessages = function () {
+            return vm.messages;
         };
 
         return vm;

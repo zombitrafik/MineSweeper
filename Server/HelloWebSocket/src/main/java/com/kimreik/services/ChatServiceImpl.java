@@ -57,7 +57,7 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	public ResponseEntity<?> getDialog(String user1, String user2) {
-		ResponseMessage message = ResponseMessage.DIALOGS;
+		ResponseMessage message = ResponseMessage.DIALOG;
 		message.add("dialog", dialogRepo.findDialog(user1,user2));
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}

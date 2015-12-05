@@ -9,5 +9,6 @@ public interface RoomsService {
 	public ResponseEntity<?> joinRoom(Integer id, String username);
 	public Room getCurrentRoom(String username);
 	public void leaveRoom(String username);
+	public int nextRoom(String username);
 	public void/*Principal*/ disconnect(String username);
 }

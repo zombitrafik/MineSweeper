@@ -54,9 +54,10 @@ public class UsersServiceImpl implements UsersService {
 
 	public ResponseEntity<?> find(String finder, String username) {
 		List<User> result = usersRepo.findByName(username);
-		result.remove(finder);
+		User finderUser = usersRepo.findOne(finder);
+		result.remove(finderUser);
 		
-		result.remove(usersRepo.findOne(finder).getFriends());
+		result.remove(finderUser.getFriends());
 		ResponseMessage message = ResponseMessage.FIND_USER_RESULT
 				.add("userList", usersRepo.findByName(username));
 		return ResponseWrapper.wrap(message, HttpStatus.OK);

@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +25,8 @@ public class RoomsController {
 	GameService gameService;
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public ResponseEntity<?> createRoom(Principal principal, @RequestBody RoomDTO roomDTO){
-		return roomsService.createRoom(principal.getName(), roomDTO);
+	public ResponseEntity<?> createRoom(Principal principal, @RequestBody RoomDTO roomDTO, BindingResult result){
+		return roomsService.createRoom(principal.getName(), roomDTO, result);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)

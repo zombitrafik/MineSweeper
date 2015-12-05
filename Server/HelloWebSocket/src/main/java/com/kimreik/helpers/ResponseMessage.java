@@ -14,6 +14,8 @@ public class ResponseMessage {
 	public static final ResponseMessage USERNAME_ALREADY_EXIST = error("USERNAME_ALREADY_EXIST");
 	public static final ResponseMessage PASSWORDS_DONT_MATCH = error("PASSWORDS_DONT_MATCH");
 	
+	public static final ResponseMessage ROOM_WITH_THIS_NAME_ALREADY_EXIST = error("ROOM_WITH_THIS_NAME_ALREADY_EXIST");
+	
 	public static final ResponseMessage FIELD_UPDATE = new ResponseMessage("FIELD_UPDATE");
 	
 	public static final ResponseMessage PLAYER_BOMBED = new ResponseMessage("PLAYER_BOMBED");

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
@@ -27,7 +29,7 @@ public class RoomsServiceImpl implements RoomsService {
 	UsersRepository userRepo;
 
 	
-	public ResponseEntity<?> createRoom(String username, RoomDTO roomDTO) {
+	public ResponseEntity<?> createRoom(String username, RoomDTO roomDTO, BindingResult result) {
 
 		
 		User user = userRepo.findOne(username);
@@ -39,6 +41,18 @@ public class RoomsServiceImpl implements RoomsService {
 		Room newRoom = new Room(roomDTO);
 		newRoom.setId(null);
 		newRoom.addPlayer(user.getUsername());
+		
+		RoomValidator validator = new RoomValidator(roomRepo);
+		
+		validator.validate(newRoom, result);
+		
+		if (result.hasErrors()) {
+			String errStr = "";
+			for (ObjectError err : result.getAllErrors()) {
+				errStr += err.getCode();
+			}
+			return new ResponseEntity<ResponseMessage>(ResponseMessage.error(errStr), HttpStatus.BAD_REQUEST);
+		}
 		
 		newRoom = roomRepo.save(newRoom);
 		user.setCurrentRoomid(newRoom.getId());

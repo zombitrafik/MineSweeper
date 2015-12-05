@@ -66,6 +66,7 @@ public class RoomsServiceImpl implements RoomsService {
 
 		for (Room room : roomRepo.findAll()) {
 			//if(!room.isStarted()) 
+			if(!room.isFinished())
 				rooms.add(new RoomDTO(room));
 		}
 		return ResponseWrapper.wrap(rooms, HttpStatus.OK);
@@ -119,6 +120,16 @@ public class RoomsServiceImpl implements RoomsService {
 		User user = userRepo.findOne(username);
 		return roomRepo.findOne(user.getCurrentRoomid());
 		
+	}
+
+	public int nextRoom(String username) {
+		User user = userRepo.findOne(username);
+		Room room = roomRepo.findOne(user.getCurrentRoomid());
+		if(room==null || !room.isFinished()) return 0;
+		if(room.getNextRoomId()!=0) return room.getNextRoomId();
+		Room newRoom = new Room(new RoomDTO(room));
+		newRoom.setId(null);
+		return roomRepo.save(newRoom).getId();
 	}
 
 }

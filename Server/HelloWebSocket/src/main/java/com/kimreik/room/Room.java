@@ -43,6 +43,9 @@ public class Room {
 	@Column
 	private boolean isWin;
 	
+	@Column
+	private int nextRoomId;
+	
 	public Room(){
 		
 	}
@@ -140,6 +143,14 @@ public class Room {
 
 	public void setWin(boolean isWin) {
 		this.isWin = isWin;
+	}
+
+	public int getNextRoomId() {
+		return nextRoomId;
+	}
+
+	public void setNextRoomId(int nextRoomId) {
+		this.nextRoomId = nextRoomId;
 	}
 	
 	

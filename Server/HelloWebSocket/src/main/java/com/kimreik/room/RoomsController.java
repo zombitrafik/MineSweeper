@@ -58,5 +58,10 @@ public class RoomsController {
 		roomsService.leaveRoom(principal.getName());
 	}
 	
+	@RequestMapping(value="/next", method = RequestMethod.POST)
+	public int nextRoom(Principal principal){
+		return roomsService.nextRoom(principal.getName());
+	}
+	
 	
 }

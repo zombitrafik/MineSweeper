@@ -33,6 +33,9 @@ public class ResponseMessage {
 	public static final ResponseMessage FRIENDS = new ResponseMessage("FRIENDS");
 	
 	
+	public static final ResponseMessage DIALOGS = new ResponseMessage("DIALOGS");
+	public static final ResponseMessage DIALOG = new ResponseMessage("DIALOG");
+	
 	public static final ResponseMessage PRIVATE_MESSAGE = new ResponseMessage("PRIVATE_MESSAGE");
 	
 	public static final ResponseMessage HEARTBEAT = new ResponseMessage("HEARTBEAT");

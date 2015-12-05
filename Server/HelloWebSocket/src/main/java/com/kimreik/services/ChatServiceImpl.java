@@ -1,16 +1,13 @@
 package com.kimreik.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.transaction.Transactional;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.kimreik.dialog.Dialog;
-import com.kimreik.dialog.DialogDTO;
 import com.kimreik.dialog.DialogRepository;
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
@@ -25,6 +22,7 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
 	DialogRepository dialogRepo;
 	
+	@Transactional
 	public void sendMessage(String sender, PrivateMessage message) {
 
 		message.setSender(sender);
@@ -53,12 +51,15 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	public ResponseEntity<?> getDialogs(String username) {
-		
-		return ResponseWrapper.wrap(dialogRepo.findDialogsOfUser(username), HttpStatus.OK);
+		ResponseMessage message = ResponseMessage.DIALOGS;
+		message.add("dialogs", dialogRepo.findDialogsOfUser(username));
+		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
 	public ResponseEntity<?> getDialog(String user1, String user2) {
-		return ResponseWrapper.wrap(dialogRepo.findDialog(user1,user2), HttpStatus.OK);
+		ResponseMessage message = ResponseMessage.DIALOGS;
+		message.add("dialog", dialogRepo.findDialog(user1,user2));
+		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
 }

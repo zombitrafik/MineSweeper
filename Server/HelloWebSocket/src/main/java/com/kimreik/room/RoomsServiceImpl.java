@@ -11,11 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
-import com.kimreik.model.Game;
-import com.kimreik.model.MineField;
-import com.kimreik.repositories.GameRoomRepository;
-import com.kimreik.repositories.UsersRepository;
 import com.kimreik.user.User;
+import com.kimreik.user.UsersRepository;
 
 @Service
 public class RoomsServiceImpl implements RoomsService {
@@ -24,7 +21,7 @@ public class RoomsServiceImpl implements RoomsService {
 	Logger logger = Logger.getLogger(RoomsServiceImpl.class);
 	
 	@Autowired
-	GameRoomRepository roomRepo;
+	RoomsRepository roomRepo;
 
 	@Autowired
 	UsersRepository userRepo;

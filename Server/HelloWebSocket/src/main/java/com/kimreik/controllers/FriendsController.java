@@ -9,29 +9,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kimreik.services.FriendsService;
 import com.kimreik.user.UserDTO;
-import com.kimreik.user.UsersService;
 
 @RestController
 @RequestMapping("/friends")
 public class FriendsController {
 
 	@Autowired
-	UsersService usersService;
+	FriendsService friendsService;
 		
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> getFriends(Principal principal){
-		return usersService.getFriends(principal.getName());
+		return friendsService.getFriends(principal.getName());
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public ResponseEntity<?> addFriend(Principal principal, @RequestBody UserDTO userDTO){
-		return usersService.addFriend(principal.getName(), userDTO.getUsername());
+		return friendsService.addFriend(principal.getName(), userDTO.getUsername());
 	}
 	
 	@RequestMapping(value="/remove", method=RequestMethod.POST)
 	public ResponseEntity<?> removeFriend(Principal principal, @RequestBody UserDTO userDTO){
-		return usersService.removeFriend(principal.getName(), userDTO.getUsername());
+		return friendsService.removeFriend(principal.getName(), userDTO.getUsername());
 	}
 	
 	

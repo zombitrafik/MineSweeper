@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.kimreik.repositories.UsersRepository;
 import com.kimreik.services.SocketMessagingService;
 import com.kimreik.user.User;
 import com.kimreik.user.UserStatus;
+import com.kimreik.user.UsersRepository;
 
 @Component
 public class HeartBeatScheduler {
@@ -33,14 +33,14 @@ public class HeartBeatScheduler {
         		//disconnect;
         		continue;
         	}
-        	if(now-user.getLastActivity()>60000/*600000*/){
+        	if(now-user.getLastActivity()>600000){
         		logger.error(user.getUsername()+"_timeOut");
         		//disconnect
-        		
+        		user.setStatus(UserStatus.OFFLINE);
         		continue;
         	}
-        	if(now-user.getLastActivity()>10000/*120000*/){
-        		logger.error(user.getUsername()+"_AFK");
+        	if(now-user.getLastActivity()>120000){
+        		//logger.error(user.getUsername()+"_AFK");
         		user.setStatus(UserStatus.AFK);
         		continue;
         	}

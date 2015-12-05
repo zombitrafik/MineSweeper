@@ -19,10 +19,10 @@ import com.kimreik.model.Game;
 import com.kimreik.model.MineField;
 import com.kimreik.model.Player;
 import com.kimreik.model.Point;
-import com.kimreik.repositories.GameRoomRepository;
-import com.kimreik.repositories.UsersRepository;
 import com.kimreik.room.Room;
+import com.kimreik.room.RoomsRepository;
 import com.kimreik.user.User;
+import com.kimreik.user.UsersRepository;
 
 @Service
 public class GameServiceImpl extends BasicGameEventsImpl implements GameService {
@@ -31,7 +31,7 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 	UsersRepository userRepo;
 
 	@Autowired
-	GameRoomRepository roomRepo;
+	RoomsRepository roomRepo;
 
 	@Autowired
 	private SocketMessagingService socketMessagingService;

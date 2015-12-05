@@ -21,7 +21,7 @@ public class RoomValidator implements Validator{
 		Room room = (Room) target;
 		for(Room r : repo.findAll()){
 			if(r.getName().equals(room.getName())){
-				error.rejectValue("roomName", ResponseMessage.ROOM_WITH_THIS_NAME_ALREADY_EXIST.getError());
+				error.rejectValue("name", ResponseMessage.ROOM_WITH_THIS_NAME_ALREADY_EXIST.getError());
 				break;
 			}
 		}

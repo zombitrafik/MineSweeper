@@ -1,8 +1,6 @@
-package com.kimreik.repositories;
+package com.kimreik.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.kimreik.user.User;
 
 public interface UsersRepository extends JpaRepository<User, String>, UsersRepositoryCustom{
 

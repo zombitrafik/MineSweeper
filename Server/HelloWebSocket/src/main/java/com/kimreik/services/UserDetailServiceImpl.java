@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kimreik.repositories.UsersRepository;
+import com.kimreik.user.UsersRepository;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService{

@@ -1,8 +1,6 @@
-package com.kimreik.repositories;
+package com.kimreik.user;
 
 import java.util.List;
-
-import com.kimreik.user.User;
 
 public interface UsersRepositoryCustom {
 	public List<User> findByName(String username);

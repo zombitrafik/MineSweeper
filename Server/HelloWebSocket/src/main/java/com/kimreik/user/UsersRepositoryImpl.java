@@ -1,11 +1,9 @@
-package com.kimreik.repositories;
+package com.kimreik.user;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import com.kimreik.user.User;
 
 public class UsersRepositoryImpl implements UsersRepositoryCustom {
 	

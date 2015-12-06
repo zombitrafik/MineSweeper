@@ -1,4 +1,4 @@
-package com.kimreik.controllers;
+package com.kimreik.game;
 
 import java.security.Principal;
 
@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
-import com.kimreik.model.Point;
 import com.kimreik.room.RoomsService;
-import com.kimreik.services.GameService;
 
 @Controller("/test")
 public class GameController {

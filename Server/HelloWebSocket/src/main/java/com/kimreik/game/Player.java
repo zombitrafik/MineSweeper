@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.game;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,6 +14,9 @@ public class Player {
 	
 	@Column
 	private boolean isBombed;
+	
+	@Column
+	private boolean isLeaved;
 	
 	public String getUsername(){
 		return username;
@@ -37,6 +40,14 @@ public class Player {
 
 	public void setBombed(boolean isBombed) {
 		this.isBombed = isBombed;
+	}
+
+	public boolean isLeaved() {
+		return isLeaved;
+	}
+
+	public void setLeaved(boolean isLeaved) {
+		this.isLeaved = isLeaved;
 	}
 	
 }

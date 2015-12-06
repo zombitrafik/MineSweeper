@@ -1,12 +1,9 @@
-package com.kimreik.services;
+package com.kimreik.game;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.kimreik.helpers.FieldGenerator;
-import com.kimreik.model.Game;
-import com.kimreik.model.MineField;
-import com.kimreik.model.Point;
 import com.kimreik.room.Room;
 
 public class BasicGameEventsImpl {

@@ -1,17 +1,20 @@
 package com.kimreik.room;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kimreik.model.Point;
-import com.kimreik.services.GameService;
+import com.kimreik.game.GameService;
+import com.kimreik.game.Player;
+import com.kimreik.game.Point;
 
 @RestController
 @RequestMapping("/rooms")
@@ -24,8 +27,8 @@ public class RoomsController {
 	GameService gameService;
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public ResponseEntity<?> createRoom(Principal principal, @RequestBody RoomDTO roomDTO){
-		return roomsService.createRoom(principal.getName(), roomDTO);
+	public ResponseEntity<?> createRoom(Principal principal, @RequestBody RoomDTO roomDTO, BindingResult result){
+		return roomsService.createRoom(principal.getName(), roomDTO, result);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -57,5 +60,14 @@ public class RoomsController {
 		roomsService.leaveRoom(principal.getName());
 	}
 	
+	@RequestMapping(value="/next", method = RequestMethod.POST)
+	public int nextRoom(Principal principal){
+		return roomsService.nextRoom(principal.getName());
+	}
+	
+	@RequestMapping(value="/stat", method = RequestMethod.GET)
+	public List<Player> getStat(Principal principal){
+		return gameService.getStatistics(principal.getName());
+	}
 	
 }

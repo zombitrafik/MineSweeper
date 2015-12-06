@@ -11,9 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.kimreik.model.Game;
-import com.kimreik.model.MineField;
-import com.kimreik.model.Player;
+import com.kimreik.game.Game;
+import com.kimreik.game.MineField;
+import com.kimreik.game.Player;
 
 @Entity
 public class Room {
@@ -42,6 +42,9 @@ public class Room {
 	
 	@Column
 	private boolean isWin;
+	
+	@Column
+	private int nextRoomId;
 	
 	public Room(){
 		
@@ -89,9 +92,10 @@ public class Room {
 		
 		players.add(newPlayer);
 	}
-
-	public void removePlayer(String playerName){
-		players.remove(getPlayerByName(playerName));
+	
+	public void setPlayerLeaved(String playerName, boolean isLeaved){
+		Player player = getPlayerByName(playerName);
+		player.setLeaved(isLeaved);
 	}
 	
 	public Game getGame() {
@@ -103,7 +107,7 @@ public class Room {
 	}
 	
 	
-	private Player getPlayerByName(String name){
+	public Player getPlayerByName(String name){
 		for(Player p : players){
 			if(p.getUsername().equals(name)) return p;
 		}
@@ -140,6 +144,14 @@ public class Room {
 
 	public void setWin(boolean isWin) {
 		this.isWin = isWin;
+	}
+
+	public int getNextRoomId() {
+		return nextRoomId;
+	}
+
+	public void setNextRoomId(int nextRoomId) {
+		this.nextRoomId = nextRoomId;
 	}
 	
 	

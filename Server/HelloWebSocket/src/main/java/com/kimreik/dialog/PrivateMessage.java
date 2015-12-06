@@ -1,8 +1,18 @@
-package com.kimreik.model;
+package com.kimreik.dialog;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class PrivateMessage {
+	
+	@Column
 	private String sender;
+	
+	@Column
 	private String recipient;
+	
+	@Column
 	private String message;
 
 	public String getSender() {

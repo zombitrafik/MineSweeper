@@ -1,5 +1,7 @@
 package com.kimreik.room;
 
+import com.kimreik.game.MineField;
+
 public class RoomDTO {
 	
 	private int id;
@@ -19,8 +21,10 @@ public class RoomDTO {
 	public RoomDTO(Room room){
 		this.id=room.getId();
 		this.name = room.getName();
-		this.width = room.getGame().getMineField().getWidth();
-		this.height = room.getGame().getMineField().getHeight();
+		MineField mineField = room.getGame().getMineField();
+		this.width = mineField.getWidth();
+		this.height = mineField.getHeight();
+		this.minesCount = mineField.getMinesCount();
 	}
 	
 	public int getId() {

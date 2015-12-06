@@ -1,7 +1,5 @@
 package com.kimreik.dialog;
 
-import com.kimreik.model.PrivateMessage;
-
 public class DialogDTO {
 	
 	private PrivateMessage lastMessage;

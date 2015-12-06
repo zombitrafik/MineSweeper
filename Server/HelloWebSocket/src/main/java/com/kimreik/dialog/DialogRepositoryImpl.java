@@ -8,8 +8,6 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.log4j.Logger;
 
-import com.kimreik.model.PrivateMessage;
-
 public class DialogRepositoryImpl implements DialogRepositoryCustom{
 
 	@PersistenceContext

@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.dialog;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

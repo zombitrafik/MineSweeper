@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.kimreik.dialog.Dialog;
 import com.kimreik.dialog.DialogRepository;
+import com.kimreik.dialog.PrivateMessage;
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
-import com.kimreik.model.PrivateMessage;
 
 @Service
 public class ChatServiceImpl implements ChatService {

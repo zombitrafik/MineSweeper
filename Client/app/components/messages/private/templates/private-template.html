@@ -1,15 +1,19 @@
-<div class="message-list" ng-if="vm.isMessageList()">
-    <div class="message" ng-repeat="messages in vm.getMessagesList()" ng-click="vm.goToChat(messages.username)">
+<div class="message-list" ng-if="vm.isMessageList()" ng-init="vm.loadListMessage()">
+    <div class="message" ng-repeat="list in vm.getMessagesList()" ng-click="vm.goToChat(list.username)">
         <div class="icon">
             <div class="fa fa-user fa-3x"></div>
             <span class="status">online</span>
         </div>
-        <span class="author">AUTHOR</span>
-        <span class="last-message">last message from user</span>
+        <span class="author" ng-bind="list.username"></span>
+        <span class="last-message" ng-bind="list.lastMessage.message"></span>
     </div>
 </div>
+<div class="start-new-chat" ng-if="vm.isMessageList()">
+    <button ng-click="vm.startNewChat()">NEW CHAT</button>
+</div>
 
-<div class="chat-block" ng-if="!vm.isMessageList()">
+
+<div class="chat-block" ng-if="!vm.isMessageList()" ng-init="vm.loadPrivateMessage()">
     <div class="chat-header">
         <span class="back-btn" ng-click="vm.backToList()">
             <i class="fa fa-arrow-left"></i>

@@ -144,6 +144,26 @@
                         return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
+            })
+
+            .state({
+                name: 'leaderboard',
+                url: '/leaderboard',
+                views: {
+                    'mainView': {
+                        templateUrl: 'components/leaderboard/leaderboard-index.html',
+                        controller: 'LeaderboardController',
+                        controllerAs: 'vm'
+                    }
+                },
+                requires: [
+                    ROUTE_REQUIRES.AUTH
+                ],
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
+                }
             });
 
     }

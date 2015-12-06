@@ -12,6 +12,7 @@
             getRooms: getRooms,
             joinRoom: joinRoom,
             createRoom: createRoom,
+            nextRoom: nextRoom,
             init: init
         };
 
@@ -37,6 +38,10 @@
                 deferred.reject();
             });
             return deferred.promise;
+        }
+
+        function nextRoom () {
+            return lobbyApiService.nextRoom();
         }
 
         function createRoom (config) {

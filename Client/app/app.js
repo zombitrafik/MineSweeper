@@ -5,7 +5,8 @@
         .module('app', [
             'app.config',
             'ui.router',
-            'LocalForageModule'
+            'LocalForageModule',
+            'angular-click-outside'
         ]);
 })();
 

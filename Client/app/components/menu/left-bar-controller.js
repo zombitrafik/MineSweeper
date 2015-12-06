@@ -3,9 +3,9 @@
         .module('app')
         .controller('LeftBarController', LeftBarController);
 
-    LeftBarController.$inject = ['pageService', 'loginService', '$state', 'stateService', 'cacheService'];
+    LeftBarController.$inject = ['pageService', 'loginService', '$state', 'stateService', 'cacheService', 'globalInitService', 'socketService'];
 
-    function LeftBarController (pageService, loginService, $state, stateService, cacheService) {
+    function LeftBarController (pageService, loginService, $state, stateService, cacheService, globalInitService, socketService) {
         var vm = this;
 
         vm.hideMenu = function () {
@@ -23,6 +23,9 @@
 
         vm.logout = function () {
             loginService.logout().finally(function () {
+                globalInitService.clearService();
+                cacheService.clearService();
+                socketService.clearService();
                 pageService.toggleMenu();
                 $state.go('home');
             });

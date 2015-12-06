@@ -3,9 +3,9 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', 'gameEndScreenService', '$rootScope'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q) {
+    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, gameEndScreenService, $rootScope) {
         var service = {
             leaveRoom: leaveRoom,
             init: init,
@@ -20,12 +20,16 @@
 
         function init () {
             var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
-
+            gameEndScreenService.open = false;
             gameApiService.joinRoom(roomId).then(function (data) {
 
                 var rows = data.game.mineField.width,
                     cols = data.game.mineField.height;
                 generateMap(rows, cols);
+
+                if(data.finished) {
+                    showGameEndScreen();
+                }
 
                 var user = cacheService.local[ROUTE_REQUIRES.AUTH].data;
 
@@ -133,6 +137,14 @@
             return deferred.promise;
         }
 
+        function showGameEndScreen () {
+            gameEndScreenService.getStats().then(
+                function () {
+                    gameEndScreenService.open = true;
+                    gameEndScreenService.leaveRoomMethod = leaveRoom;
+                }
+            );
+        }
 
         function handleSocket (data) {
 
@@ -142,15 +154,23 @@
                     break;
                 }
                 case 'GAME_LOSE': {
-                    canvasService.blockAllActions();
+                    console.log('lose');
+                    showGameEndScreen();
+                    $rootScope.$apply();
                     break;
                 }
                 case 'GAME_WIN' : {
                     console.log('win');
+                    showGameEndScreen();
+                    $rootScope.$apply();
                     break;
                 }
                 case 'PRIVATE_MESSAGE': {
                     console.log(data);
+                    break;
+                }
+                case 'PLAYER_BOMBED' : {
+                    canvasService.blockAllActions();
                     break;
                 }
             }

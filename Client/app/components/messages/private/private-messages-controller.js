@@ -3,50 +3,39 @@
         .module('app')
         .controller('PrivateMessagesController', PrivateMessagesController);
 
-    PrivateMessagesController.$inject = ['messagesService', '$state', '$stateParams', 'privateMessagesService'];
+    PrivateMessagesController.$inject = ['messagesService', '$state', 'privateMessagesService'];
 
-    function PrivateMessagesController (messagesService, $state, $stateParams, privateMessagesService) {
+    function PrivateMessagesController (messagesService, $state, privateMessagesService) {
         var vm = this;
         vm.listOfMessage = [
             {username: 'kimreik'},
+            {username: 'zombitrafik'},
             {username: 'kimreik'},
+            {username: 'zombitrafik'},
             {username: 'kimreik'},
+            {username: 'zombitrafik'},
             {username: 'kimreik'},
+            {username: 'zombitrafik'},
             {username: 'kimreik'},
-            {username: 'kimreik'}
+            {username: 'zombitrafik'},
+            {username: 'kimreik'},
+            {username: 'zombitrafik'},
+            {username: 'kimreik'},
+            {username: 'zombitrafik'},
+            {username: 'kimreik'},
+            {username: 'zombitrafik'}
         ];
 
-        vm.messages = [
-            {
-                text: 'some long message from zombitrafik',
-                recipient: 'kimreik',
-                sender: 'zombitrafik'
-            },
-            {
-                text: 'some long message from zombitrafik',
-                recipient: 'kimreik',
-                sender: 'zombitrafik'
-            },
-            {
-                text: 'some long message from zombitrafik',
-                recipient: 'kimreik',
-                sender: 'zombitrafik'
-            },
-            {
-                text: 'some long message from zombitrafik',
-                recipient: 'kimreik',
-                sender: 'zombitrafik'
-            },
-            {
-                text: 'another text from kimreik',
-                recipient: 'zombitrafik',
-                sender: 'kimreik'
-            }
-        ];
+        vm.messageModel = {
+            text: ''
+        };
+
+        vm.sendMessage = function () {
+
+        };
 
         vm.isMessageList = function () {
-            console.log(_.isEmpty($stateParams.recipient));
-            return _.isEmpty($stateParams.recipient);
+            return privateMessagesService.isMessageList();
         };
 
         vm.header = 'private';
@@ -64,23 +53,42 @@
         };
 
         vm.goToChat = function (username) {
-            $state.go('messages', {recipient: username});
+            privateMessagesService.loadPrivateMessage(username).then(function () {
+                $state.go('messages', {recipient: username});
+            });
+        };
+
+        vm.loadPrivateMessage = function () {
+            privateMessagesService.loadPrivateMessageFromState();
         };
 
         vm.getMessagesList = function () {
-            return this.listOfMessage;
+            return privateMessagesService.getListOfMessage();
+        };
+
+        vm.loadListMessage = function () {
+            privateMessagesService.loadMessageList();
         };
 
         vm.backToList = function () {
+            privateMessagesService.currentMessages = [];
             $state.go('messages', {recipient: ''});
         };
 
         vm.getMessages = function () {
-            return vm.messages;
+            return privateMessagesService.getMessages();
         };
 
         vm.isMyMessage = function (message) {
             return privateMessagesService.isMyMessage(message);
+        };
+
+        vm.sendMessage = function () {
+            privateMessagesService.sendMessage(vm.messageModel.text);
+        };
+
+        vm.startNewChat = function () {
+            $state.go('friends', {action: 'CHAT'});
         };
 
         return vm;

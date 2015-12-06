@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q', 'popupService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q', 'popupService', 'cacheService'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q, popupService) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q, popupService, cacheService) {
         var service = {
             init: init,
             handleActions: handleActions,
@@ -212,7 +212,8 @@
                     }
                 }
             });
-            if(username !== '') {
+            var currentUser = cacheService.local[ROUTE_REQUIRES.AUTH].data;
+            if(username !== '' && username !== currentUser.username) {
                 popupService.createPopup(username, data[0].x * gameConfigService.FIELD.CELL.SIZE, data[0].y * gameConfigService.FIELD.CELL.SIZE);
             }
 

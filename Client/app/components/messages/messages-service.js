@@ -3,12 +3,13 @@
         .module('app')
         .service('messagesService', messagesService);
     
-    messagesService.$inject = [];    
+    messagesService.$inject = ['messagesApiService'];
         
-    function messagesService () {
+    function messagesService (messagesApiService) {
         var service = {
             isSelectedTab: isSelectedTab,
             getMessageList: getMessageList,
+            loadPrivateMessage: loadPrivateMessage,
             selectTab: selectTab,
             selectedTab: '',
             handleMessages: handleMessages
@@ -24,11 +25,16 @@
         }
 
         function getMessageList () {
-
+            return messagesApiService.getMessageList();
         }
 
         function handleMessages (message) {
 
         }
+
+        function loadPrivateMessage (username) {
+            return messagesApiService.loadPrivateMessage(username);
+        }
+
     }
 })();

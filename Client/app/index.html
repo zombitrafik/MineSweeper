@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="styles/main.css"/>
     <link rel="stylesheet" href="styles/messages.css"/>
     <link rel="stylesheet" href="styles/friends.css"/>
+    <link rel="stylesheet" href="styles/lobby.css"/>
+    <link rel="stylesheet" href="styles/leaderboard.css"/>
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-sacle=1, maximum-scale=1, user-scalable=no">
 </head>
@@ -27,6 +29,7 @@
     <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="bower_components/localforage/dist/localforage.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-click-outside/clickoutside.directive.js"></script>
     <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
     <script type="text/javascript" src="bower_components/restangular/dist/restangular.min.js"></script>
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
@@ -46,6 +49,9 @@
     <!-- Dialogs -->
     <script type="text/javascript" src="components/dialogs/create-room/create-room-controller.js"></script>
     <script type="text/javascript" src="components/dialogs/create-room/create-room-service.js"></script>
+    <script type="text/javascript" src="components/dialogs/game-end-screen/game-end-screen-controller.js"></script>
+    <script type="text/javascript" src="components/dialogs/game-end-screen/game-end-screen-service.js"></script>
+
 
     <!-- Controllers -->
 
@@ -71,6 +77,8 @@
     <script type="text/javascript" src="components/messages/world/world-messages-controller.js"></script>
     <!-- Friends -->
     <script type="text/javascript" src="components/friends/friends-controller.js"></script>
+    <!-- Leaderboard -->
+    <script type="text/javascript" src="components/leaderboard/leaderboard-controller.js"></script>
 
 
     <!-- Services -->
@@ -92,9 +100,19 @@
     <!-- Messages -->
     <script type="text/javascript" src="components/messages/messages-service.js"></script>
     <script type="text/javascript" src="components/messages/private/private-messages-service.js"></script>
+    <script type="text/javascript" src="components/messages/messages-api-service.js"></script>
     <!-- Friends -->
     <script type="text/javascript" src="components/friends/friends-service.js"></script>
     <script type="text/javascript" src="components/friends/friends-api-service.js"></script>
+    <!-- Notification -->
+    <script type="text/javascript" src="components/notifications/notification-service.js"></script>
+    <!-- Leaderboard -->
+    <script type="text/javascript" src="components/leaderboard/leaderboard-api-service.js"></script>
+    <script type="text/javascript" src="components/leaderboard/leaderboard-service.js"></script>
+
+
+
+
 
     <!-- Shared -->
     <script type="text/javascript" src="shared/directives/field/field-directive.js"></script>

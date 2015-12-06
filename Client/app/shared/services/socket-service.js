@@ -7,6 +7,7 @@
     function socketService ($q) {
 
         var BASE_URL = 'http://52.28.17.161:8080/';
+        //var BASE_URL = 'http://169.254.130.181:8080/';
 
         var service = {
             connect: connect,
@@ -16,7 +17,8 @@
             send: send,
             subscriptions: [],
             ws: undefined,
-            unsubscribeAll: unsubscribeAll
+            unsubscribeAll: unsubscribeAll,
+            clearService: clearService
         };
 
         return service;
@@ -58,13 +60,21 @@
         function unsubscribeAll () {
             var prefixes = service.subscriptions;
             for(var i in prefixes) {
-                prefixes[i].unsubscribe();
+                if(prefixes[i]) {
+                    prefixes[i].unsubscribe();
+                }
             }
             service.subscriptions = [];
         }
 
         function send(url, data) {
             service.client.send(url, {}, JSON.stringify(data));
+        }
+
+        function clearService () {
+            service.client = {};
+            service.ws = undefined;
+            service.subscriptions = []
         }
 
     }

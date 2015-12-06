@@ -12,7 +12,8 @@
             remove: remove,
             local: [],
             init: init,
-            isInit: false
+            isInit: false,
+            clearService: clearService
         };
         return service;
 
@@ -91,6 +92,11 @@
         function remove (key) {
             removeLocal(key);
             return $localForage.removeItem(key);
+        }
+
+        function clearService () {
+            service.isInit = false;
+            service.local = [];
         }
     }
 })();

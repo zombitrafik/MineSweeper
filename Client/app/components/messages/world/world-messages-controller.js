@@ -22,7 +22,7 @@
         };
 
         vm.getTemplate = function () {
-            return 'components/messages/templates/' + vm.header.toLowerCase() + '-template.html';
+            return 'components/messages/world/templates/world-template.html';
         };
 
         var messagesList = [

@@ -80,9 +80,15 @@ body {
 #field {
     position: relative;
     overflow: auto;
-    height: calc(100vh - 60px);
+    height: 100%;
     width: 100%;
 }
+
+.content .container {
+    height: 100%;
+}
+
+
 
 .hidden {
     display: none;
@@ -100,7 +106,7 @@ body {
 .create-room-dialog .dialog {
     position: absolute;
     width: 70%;
-    height: 50%;
+    height: 240px;
     background: #424242;
     left: 15%;
     top: 10%;
@@ -162,4 +168,8 @@ body {
     border-radius: 4px;
     background: #2196F3;
     color: white;
+}
+
+.create-room-dialog .dark-layer {
+    height: 100%;
 }

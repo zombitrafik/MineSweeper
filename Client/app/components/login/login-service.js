@@ -55,6 +55,7 @@
             cacheService.clear();
             socketService.unsubscribeAll();
             service.isLoggined = false;
+            service.isInit = false;
             return loginApiService.logout();
         }
     }

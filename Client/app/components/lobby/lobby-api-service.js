@@ -11,7 +11,8 @@
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,
-            createRoom: createRoom
+            createRoom: createRoom,
+            nextRoom: nextRoom
         };
 
         return service;
@@ -27,6 +28,10 @@
 
         function createRoom (config) {
             return Restangular.one('rooms/create').customPOST(config);
+        }
+
+        function nextRoom () {
+            return Restangular.one('rooms/next').customPOST();
         }
     }
 })();

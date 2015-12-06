@@ -3,9 +3,9 @@
         .module('app')
         .controller('FriendsController', FriendsController);
 
-    FriendsController.$inject = ['friendsService', '$stateParams', '$rootScope'];
+    FriendsController.$inject = ['friendsService', '$stateParams', '$rootScope', '$state'];
 
-    function FriendsController (friendsService, $stateParams, $rootScope) {
+    function FriendsController (friendsService, $stateParams, $rootScope, $state) {
         var vm = this;
 
         vm.users = [];
@@ -78,6 +78,10 @@
         }, function (newVal) {
             vm.search();
         });
+
+        vm.openChat = function (username) {
+            $state.go('messages', {recipient: username});
+        };
 
         return vm;
     }

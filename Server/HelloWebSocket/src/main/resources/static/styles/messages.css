@@ -1,0 +1,204 @@
+.messages {
+    position: relative;
+    height: 100%;
+}
+
+.messages .tab>span {
+    width: 33.3%;
+    display: inline-block;
+    float: left;
+    text-align: center;
+    border-bottom: 4px solid white;
+    height: 30px;
+    line-height: 30px;
+    background: #2A2A31;
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+
+.messages .tab>span.active {
+    border-bottom: 4px solid #03A9F4;
+}
+
+.messages .tab .body {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow: auto;
+}
+
+.message-list .message {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    width: calc(100% - 20px);
+    border-bottom: 1px solid whitesmoke;
+    height: 55px;
+    padding-top: 5px;
+}
+.message-list .message .icon {
+    display: inline-block;
+    float: left;
+    position: relative;
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+.message-list .message .icon .image {
+    width: 40px;
+    height: 40px;
+    background: #BB7373;
+    border-radius: 3px;
+    display: inline-block;
+    color: #aaa
+}
+
+.message-list .message .icon .status {
+    position: absolute;
+    left: 45px;
+    top: 20px;
+    color: white;
+}
+
+.message-list .message .author {
+    float: left;
+    margin-top: 0;
+    color: bisque;
+}
+
+.message-list .message .last-message {
+    margin-top: 16px;
+    display: inline-block;
+    margin-left: 10px;
+    color: silver;
+}
+
+.chat-block {
+    height: 100%;
+}
+
+.chat-block .container {
+    height: calc(100% - 36px);
+}
+
+.chat-block .chat-header {
+    color: white;
+    height: 30px;
+    line-height: 30px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid white;
+}
+
+.chat-block .chat-header .back-btn {
+    margin-left: 20px;
+}
+
+.chat-block .chat-header .username {
+    margin-left: 20px;
+}
+
+.messages-box .message {
+    min-height: 40px;
+    border-radius: 5px;
+    padding: 3px;
+    min-width: 40px;
+    width: auto;
+    clear: both;
+    max-width: 80%;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.messages-box .message.right {
+    min-height: 40px;
+    border-radius: 5px;
+    padding: 3px;
+    min-width: 40px;
+    width: auto;
+    float: right;
+    clear: both;
+    max-width: 80%;
+    background: #E0F7FA;
+}
+
+.messages-box .message .icon {
+    display: inline-block;
+    float: left;
+}
+
+.messages-box .message .username {
+    float: left;
+}
+
+.messages-box .message.right .icon,
+.messages-box .message.right .username {
+    float: right;
+}
+
+.messages-box .message .message-content {
+    text-align: left;
+    display: table;
+}
+
+.messages-box .message .clear {
+    clear: both;
+}
+
+.messages-box {
+    height: calc(100% - 50px);
+    overflow: auto;
+}
+
+.chat-block .action-panel {
+    height: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.chat-block .action-panel input {
+    height: 40px;
+    width: 65%;
+    float: left;
+    border: 0 solid black;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    background: #424242;
+    color: white;
+}
+
+.chat-block .action-panel button {
+    width: 35%;
+    height: 40px;
+    border: 0 solid black;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    background: #212121;
+    color: #03A9F4;
+}
+
+.start-new-chat {
+    width: 100px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.start-new-chat button {
+    border: 0 solid black;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    background: #03a9f4;
+    color: white;
+    border-radius: 3px;
+}

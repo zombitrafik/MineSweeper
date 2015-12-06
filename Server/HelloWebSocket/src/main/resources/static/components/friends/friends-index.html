@@ -1,0 +1,33 @@
+<div ng-init="vm.init()">
+    <div class="friends-block">
+        <div class="friends-label">FRIENDS LIST (<span ng-bind="vm.friends.length"></span>)</div>
+    </div>
+    <div class="friends-list">
+        <div class="user" ng-repeat="friend in vm.friends" ng-click="vm.selectUser(friend.username)" ng-class="{'selected': vm.getAction() === 'INVITE_USER' && vm.isSelectedUser(friend.username)}">
+            <span ng-bind="friend.username"></span>
+            <span class="remove-from-friends" ng-click="vm.removeFromFriend(friend)">
+                <i class="fa fa-times"></i>
+            </span>
+            <span class="send-message" ng-click="vm.openChat(friend.username)" ng-if="vm.getAction() == 'CHAT'">
+                <i class="fa fa-mail-forward"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="search-block" ng-if="vm.isShowSearch()">
+        <div class="search-result-label">SEARCH RESULTS (<span ng-bind="vm.users.length"></span>)</div>
+    </div>
+
+    <div class="friends-list" ng-if="vm.isShowSearch()">
+        <div class="user" ng-repeat="user in vm.users" ng-click="vm.selectUser(user.username)" ng-class="{'selected': vm.getAction() === 'INVITE_USER' && vm.isSelectedUser(user.username)}">
+            <span ng-bind="user.username"></span>
+            <span class="add-to-friend" ng-click="vm.addToFriend(user)">
+                <i class="fa fa-plus"></i>
+            </span>
+            <span class="send-message" ng-click="vm.openChat(user.username)" ng-if="vm.getAction() == 'CHAT'">
+                <i class="fa fa-mail-forward"></i>
+            </span>
+        </div>
+    </div>
+    <div class="spinner"></div>
+</div>

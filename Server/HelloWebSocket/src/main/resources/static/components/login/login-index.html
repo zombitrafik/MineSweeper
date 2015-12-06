@@ -1,0 +1,20 @@
+<div class="login-page">
+    <div class="layout">
+        <div class="form-group">
+            <div class="form-element">
+                <label class="over">Username</label>
+                <input ng-model="vm.model.username">
+                <div class="error" ng-bind="vm.errors.username"></div>
+            </div>
+            <div class="form-element">
+                <label class="over">Password</label>
+                <input type="password" ng-model="vm.model.password" />
+                <div class="error" ng-bind="vm.errors.password"></div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="login" ng-click="vm.login()">SIGN IN</button>
+            <button class="register" ng-click="vm.register()">REGISTER</button>
+        </div>
+    </div>
+</div>

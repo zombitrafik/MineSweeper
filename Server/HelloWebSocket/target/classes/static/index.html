@@ -11,14 +11,15 @@
     <link rel="stylesheet" href="styles/main.css"/>
     <link rel="stylesheet" href="styles/messages.css"/>
     <link rel="stylesheet" href="styles/friends.css"/>
+    <link rel="stylesheet" href="styles/lobby.css"/>
+    <link rel="stylesheet" href="styles/leaderboard.css"/>
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-sacle=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
     <div class="mainView" ng-controller="PageController as pageController">
         <div ng-include="'components/header/header-index.html'"></div>
-        <div ui-view="mainView"></div>
-
+        <div class="content" ui-view="mainView"></div>
     </div>
 </body>
 
@@ -28,6 +29,7 @@
     <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="bower_components/localforage/dist/localforage.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-localforage/dist/angular-localForage.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-click-outside/clickoutside.directive.js"></script>
     <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
     <script type="text/javascript" src="bower_components/restangular/dist/restangular.min.js"></script>
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
@@ -47,6 +49,9 @@
     <!-- Dialogs -->
     <script type="text/javascript" src="components/dialogs/create-room/create-room-controller.js"></script>
     <script type="text/javascript" src="components/dialogs/create-room/create-room-service.js"></script>
+    <script type="text/javascript" src="components/dialogs/game-end-screen/game-end-screen-controller.js"></script>
+    <script type="text/javascript" src="components/dialogs/game-end-screen/game-end-screen-service.js"></script>
+
 
     <!-- Controllers -->
 
@@ -67,8 +72,14 @@
     <script type="text/javascript" src="components/home/home-controller.js"></script>
     <!-- Messages -->
     <script type="text/javascript" src="components/messages/messages-controller.js"></script>
+    <script type="text/javascript" src="components/messages/private/private-messages-controller.js"></script>
+    <script type="text/javascript" src="components/messages/lobby/lobby-messages-controller.js"></script>
+    <script type="text/javascript" src="components/messages/world/world-messages-controller.js"></script>
     <!-- Friends -->
     <script type="text/javascript" src="components/friends/friends-controller.js"></script>
+    <!-- Leaderboard -->
+    <script type="text/javascript" src="components/leaderboard/leaderboard-controller.js"></script>
+
 
     <!-- Services -->
     <script type="text/javascript" src="components/page-service.js"></script>
@@ -88,13 +99,25 @@
     <script type="text/javascript" src="components/game/event-handler-service.js"></script>
     <!-- Messages -->
     <script type="text/javascript" src="components/messages/messages-service.js"></script>
+    <script type="text/javascript" src="components/messages/private/private-messages-service.js"></script>
+    <script type="text/javascript" src="components/messages/messages-api-service.js"></script>
     <!-- Friends -->
     <script type="text/javascript" src="components/friends/friends-service.js"></script>
+    <script type="text/javascript" src="components/friends/friends-api-service.js"></script>
+    <!-- Notification -->
+    <script type="text/javascript" src="components/notifications/notification-service.js"></script>
+    <!-- Leaderboard -->
+    <script type="text/javascript" src="components/leaderboard/leaderboard-api-service.js"></script>
+    <script type="text/javascript" src="components/leaderboard/leaderboard-service.js"></script>
+
+
+
+
 
     <!-- Shared -->
     <script type="text/javascript" src="shared/directives/field/field-directive.js"></script>
     <script type="text/javascript" src="shared/directives/canvas-field/canvas-field-directive.js"></script>
-    <!--<script type="text/javascript" src="shared/helpers/disable-context-menu.js"></script>-->
+    <script type="text/javascript" src="shared/helpers/disable-context-menu.js"></script>
     <script type="text/javascript" src="shared/services/canvas-service/canvas-service.js"></script>
     <script type="text/javascript" src="shared/services/socket-service.js"></script>
     <script type="text/javascript" src="shared/services/sprite-service/sprite-service.js"></script>
@@ -109,5 +132,7 @@
     <script type="text/javascript" src="shared/services/user-service/user-service.js"></script>
     <script type="text/javascript" src="shared/helpers/state-service.js"></script>
     <script type="text/javascript" src="shared/directives/tab-directive/tab-directive.js"></script>
-
+    <script type="text/javascript" src="shared/services/heartbeat-service.js"></script>
+    <script type="text/javascript" src="shared/services/global-init-service.js"></script>
+    <script type="text/javascript" src="shared/directives/message-directive/message-directive.js"></script>
 </html>

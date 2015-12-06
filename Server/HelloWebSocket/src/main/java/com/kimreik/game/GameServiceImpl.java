@@ -1,6 +1,7 @@
-package com.kimreik.services;
+package com.kimreik.game;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -15,12 +16,10 @@ import com.kimreik.helpers.DebugTimer;
 import com.kimreik.helpers.FieldGenerator;
 import com.kimreik.helpers.ResponseMessage;
 import com.kimreik.helpers.ResponseWrapper;
-import com.kimreik.model.Game;
-import com.kimreik.model.MineField;
-import com.kimreik.model.Player;
-import com.kimreik.model.Point;
 import com.kimreik.room.Room;
 import com.kimreik.room.RoomsRepository;
+import com.kimreik.services.SocketMessagingService;
+import com.kimreik.statistics.StatisticsService;
 import com.kimreik.user.User;
 import com.kimreik.user.UsersRepository;
 
@@ -35,6 +34,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 
 	@Autowired
 	private SocketMessagingService socketMessagingService;
+	
+	@Autowired
+	StatisticsService statService;
 	
 	@Autowired
 	@Qualifier("simpleGenerator")
@@ -192,23 +194,32 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		Game game = room.getGame();
 		boolean isFinished = true;
 		for(Player p : room.getPlayers()){
-			if(!p.isBombed()){
+			if(!p.isBombed() && !p.isLeaved()){
 				isFinished=false;
 			}
 		}
 		if(isFinished){
 			room.setFinished(true);
-			socketMessagingService.sendToRoom(room.getId(), ResponseMessage.GAME_LOSE);
+			ResponseMessage message = ResponseMessage.GAME_LOSE;
+			message.add("stat", getStatistic(room));
+			socketMessagingService.sendToRoom(room.getId(), message);
+			logger.error("append1");
+			statService.appendGameToStat(room);
 			return;
 		}
 		
 		int fieldSize = game.getMineField().getHeight()*game.getMineField().getWidth();
 		if(fieldSize - game.getOpenedField().size() - (game.getMineField().getMinesCount()-game.getExplodedBombs().size())==0){
+			
 			room.setFinished(true);
 			room.setWin(true);
-			socketMessagingService.sendToRoom(room.getId(), ResponseMessage.GAME_WIN);
+			//TODO win coeff
+			logger.error("append2 "+room.getPlayers().size());
+			statService.appendGameToStat(room);
+			ResponseMessage message = ResponseMessage.GAME_WIN;
+			message.add("stat", getStatistic(room));
+			socketMessagingService.sendToRoom(room.getId(), message);
 		}
-		
 	}
 	
 	private Player getPlayer(Room room, String playerName){
@@ -220,5 +231,14 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		return null;
 	}
 	
+	private List<Player> getStatistic(Room room){
+		return room.getPlayers();
+	}
+	
+	public List<Player> getStatistics(String username){
+		//need refactoring
+		Room room = roomRepo.findOne(userRepo.findOne(username).getCurrentRoomid());
+		return getStatistic(room);
+	}
 	
 }

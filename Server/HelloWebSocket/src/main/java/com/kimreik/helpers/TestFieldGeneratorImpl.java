@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import com.kimreik.model.MineField;
-import com.kimreik.model.Point;
+import com.kimreik.game.MineField;
+import com.kimreik.game.Point;
 
 @Component("testGenerator")
 public class TestFieldGeneratorImpl implements FieldGenerator {

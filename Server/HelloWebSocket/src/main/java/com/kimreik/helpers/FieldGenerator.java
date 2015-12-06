@@ -1,7 +1,7 @@
 package com.kimreik.helpers;
 
-import com.kimreik.model.MineField;
-import com.kimreik.model.Point;
+import com.kimreik.game.MineField;
+import com.kimreik.game.Point;
 
 public interface FieldGenerator {
 	public MineField generate(Point startPoint, int width, int height, int minesCount);

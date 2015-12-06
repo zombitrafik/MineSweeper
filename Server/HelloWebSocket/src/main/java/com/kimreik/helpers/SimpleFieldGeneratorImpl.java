@@ -9,8 +9,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.kimreik.model.MineField;
-import com.kimreik.model.Point;
+import com.kimreik.game.MineField;
+import com.kimreik.game.Point;
 
 @Component("simpleGenerator")
 public class SimpleFieldGeneratorImpl implements FieldGenerator {

@@ -1,11 +1,12 @@
-package com.kimreik.services;
+package com.kimreik.game;
+
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-
-import com.kimreik.model.Point;
 
 public interface GameService {
 	public ResponseEntity<?> handleGameClick(String username, Point point);
 	public ResponseEntity<?> handleGameRightClick(String username, Point point);
+	public List<Player> getStatistics(String username);
 	
 }

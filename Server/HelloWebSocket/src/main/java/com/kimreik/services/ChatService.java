@@ -2,7 +2,7 @@ package com.kimreik.services;
 
 import org.springframework.http.ResponseEntity;
 
-import com.kimreik.model.PrivateMessage;
+import com.kimreik.dialog.PrivateMessage;
 
 public interface ChatService {
 	public void sendMessage(String sender, PrivateMessage message);

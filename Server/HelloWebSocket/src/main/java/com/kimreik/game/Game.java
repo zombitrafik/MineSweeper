@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.game;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

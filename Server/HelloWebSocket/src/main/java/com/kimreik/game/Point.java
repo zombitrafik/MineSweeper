@@ -1,4 +1,4 @@
-package com.kimreik.model;
+package com.kimreik.game;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

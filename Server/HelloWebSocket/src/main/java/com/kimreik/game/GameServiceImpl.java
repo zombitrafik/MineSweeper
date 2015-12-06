@@ -200,11 +200,8 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		}
 		if(isFinished){
 			room.setFinished(true);
-			ResponseMessage message = ResponseMessage.GAME_LOSE;
-			message.add("stat", getStatistic(room));
-			socketMessagingService.sendToRoom(room.getId(), message);
-			logger.error("append1");
 			statService.appendGameToStat(room);
+			socketMessagingService.sendToRoom(room.getId(), getStatistic(ResponseMessage.GAME_LOSE, room));
 			return;
 		}
 		
@@ -214,11 +211,9 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 			room.setFinished(true);
 			room.setWin(true);
 			//TODO win coeff
-			logger.error("append2 "+room.getPlayers().size());
+			
 			statService.appendGameToStat(room);
-			ResponseMessage message = ResponseMessage.GAME_WIN;
-			message.add("stat", getStatistic(room));
-			socketMessagingService.sendToRoom(room.getId(), message);
+			socketMessagingService.sendToRoom(room.getId(), getStatistic(ResponseMessage.GAME_WIN, room));
 		}
 	}
 	
@@ -231,14 +226,20 @@ public class GameServiceImpl extends BasicGameEventsImpl implements GameService 
 		return null;
 	}
 	
-	private List<Player> getStatistic(Room room){
-		return room.getPlayers();
+	private ResponseMessage getStatistic(ResponseMessage message, Room room){
+		message.add("players", room.getPlayers());
+		int score = 0;
+		for(Player pl : room.getPlayers()){
+			score+=pl.getCurrentScore();
+		}
+		message.add("score", score);
+		return message;
 	}
 	
 	public List<Player> getStatistics(String username){
 		//need refactoring
 		Room room = roomRepo.findOne(userRepo.findOne(username).getCurrentRoomid());
-		return getStatistic(room);
+		return room.getPlayers();
 	}
 	
 }

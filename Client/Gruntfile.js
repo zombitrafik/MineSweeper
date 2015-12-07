@@ -56,11 +56,20 @@ module.exports = function(grunt) {
                     dest: '<%= mineSweeper.dist %>',
                     src: [
                         '**/*.html',
-                        'image/**/*',
+                        'images/**/*',
                         '!bower_components/**',
                         '!shared/**'
                     ]
-                }]
+                },
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: 'app',
+                        dest: '<%= mineSweeper.dist %>/fonts',
+                        src: [
+                            'bower_components/components-font-awesome/fonts/**'
+                        ]
+                    }]
             }
         },
 
@@ -111,6 +120,8 @@ module.exports = function(grunt) {
                     {
                         dest: '.tmp/scripts/main.js',
                         src: [
+                            '<%= mineSweeper.app %>/app.js',
+                            '<%= mineSweeper.app %>/app-config.js',
                             '<%= mineSweeper.app %>/components/**/*.js',
                             '<%= mineSweeper.app %>/shared/**/*.js'
                         ]

@@ -166,6 +166,7 @@
                 animationService.play('click_right', cell, function () {
                     animationService.play('pending_flag', cell);
                 });
+                window.navigator.vibrate(80);
                 return;
             }
         }

@@ -119,7 +119,8 @@ module.exports = function(grunt) {
             },
             css :{
                 src: [
-                    'styles/*.css'
+                    'styles/*.css',
+                    'bower_components/components-font-awesome/css/font-awesome.min.css'
                 ],
                 dest: '.tmp/styles/main.css'
             }
@@ -171,6 +172,26 @@ module.exports = function(grunt) {
                     copy: false
                 }
             }
+        },
+
+        htmlmin: {
+            dist: {
+                options: {
+                    collapseWhitespace: true,
+                    conservativeCollapse: true,
+                    collapseBooleanAttributes: true,
+                    removeCommentsFromCDATA: true,
+                    removeOptionalTags: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= mineSweeper.dist %>',
+                    src: [
+                        '**/*.html'
+                    ],
+                    dest: '<%= mineSweeper.dist %>'
+                }]
+            }
         }
     });
 
@@ -186,6 +207,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-bower-concat');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
 
     grunt.registerTask('serve', 'Compile then start a connect web server', function () {
@@ -205,6 +227,7 @@ module.exports = function(grunt) {
         'uglify:bower',
         'cssmin',
         'copy',
-        'usemin'
+        'usemin',
+        'htmlmin'
     ]);
 };

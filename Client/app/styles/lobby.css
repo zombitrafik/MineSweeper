@@ -3,3 +3,156 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+.room-header {
+    background: #009688;
+    color: white;
+    padding: 10px 20px;
+    border-bottom: 2px solid rgba(192, 192, 192, 0.38);
+}
+
+.room-list-block {
+    width: 80%;
+    margin: 0 auto;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.room {
+    padding: 20px;
+    color: #565656;
+    cursor: pointer;
+    border-bottom: 4px solid white;
+}
+
+.room:hover {
+/*    background: #009688;
+    color: white;
+    border-bottom-color: #03887B;*/
+    color: #00A499;
+}
+
+span.room-name {
+    width: 50%;
+    display: inline-block;
+}
+
+span.players-count {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+
+span.room-started {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+
+span.field-size {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+
+span.mines-count {
+    display: inline-block;
+    width: 10%;
+    text-align: center;
+}
+
+.room-list-header {
+    padding: 20px;
+    background: #009688;
+    position: relative;
+    color: white;
+}
+
+.room-list-header .create-btn {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #FFC107;
+    text-align: center;
+    line-height: 41px;
+    color: white;
+    position: absolute;
+    top: 30px;
+    left: -20px;
+    cursor: pointer;
+    transition: 200ms;
+}
+
+.room-list-header .create-btn:hover {
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    top: 28px;
+}
+
+.room-list-header .refresh-btn {
+    display: inline-block;
+}
+
+.create-room {
+    padding: 20px;
+    text-align: center;
+}
+
+.input-wrapper {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #009688;
+    font-weight: 800;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.input-wrapper span.input-label {
+    display: block;
+    text-align: left;
+}
+
+.input-wrapper input {
+    border: 0 solid black;
+    line-height: 30px;
+    outline: none;
+    border-bottom: 2px solid #009688;
+    color: gray;
+}
+
+.action {
+    margin-top: 10px;
+}
+
+button {
+    margin: 10px;
+}
+
+
+button.submit {
+    background: #4CAF50;
+    border: 0 solid black;
+    padding: 10px 30px;
+    color: white;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    transition: 100ms;
+}
+
+button.cancel {
+    background: #FF9800;
+    border: 0 solid black;
+    padding: 10px 30px;
+    color: white;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    transition: 100ms;
+}
+
+
+button:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+}

@@ -10,14 +10,27 @@
     function LobbyController (lobbyService, $state, createRoomService) {
         var vm = this;
 
+        vm.isCreating = false;
+
         vm.newRoomModel = {
             width: 0,
             height: 0,
             minesCount: 0
         };
 
+        vm.roomModel = {
+            name: '',
+            width: '',
+            height: '',
+            minesCount: ''
+        };
+
         vm.getRooms = function () {
             return lobbyService.rooms;
+        };
+
+        vm.isCreate = function () {
+            return vm.isCreating;
         };
 
         vm.refreshRooms = function () {
@@ -34,18 +47,33 @@
         };
 
         vm.createRoom = function () {
-/*            console.log(vm.newRoomModel);
-            var promise = lobbyService.createRoom(vm.newRoomModel);
+            vm.isCreating = true;
+        };
 
+        vm.cancelCreate = function () {
+            vm.isCreating = false;
+            resetModel();
+        };
+
+        vm.sendCreateRequest = function () {
+            var promise = lobbyService.createRoom(vm.roomModel);
             promise.then(function () {
                 $state.go('game');
-            });*/
-            createRoomService.showDialog();
+            });
         };
 
         vm.isShowCreateMenuDialog = function () {
             return createRoomService.isShow;
         };
+
+        function resetModel () {
+            vm.roomModel = {
+                name: '',
+                width: '',
+                height: '',
+                minesCount: ''
+            };
+        }
 
     }
 })();

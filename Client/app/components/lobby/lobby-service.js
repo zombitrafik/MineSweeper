@@ -8,13 +8,42 @@
     lobbyService.$inject = ['lobbyApiService', 'cacheService', '$q'];
 
     function lobbyService (lobbyApiService, cacheService, $q) {
+
+        var rooms = [
+            {
+                name: 'some name 1',
+                players: {
+                    length: 3
+                },
+                started: true,
+                time: (new Date())
+            },{
+                name: 'some name 2',
+                players: {
+                    length: 5
+                },
+                started: true,
+                time: (new Date())
+            },{
+                name: 'some name 3',
+                players: {
+                    length: 4
+                },
+                started: true,
+                time: (new Date())
+            }
+        ];
+
+
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,
             createRoom: createRoom,
             nextRoom: nextRoom,
+            rooms: rooms,
             init: init
         };
+
 
         return service;
 
@@ -23,11 +52,13 @@
         }
 
         function getRooms () {
-            var promise = lobbyApiService.getRooms();
+/*            var promise = lobbyApiService.getRooms();
             promise.then(function (response) {
                 service.rooms = response;
             });
-            return promise;
+            return promise;*/
+
+            return rooms;
         }
 
         function joinRoom (id) {

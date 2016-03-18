@@ -173,3 +173,21 @@ body {
 .create-room-dialog .dark-layer {
     height: 100%;
 }
+
+.layout-main {
+    height: 100%;
+}
+
+.layout-content {
+    display: inline-block;
+    width: calc(100% - 300px);
+    float: left;
+    height: 100%;
+}
+
+.layout-right-bar {
+    display: inline-block;
+    width: 300px;
+    background: red;
+    height: 100%;
+}

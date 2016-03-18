@@ -20,8 +20,20 @@
 </head>
 <body>
     <div class="mainView" ng-controller="PageController as pageController">
-        <div ng-include="'components/header/header-index.html'"></div>
-        <div class="content" ui-view="mainView"></div>
+        <div class="layout-header">
+            <div ng-include="'components/header/header-index.html'"></div>
+        </div>
+        <div class="layout-main">
+            <div class="layout-content">
+                <div class="content" ui-view="mainView"></div>
+            </div>
+            <div class="layout-right-bar">
+                <div ng-include="'components/right-bar/right-bar.html'"></div>
+            </div>
+        </div>
+        <div class="layout-footer"></div>
+
+
     </div>
 </body>
 

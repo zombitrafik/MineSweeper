@@ -1,0 +1,78 @@
+<div class="header" ng-controller="HeaderController as controller">
+    <div class="menu" ng-click="controller.toggleMenu()">
+        <i ng-class="{'fa fa-bars': !pageController.isShowMenu(), 'fa fa-arrow-left': pageController.isShowMenu()}" > Mine Sweeper</i>
+    </div>
+    <div class="menu-actions" ng-if="!pageController.isShowMenu()">
+
+        <div class="lobby-header" ng-if="controller.isThisPage('lobby')">
+            <div class="notification" ng-click="controller.toggleNotificationDropdown()" click-outside="controller.hideNotificationDropdown()" ng-class="{active: controller.getNotifications().length > 0, 'active-dropdown': controller.isShowNotificationDropdown}" >
+                <i class="fa fa-bell"></i>
+                <span class="notification-count" ng-if="controller.getNotifications().length > 0" ng-bind="controller.getNotifications().length"></span>
+                <div class="dropdown" ng-if="controller.isShowNotificationDropdown">
+                    <span ng-repeat="notify in controller.getNotifications()" ng-click="controller.goToChat(notify.sender)">
+                        <i class="fa fa-envelope"></i>
+                        <span>New message from <span class="username" ng-bind="notify.sender"></span></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="messages-header" ng-if="controller.isThisPage('messages')">
+            <div class="notification" ng-click="controller.toggleNotificationDropdown()" click-outside="controller.hideNotificationDropdown()" ng-class="{active: controller.getNotifications().length > 0, 'active-dropdown': controller.isShowNotificationDropdown}" >
+                <i class="fa fa-bell"></i>
+                <span class="notification-count" ng-if="controller.getNotifications().length > 0" ng-bind="controller.getNotifications().length"></span>
+                <div class="dropdown" ng-if="controller.isShowNotificationDropdown">
+                    <span ng-repeat="notify in controller.getNotifications()" ng-click="controller.goToChat(notify.sender)">
+                        <i class="fa fa-envelope"></i>
+                        <span>New message from <span class="username" ng-bind="notify.sender"></span></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="friends-header" ng-if="controller.isThisPage('friends')">
+            <div class="tool-search-field" ng-if="controller.isShowFriendsSearch()">
+                <input type="text" ng-model="controller.getSearchFieldModel().username"/>
+            </div>
+            <div class="notification" ng-click="controller.toggleNotificationDropdown()" click-outside="controller.hideNotificationDropdown()" ng-class="{active: controller.getNotifications().length > 0, 'active-dropdown': controller.isShowNotificationDropdown}" >
+                <i class="fa fa-bell"></i>
+                <span class="notification-count" ng-if="controller.getNotifications().length > 0" ng-bind="controller.getNotifications().length"></span>
+                <div class="dropdown" ng-if="controller.isShowNotificationDropdown">
+                    <span ng-repeat="notify in controller.getNotifications()" ng-click="controller.goToChat(notify.sender)">
+                        <i class="fa fa-envelope"></i>
+                        <span>New message from <span class="username" ng-bind="notify.sender"></span></span>
+                    </span>
+                </div>
+            </div>
+            <div class="tool" ng-class="{'active': controller.isShowFriendsSearch()}" ng-click="controller.toggleFriendSearch()">
+                <i class="fa fa-search" ng-click=""></i>
+            </div>
+        </div>
+
+        <div class="notification-header">
+
+        </div>
+
+        <div class="game-header" ng-if="controller.isThisPage('game')">
+            <div class="tool" ng-click="controller.toggleToolsDropdown()" click-outside="controller.hideToolsDropdown()" ng-class="{'active': controller.isShowToolsDropdown}">
+                <i class="fa fa-ellipsis-v"></i>
+                <div class="dropdown" ng-if="controller.isShowToolsDropdown">
+                    <span ng-click="controller.leaveRoom()">LEAVE</span>
+                </div>
+            </div>
+            <div class="notification" ng-click="controller.toggleNotificationDropdown()" click-outside="controller.hideNotificationDropdown()" ng-class="{active: controller.getNotifications().length > 0, 'active-dropdown': controller.isShowNotificationDropdown}" >
+                <i class="fa fa-bell"></i>
+                <span class="notification-count" ng-if="controller.getNotifications().length > 0" ng-bind="controller.getNotifications().length"></span>
+                <div class="dropdown" ng-if="controller.isShowNotificationDropdown">
+                    <span ng-repeat="notify in controller.getNotifications()" ng-click="controller.goToChat(notify.sender)">
+                        <i class="fa fa-envelope"></i>
+                        <span>New message from <span class="username" ng-bind="notify.sender"></span></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div ng-class="{'hidden': !pageController.isShowMenu()}" ng-include="'components/menu/left-bar-menu-indext.html'"></div>

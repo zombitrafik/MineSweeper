@@ -8,16 +8,19 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
+{
 
 	@Override
-	public void configureMessageBroker(MessageBrokerRegistry config) {
+	public void configureMessageBroker(MessageBrokerRegistry config)
+	{
 		config.enableSimpleBroker("/broker");
 		config.setApplicationDestinationPrefixes("/test", "/users");
-		
+
 	}
 
-	public void registerStompEndpoints(StompEndpointRegistry registry) {
+	public void registerStompEndpoints(StompEndpointRegistry registry)
+	{
 		registry.addEndpoint("/game").setAllowedOrigins("*").withSockJS();
 	}
 }

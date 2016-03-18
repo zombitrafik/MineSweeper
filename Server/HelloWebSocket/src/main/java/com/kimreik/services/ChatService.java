@@ -1,11 +1,13 @@
 package com.kimreik.services;
 
+import com.kimreik.dialog.PrivateMessage;
 import org.springframework.http.ResponseEntity;
 
-import com.kimreik.dialog.PrivateMessage;
+public interface ChatService
+{
+	void sendMessage(String sender, PrivateMessage message);
 
-public interface ChatService {
-	public void sendMessage(String sender, PrivateMessage message);
-	public ResponseEntity<?> getDialogs(String username);
-	public ResponseEntity<?> getDialog(String user1, String user2);
- }
+	ResponseEntity<?> getDialogs(String username);
+
+	ResponseEntity<?> getDialog(String user1, String user2);
+}

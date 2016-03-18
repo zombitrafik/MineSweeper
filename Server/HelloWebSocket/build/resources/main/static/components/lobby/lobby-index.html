@@ -1,0 +1,28 @@
+<div class="lobby-page" ng-init="vm.refreshRooms()">
+
+    <div class="create-btn" ng-click="vm.createRoom()" ng-if="!pageController.isShowMenu()" >
+        <i class="fa fa-plus"></i>
+    </div>
+    <div class="room-list-block">
+        <div class="refresh-btn" ng-click="vm.refreshRooms()">
+            <i class="fa fa-refresh"></i>
+        </div>
+        <span class="room-list-label">ROOMS LIST</span>
+        <div class="room-header">
+            <span class="room-name">NAME</span>
+            <span class="players-count">PLAYERS</span>
+            <span class="game-type">TYPE</span>
+            <span class="room-started">STARTED</span>
+        </div>
+        <div class="room" ng-repeat="room in vm.getRooms()" ng-click="vm.joinRoom(room.id)">
+            <span class="room-name" ng-bind="room.name"></span>
+            <span class="players-count" ng-bind="room.players.length"></span>
+            <span class="game-type">DEFAULT</span>
+            <span class="room-started" ng-class="{'started': room.started, 'non-started': !room.started}">
+                <i class="fa fa-flag"></i>
+            </span>
+        </div>
+    </div>
+
+</div>
+<div class="dialog-layer" ng-class="{'hidden': !vm.isShowCreateMenuDialog()}" ng-include="'components/dialogs/create-room/create-room-index.html'"></div>

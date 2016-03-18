@@ -1,0 +1,23 @@
+<div class="create-room-dialog" ng-controller="CreateRoomController as vm">
+    <div class="dark-layer" ng-click="vm.close()"></div>
+    <div class="dialog">
+        <div class="dialog-header">
+            <span>Create room</span>
+            <div class="close-dialog-btn" ng-click="vm.close()">
+                <i class="fa fa-times"></i>
+            </div>
+        </div>
+        <div class="dialog-body">
+            <div class="wrap">
+                <input type="text" placeholder="ROOM NAME" ng-model="vm.model.name"/>
+                <input type="number" placeholder="WIDTH" ng-model="vm.model.width"/>
+                <input type="number" placeholder="HEIGHT" ng-model="vm.model.height"/>
+                <input type="number" placeholder="MINES COUNT" ng-model="vm.model.minesCount"/>
+            </div>
+        </div>
+        <div class="dialog-actions">
+            <button ng-click="vm.createRoom()">CREATE</button>
+        </div>
+
+    </div>
+</div>

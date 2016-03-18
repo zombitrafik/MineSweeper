@@ -1,8 +1,8 @@
 package com.kimreik.user;
 
-import java.security.Principal;
-import java.util.List;
-
+import com.kimreik.helpers.ResponseMessage;
+import com.kimreik.helpers.ResponseWrapper;
+import com.kimreik.services.SocketMessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,33 +11,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
-import com.kimreik.helpers.ResponseMessage;
-import com.kimreik.helpers.ResponseWrapper;
-import com.kimreik.services.SocketMessagingService;
+import java.security.Principal;
+import java.util.List;
 
 @Service
-public class UsersServiceImpl implements UsersService {
+public class UsersServiceImpl implements UsersService
+{
 
 	@Autowired
-	private UsersRepository usersRepo;
+	SocketMessagingService	socketMessagingService;
+	@Autowired
+	private UsersRepository	usersRepo;
+	@Autowired
+	private PasswordEncoder	passwordEncoder;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	SocketMessagingService socketMessagingService;
-	
-	public ResponseEntity<?> addUser(User user, BindingResult result) {
+	public ResponseEntity<?> addUser(User user, BindingResult result)
+	{
 		user.setEnabled(true);
-		
+
 		user.setUsername(user.getUsername().toLowerCase());
-		
+
 		UserValidator validator = new UserValidator(usersRepo);
 
 		validator.validate(user, result);
-		if (result.hasErrors()) {
+		if (result.hasErrors())
+		{
 			String errStr = "";
-			for (ObjectError err : result.getAllErrors()) {
+			for (ObjectError err : result.getAllErrors())
+			{
 				errStr += err.getCode();
 			}
 			return new ResponseEntity<ResponseMessage>(ResponseMessage.error(errStr), HttpStatus.BAD_REQUEST);
@@ -48,26 +49,27 @@ public class UsersServiceImpl implements UsersService {
 		return null;
 	}
 
-	public User login(Principal principal) {
+	public User login(Principal principal)
+	{
 		return usersRepo.findOne(principal.getName());
 	}
 
-	public ResponseEntity<?> find(String finder, String username) {
+	public ResponseEntity<?> find(String finder, String username)
+	{
 		List<User> result = usersRepo.findByName(username);
 		User finderUser = usersRepo.findOne(finder);
 		result.remove(finderUser);
-		
+
 		result.remove(finderUser.getFriends());
-		ResponseMessage message = ResponseMessage.FIND_USER_RESULT
-				.add("userList", usersRepo.findByName(username));
+		ResponseMessage message = ResponseMessage.FIND_USER_RESULT.add("userList", usersRepo.findByName(username));
 		return ResponseWrapper.wrap(message, HttpStatus.OK);
 	}
 
-	public void heartbeat(String username) {
+	public void heartbeat(String username)
+	{
 		User user = usersRepo.findOne(username);
 		user.setLastHeartBeat(System.currentTimeMillis());
 		usersRepo.save(user);
 	}
 
 }
-

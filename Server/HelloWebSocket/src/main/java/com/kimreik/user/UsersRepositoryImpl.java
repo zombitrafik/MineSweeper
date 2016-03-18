@@ -1,26 +1,24 @@
 package com.kimreik.user;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
-public class UsersRepositoryImpl implements UsersRepositoryCustom {
-	
+public class UsersRepositoryImpl implements UsersRepositoryCustom
+{
+
 	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager	entityManager;
 
 	@SuppressWarnings("unchecked")
-	public List<User> findByName(String username) {
-		return this.entityManager
-				.createQuery("select user from User user where user.username like '%"+username+"%'")
-				.getResultList();
+	public List<User> findByName(String username)
+	{
+		return this.entityManager.createQuery("select user from User user where user.username like '%" + username + "%'").getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<User> findOnline() {
-		return this.entityManager
-				.createQuery("select user from User user where user.status !='OFFLINE'")
-				.getResultList();
+	public List<User> findOnline()
+	{
+		return this.entityManager.createQuery("select user from User user where user.status !='OFFLINE'").getResultList();
 	}
 }

@@ -1,46 +1,53 @@
 package com.kimreik.helpers;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
+import com.kimreik.game.MineField;
+import com.kimreik.game.Point;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.kimreik.game.MineField;
-import com.kimreik.game.Point;
+import java.util.*;
 
 @Component("simpleGenerator")
-public class SimpleFieldGeneratorImpl implements FieldGenerator {
+public class SimpleFieldGeneratorImpl implements FieldGenerator
+{
 
-	Logger logger = Logger.getLogger(SimpleFieldGeneratorImpl.class);
-	
-	public MineField generate(Point startPoint, int width, int height, int minesCount) {
+	Logger	logger	= Logger.getLogger(SimpleFieldGeneratorImpl.class);
+
+	private static void updatePoint(Point point)
+	{
+		int val = point.getValue();
+		if (val != -1)
+		{
+			point.setValue(val + 1);
+		}
+	}
+
+	public MineField generate(Point startPoint, int width, int height, int minesCount)
+	{
 		MineField res = new MineField();
 		res.setHeight(height);
 		res.setWidth(width);
 		res.setMinesCount(minesCount);
-		
-		Set<Point> field = new LinkedHashSet<Point>();
-		List<Integer> vect = new ArrayList<Integer>();
-		
-		Set<Point> mines = new LinkedHashSet<Point>();
 
-		for (int i = 0; i < width * height; i++) {
-			if (i != startPoint.getY() * width + startPoint.getX())
-				vect.add(i);
+		Set<Point> field = new LinkedHashSet<>();
+		List<Integer> vect = new ArrayList<>();
+
+		Set<Point> mines = new LinkedHashSet<>();
+
+		for (int i = 0; i < width * height; i++)
+		{
+			if (i != startPoint.getY() * width + startPoint.getX()) vect.add(i);
 			Point newPoint = new Point();
 			newPoint.setValue(0);
-			newPoint.setX(i%width);
-			newPoint.setY(i/width);
+			newPoint.setX(i % width);
+			newPoint.setY(i / width);
 			field.add(newPoint);
 		}
-		
+
 		res.setField(field);
 
-		for (int i = 0; i < minesCount; i++) {
+		for (int i = 0; i < minesCount; i++)
+		{
 			int rand = new Random().nextInt(vect.size());
 			Point point = new Point();
 			point.setX(vect.get(rand) % width);
@@ -50,22 +57,13 @@ public class SimpleFieldGeneratorImpl implements FieldGenerator {
 			mines.add(point);
 			vect.remove(rand);
 		}
-				
-		
-		for (Point point : mines) {
-			for(Point p: res.getNearbyPoints(point)){
-				updatePoint(p);
-			}
+
+		for (Point point : mines)
+		{
+			res.getNearbyPoints(point).forEach(SimpleFieldGeneratorImpl::updatePoint);
 		}
-		
+
 		return res;
-	}
-	
-	private static void updatePoint(Point point) {
-		int val = point.getValue();
-		if(val!=-1){
-			point.setValue(val+1);
-		}
 	}
 
 }

@@ -3,12 +3,19 @@ package com.kimreik.room;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
-public interface RoomsService {
-	public ResponseEntity<?> createRoom(String username, RoomDTO roomDTO, BindingResult result);
-	public ResponseEntity<?> getRooms();
-	public ResponseEntity<?> joinRoom(Integer id, String username);
-	public Room getCurrentRoom(String username);
-	public void leaveRoom(String username);
-	public int nextRoom(String username);
-	public void/*Principal*/ disconnect(String username);
+public interface RoomsService
+{
+	ResponseEntity<?> createRoom(String username, RoomDTO roomDTO, BindingResult result);
+
+	ResponseEntity<?> getRooms();
+
+	ResponseEntity<?> joinRoom(Integer id, String username);
+
+	Room getCurrentRoom(String username);
+
+	void leaveRoom(String username);
+
+	int nextRoom(String username);
+
+	void/*Principal*/disconnect(String username);
 }

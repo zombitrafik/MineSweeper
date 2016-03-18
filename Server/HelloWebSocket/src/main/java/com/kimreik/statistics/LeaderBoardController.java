@@ -1,7 +1,5 @@
 package com.kimreik.statistics;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,15 +7,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/leaderboard")
-public class LeaderBoardController {
+public class LeaderBoardController
+{
 
 	@Autowired
-	StatisticsService statService;
-	
+	StatisticsService	statService;
+
 	@RequestMapping(method = RequestMethod.GET)
-	public Page<EndedGame> getLeaderBoard(Principal principal, @RequestParam("page") int page,  @RequestParam("size") int size){
+	public Page<EndedGame> getLeaderBoard(Principal principal, @RequestParam("page") int page, @RequestParam("size") int size)
+	{
 		return statService.getLeaderBoard(page, size);
 	}
 	/*

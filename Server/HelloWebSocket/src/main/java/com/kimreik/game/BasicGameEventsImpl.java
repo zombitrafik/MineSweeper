@@ -1,16 +1,17 @@
 package com.kimreik.game;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import com.kimreik.helpers.FieldGenerator;
 import com.kimreik.room.Room;
 
-public class BasicGameEventsImpl {
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+public class BasicGameEventsImpl
+{
 
-	protected Set<Point> handleLeftClick(Game game, Point point){
-		
+	protected Set<Point> handleLeftClick(Game game, Point point)
+	{
+
 		Set<Point> result = new LinkedHashSet<Point>();
 
 		MineField mineField = game.getMineField();
@@ -18,83 +19,98 @@ public class BasicGameEventsImpl {
 		Point openedPoint = game.getMineField().getPoint(point);
 
 		result.add(openedPoint);
-		
-		// TODO: проверить открытие бомбы при ошибке
-		// нажатие на уже раскрытую клетку(быстрое раскрытие)
 
-		if (game.getOpenedField().contains(openedPoint)) {
-			if (openedPoint.getValue() <=0) {
+		// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+
+		if (game.getOpenedField().contains(openedPoint))
+		{
+			if (openedPoint.getValue() <= 0)
+			{
 				return result;
 			}
 			int realValue = openedPoint.getValue();
 			Set<Point> nearbyPoints = mineField.getNearbyPoints(openedPoint);
-			for (Point nearby : nearbyPoints) {
-				if (game.getFlags().contains(nearby) || game.getExplodedBombs().contains(nearby)) {
+			for (Point nearby : nearbyPoints)
+			{
+				if (game.getFlags().contains(nearby) || game.getExplodedBombs().contains(nearby))
+				{
 					realValue--;
 				}
 			}
-			if (realValue == 0) {
+			if (realValue == 0)
+			{
 				nearbyPoints.removeAll(game.getOpenedField());
 				nearbyPoints.removeAll(game.getFlags());
-				
-				for (Point nearbyPoint : nearbyPoints) {
+
+				for (Point nearbyPoint : nearbyPoints)
+				{
 					result.add(nearbyPoint);
-					if (nearbyPoint.getValue() == 0) {
+					if (nearbyPoint.getValue() == 0)
+					{
 						openFreeSpace(game, result, nearbyPoint);
 					}
 				}
-				
+
 				return result;
 			}
 		}
 
-		// нажатие на 0
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 0
 
-		if (openedPoint.getValue() == 0) {
+		if (openedPoint.getValue() == 0)
+		{
 			openFreeSpace(game, result, openedPoint);
 		}
-		
+
 		return result;
 	}
 
-	private Set<Point> openFreeSpace(Game game, Set<Point> freeSpace, Point startPoint) {
+	private Set<Point> openFreeSpace(Game game, Set<Point> freeSpace, Point startPoint)
+	{
 
 		int x = startPoint.getX();
 		int y = startPoint.getY();
 
 		Set<Point> nearbyPoints = game.getMineField().getNearbyPoints(x, y);
 
-		for (Point point : nearbyPoints) {
+		for (Point point : nearbyPoints)
+		{
 			checkCandidateForAutoOpen(game, point, freeSpace);
 		}
 
 		return freeSpace;
 	}
 
-	private void checkCandidateForAutoOpen(Game game, Point point, Set<Point> freeSpace) {
+	private void checkCandidateForAutoOpen(Game game, Point point, Set<Point> freeSpace)
+	{
 
-		if (isValidForAutoOpen(freeSpace, game, point)) {
+		if (isValidForAutoOpen(freeSpace, game, point))
+		{
 			freeSpace.add(point);
-			
-			if (point.getValue() == 0) {
+
+			if (point.getValue() == 0)
+			{
 				freeSpace.addAll(openFreeSpace(game, freeSpace, point));
 			}
 		}
 	}
 
-	private boolean isValidForAutoOpen(Set<Point> space, Game game, Point point) {
+	private boolean isValidForAutoOpen(Set<Point> space, Game game, Point point)
+	{
 
-		return !(space.contains(point) || game.getOpenedField().contains(point) || game.getFlags().contains(point)
-				|| point.getValue() == -1);
+		return !(space.contains(point) || game.getOpenedField().contains(point) || game.getFlags().contains(point) || point.getValue() == -1);
 	}
-	
-	protected void generateField(Room room, Point point, FieldGenerator fieldGenerator) {
+
+	protected void generateField(Room room, Point point, FieldGenerator fieldGenerator)
+	{
 		Game game = room.getGame();
 		if (game.getOpenedField().size() != 0 || game.getFlags().size() != 0)
+		{
 			return;
+		}
 		MineField mineField = game.getMineField();
-		mineField = fieldGenerator.generate(point, mineField.getWidth(), mineField.getHeight(),
-				mineField.getMinesCount());
+		mineField = fieldGenerator.generate(point, mineField.getWidth(), mineField.getHeight(), mineField.getMinesCount());
 		game.setMineField(mineField);
 		room.setStarted(true);
 	}

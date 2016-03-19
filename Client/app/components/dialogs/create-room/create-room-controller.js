@@ -3,9 +3,9 @@
         .module('app')
         .controller('CreateRoomController', CreateRoomController);
 
-    CreateRoomController.$inject = ['createRoomService', 'lobbyService', '$state'];
+    CreateRoomController.$inject = ['createRoomService', 'roomListService', '$state'];
 
-    function CreateRoomController (createRoomService, lobbyService, $state) {
+    function CreateRoomController (createRoomService, roomListService, $state) {
         var vm = this;
 
         vm.model = {
@@ -20,7 +20,7 @@
         };
 
         vm.createRoom = function () {
-            var promise = lobbyService.createRoom(vm.model);
+            var promise = roomListService.createRoom(vm.model);
             promise.then(function () {
                 vm.close();
                 $state.go('game');

@@ -3,11 +3,11 @@
 
     angular
         .module('app')
-        .service('lobbyService', lobbyService);
+        .service('roomListService', roomListService);
 
-    lobbyService.$inject = ['lobbyApiService', 'cacheService', '$q'];
+    roomListService.$inject = ['roomListApiService', 'cacheService', '$q'];
 
-    function lobbyService (lobbyApiService, cacheService, $q) {
+    function roomListService (roomListApiService, cacheService, $q) {
 
         var rooms = [
             {
@@ -52,7 +52,7 @@
         }
 
         function getRooms () {
-/*            var promise = lobbyApiService.getRooms();
+/*            var promise = roomListApiService.getRooms();
             promise.then(function (response) {
                 service.rooms = response;
             });
@@ -72,12 +72,12 @@
         }
 
         function nextRoom () {
-            return lobbyApiService.nextRoom();
+            return roomListApiService.nextRoom();
         }
 
         function createRoom (config) {
             var deferred = $q.defer();
-            var promise = lobbyApiService.createRoom(config);
+            var promise = roomListApiService.createRoom(config);
             promise.then(function (response) {
                 cacheService.item(ROUTE_REQUIRES.ROOM, response.plain().id).then(function () {
                     deferred.resolve();

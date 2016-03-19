@@ -3,9 +3,9 @@
         .module('app')
         .service('gameEndScreenService', gameEndScreenService);
 
-    gameEndScreenService.$inject = ['lobbyService', '$q', 'leaderboardService'];
+    gameEndScreenService.$inject = ['roomListService', '$q', 'leaderboardService'];
 
-    function gameEndScreenService (lobbyService, $q, leaderboardService) {
+    function gameEndScreenService (roomListService, $q, leaderboardService) {
         var service = {
             open: false,
             nextRoom: nextRoom,
@@ -18,10 +18,10 @@
 
         function nextRoom () {
             var deferred = $q.defer();
-            var promise = lobbyService.nextRoom();
+            var promise = roomListService.nextRoom();
             promise.then(function (id) {
                 service.leaveRoomMethod().then(function () {
-                    lobbyService.joinRoom(id).then(function () {
+                    roomListService.joinRoom(id).then(function () {
                         deferred.resolve();
                     });
                 })

@@ -25,7 +25,7 @@
             }
 
             loginService.login(vm.model).then(function () {
-                $state.go('lobby');
+                $state.go('room-list');
             }).catch(function () {
                 vm.errors.username = 'Wrong username or password';
             });

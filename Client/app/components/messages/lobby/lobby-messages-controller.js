@@ -22,7 +22,7 @@
         };
 
         vm.getTemplate = function () {
-            return 'components/messages/lobby/templates/lobby-template.html';
+            return 'components/messages/room-list/templates/room-list-template.html';
         };
 
         var messagesList = [

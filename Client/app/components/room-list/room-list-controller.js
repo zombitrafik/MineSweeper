@@ -3,11 +3,11 @@
 
     angular
         .module('app')
-        .controller('LobbyController', LobbyController);
+        .controller('RoomListController', RoomListController);
 
-    LobbyController.$inject = ['lobbyService', '$state', 'createRoomService'];
+    RoomListController.$inject = ['roomListService', '$state'];
 
-    function LobbyController (lobbyService, $state, createRoomService) {
+    function RoomListController (roomListService, $state) {
         var vm = this;
 
         vm.isCreating = false;
@@ -26,7 +26,7 @@
         };
 
         vm.getRooms = function () {
-            return lobbyService.rooms;
+            return roomListService.rooms;
         };
 
         vm.isCreate = function () {
@@ -34,12 +34,12 @@
         };
 
         vm.refreshRooms = function () {
-            lobbyService.getRooms();
+            roomListService.getRooms();
         };
 
         vm.joinRoom = function (id) {
 
-            var promise = lobbyService.joinRoom(id);
+            var promise = roomListService.joinRoom(id);
 
             promise.then(function () {
                 $state.go('game');
@@ -56,14 +56,10 @@
         };
 
         vm.sendCreateRequest = function () {
-            var promise = lobbyService.createRoom(vm.roomModel);
+            var promise = roomListService.createRoom(vm.roomModel);
             promise.then(function () {
                 $state.go('game');
             });
-        };
-
-        vm.isShowCreateMenuDialog = function () {
-            return createRoomService.isShow;
         };
 
         function resetModel () {

@@ -87,12 +87,12 @@
             })
 
             .state({
-                name: 'lobby',
-                url: '/lobby',
+                name: 'room-list',
+                url: '/room-list',
                 views: {
                     'mainView': {
-                        templateUrl: 'components/lobby/lobby-index.html',
-                        controller: 'LobbyController',
+                        templateUrl: 'components/room-list/room-list-index.html',
+                        controller: 'RoomListController',
                         controllerAs: 'vm'
                     }
                 },

@@ -3,11 +3,11 @@
 
     angular
         .module('app')
-        .service('lobbyApiService', lobbyApiService);
+        .service('roomListApiService', roomListApiService);
 
-    lobbyApiService.$inject = ['Restangular'];
+    roomListApiService.$inject = ['Restangular'];
 
-    function lobbyApiService (Restangular) {
+    function roomListApiService (Restangular) {
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,

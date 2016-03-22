@@ -8,7 +8,7 @@
 
         //var BASE_URL = '/';
         //var BASE_URL = 'http://169.254.130.181:8080/';
-        var BASE_URL = 'http://192.168.2.33:8080/';
+        var BASE_URL = 'http://192.168.2.33:8090/';
 
         var service = {
             connect: connect,

@@ -4,7 +4,7 @@
     </div>
     <div class="menu-actions" ng-if="!pageController.isShowMenu()">
 
-        <div class="lobby-header" ng-if="controller.isThisPage('lobby')">
+<!--        <div class="lobby-header" ng-if="controller.isThisPage('lobby')">
             <div class="notification" ng-click="controller.toggleNotificationDropdown()" click-outside="controller.hideNotificationDropdown()" ng-class="{active: controller.getNotifications().length > 0, 'active-dropdown': controller.isShowNotificationDropdown}" >
                 <i class="fa fa-bell"></i>
                 <span class="notification-count" ng-if="controller.getNotifications().length > 0" ng-bind="controller.getNotifications().length"></span>
@@ -15,7 +15,7 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <div class="messages-header" ng-if="controller.isThisPage('messages')">
             <div class="notification" ng-click="controller.toggleNotificationDropdown()" click-outside="controller.hideNotificationDropdown()" ng-class="{active: controller.getNotifications().length > 0, 'active-dropdown': controller.isShowNotificationDropdown}" >

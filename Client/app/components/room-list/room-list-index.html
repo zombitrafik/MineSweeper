@@ -17,7 +17,7 @@
             </div>
             <div class="input-wrapper">
                 <span class="input-label">Field width</span>
-                <input type="number" ng-model="vm.roomModel.width" min="0" placeholder="30" />
+                <input type="numbrer" ng-model="vm.roomModel.width" min="0" placeholder="30" />
             </div>
             <div class="input-wrapper">
                 <span class="input-label">Field height</span>
@@ -38,6 +38,7 @@
         </div>
         <div class="room-header">
             <span class="room-name">NAME</span>
+            <span class="min-rating">MIN RATING</span>
             <span class="field-size">FIELD SIZE</span>
             <span class="mines-count">MINES</span>
             <span class="players-count">PLAYERS</span>
@@ -45,6 +46,7 @@
         </div>
         <div class="room" ng-repeat="room in vm.getRooms()" ng-click="vm.joinRoom(room.id)">
             <span class="room-name" ng-bind="room.name"></span>
+            <span class="min-rating" ng-bind="room.rating"></span>
             <span class="field-size" ng-bind="room.width + 'x' + room.height"></span>
             <span class="mines-count" ng-bind="room.minesCount"></span>
             <span class="players-count" ng-bind="room.players.length"></span>
@@ -55,4 +57,3 @@
     </div>
 
 </div>
-<div class="dialog-layer" ng-class="{'hidden': !vm.isShowCreateMenuDialog()}" ng-include="'components/dialogs/create-room/create-room-index.html'"></div>

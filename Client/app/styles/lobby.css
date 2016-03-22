@@ -1,3 +1,5 @@
+/* room-list */
+
 .lobby-page {
     height: calc(100% - 20px);
     padding-top: 10px;
@@ -32,13 +34,19 @@
 }
 
 span.room-name {
-    width: 50%;
+    width: 25%;
     display: inline-block;
 }
 
 span.players-count {
     display: inline-block;
     width: 10%;
+    text-align: center;
+}
+
+span.min-rating {
+    display: inline-block;
+    width: 20%;
     text-align: center;
 }
 
@@ -50,7 +58,7 @@ span.room-started {
 
 span.field-size {
     display: inline-block;
-    width: 10%;
+    width: 20%;
     text-align: center;
 }
 
@@ -63,6 +71,7 @@ span.mines-count {
 .room-list-header {
     padding: 20px;
     background: #009688;
+    //background: url('../images/grass-tile.png') repeat-x;
     position: relative;
     color: white;
 }
@@ -72,7 +81,7 @@ span.mines-count {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #FFC107;
+    background: #7CB342;
     text-align: center;
     line-height: 41px;
     color: white;
@@ -129,7 +138,7 @@ button {
 
 
 button.submit {
-    background: #4CAF50;
+    background: #7CB342;
     border: 0 solid black;
     padding: 10px 30px;
     color: white;
@@ -141,7 +150,7 @@ button.submit {
 }
 
 button.cancel {
-    background: #FF9800;
+    background: #F57C00;
     border: 0 solid black;
     padding: 10px 30px;
     color: white;
@@ -155,4 +164,180 @@ button.cancel {
 
 button:hover {
     box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+}
+
+/* lobby */
+
+.lobby-list-block {
+    width: 50%;
+    margin: 0 auto;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.player {
+    padding: 20px;
+    color: #565656;
+    cursor: pointer;
+    border-bottom: 4px solid white;
+}
+
+.player:hover {
+    color: #00A499;
+}
+
+.lobby-header {
+    background: #009688;
+    color: white;
+    padding: 10px 20px;
+    border-bottom: 2px solid rgba(192, 192, 192, 0.38);
+}
+
+span.player-name {
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+}
+
+span.player-rating {
+    display: inline-block;
+    width: 40%;
+    text-align: center;
+}
+
+span.player-actions {
+    display: inline-block;
+    width: 25%;
+    text-align: center;
+}
+
+.room-list-header .lobby-back-btn {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #7CB342;
+    text-align: center;
+    line-height: 41px;
+    color: white;
+    position: absolute;
+    top: 30px;
+    left: -20px;
+    cursor: pointer;
+    transition: 200ms;
+}
+
+.room-list-header .lobby-back-btn:hover {
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    top: 28px;
+}
+
+.player .write-message {
+    padding: 3px 3px 3px 7px;
+    border-radius: 3px;
+    background: white !important;
+    color: black !important;
+    margin-right: 10px;
+    transition: 100ms;
+}
+
+.player .write-message:hover {
+    background: #009688 !important;
+    color: white !important;
+}
+
+.player .remove-user {
+    padding: 3px 9px 3px 8px;
+    border-radius: 3px;
+    background: white !important;
+    color: black !important;
+    margin-right: 10px;
+    transition: 100ms;
+}
+
+.player .remove-user:hover {
+    background: #009688 !important;
+    color: white !important;
+}
+
+.player .player-leader {
+    color: #FFC107;
+}
+
+.lobby-list-block .room-list-header {
+    text-align: right
+}
+
+.lobby-list-label {
+    float: left;
+    line-height: 50px;
+    margin-left: 10px;
+}
+
+.lobby-list-block .start-game {
+    display: inline-block;
+}
+
+.lobby-list-block .start-game button {
+    border: 0 solid black;
+    border-radius: 3px;
+    padding: 5px 15px;
+    outline: none;
+    cursor: pointer;
+    background: #7CB342;
+    color: white;
+    transition: 100ms;
+}
+
+.lobby-list-block .invite-friend {
+    display: inline-block;
+    position: relative;
+    overflow: visible;
+}
+
+.lobby-list-block .invite-friend button {
+    border: 0 solid black;
+    border-radius: 3px;
+    padding: 5px 15px;
+    outline: none;
+    cursor: pointer;
+    background: #00796B;
+    color: white;
+    transition: 100ms;
+}
+
+.players {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.lobby-footer {
+    background: #00897B;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.invite-friend-block {
+    position: absolute;
+    left: 175px;
+    top: -20px;
+    color: black;
+    width: 200px;
+    text-align: left;
+    background: white;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+.invite-friend-block-header {
+    color: white;
+    background: #009688;
+    padding: 5px;
+}
+
+.invite-friend-block-header .close {
+    float: right;
+    background: #7CB342;
+    padding: 0 3px;
+    border-radius: 3px;
+    cursor: pointer;
 }

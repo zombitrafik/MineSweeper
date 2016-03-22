@@ -107,6 +107,26 @@
             })
 
             .state({
+                name: 'lobby',
+                url: '/lobby/:id',
+                views: {
+                    'mainView': {
+                        templateUrl: 'components/lobby/lobby-index.html',
+                        controller: 'LobbyController',
+                        controllerAs: 'vm'
+                    }
+                },
+                requires: [
+                    ROUTE_REQUIRES.AUTH
+                ],
+                resolve: {
+                    auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                    }
+                }
+            })
+
+            .state({
                 name: 'messages',
                 url: '/messages/:recipient',
                 views: {

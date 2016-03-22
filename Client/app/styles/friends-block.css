@@ -1,0 +1,50 @@
+.friends-block-wrapper {
+    padding: 5px;
+    margin: 0;
+}
+
+.user {
+    color: #565656;
+    position: relative;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.user .status {
+    font-size: 10px;
+    position: absolute;
+    top: 8px;
+    left: 2px;
+}
+
+.user .status.offline {
+    color: #565656;
+}
+
+.user .status.online {
+    color: #7CB342;
+}
+
+.user .user-name {
+    margin-left: 10px;
+}
+
+.user:hover {
+    background: #F1F8E9;
+}
+
+.friends-block-wrapper .pending {
+    text-align: center;
+    color: #009688;
+}
+
+.user-list {
+    max-height: 400px;
+    overflow: auto
+}
+
+.user-list-result {
+    font-size: 13px;
+    color: silver;
+    padding-bottom: 2px;
+}

@@ -11,24 +11,30 @@
 
         var rooms = [
             {
+                id: 1,
                 name: 'some name 1',
                 players: {
                     length: 3
                 },
+                rating: 1200,
                 started: true,
                 time: (new Date())
             },{
+                id: 2,
                 name: 'some name 2',
                 players: {
                     length: 5
                 },
+                rating: 730,
                 started: true,
                 time: (new Date())
             },{
+                id: 3,
                 name: 'some name 3',
                 players: {
                     length: 4
                 },
+                rating: 2200,
                 started: true,
                 time: (new Date())
             }

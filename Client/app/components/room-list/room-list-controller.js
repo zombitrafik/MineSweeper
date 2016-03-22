@@ -38,11 +38,12 @@
         };
 
         vm.joinRoom = function (id) {
-
             var promise = roomListService.joinRoom(id);
 
             promise.then(function () {
-                $state.go('game');
+                $state.go('lobby', {id: id});
+            }).catch(function () {
+                $state.go('lobby', {id: id});
             });
         };
 

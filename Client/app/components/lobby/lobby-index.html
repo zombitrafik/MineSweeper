@@ -1,0 +1,52 @@
+<div class="lobby-page" ng-init="vm.refreshPlayers()">
+
+    <div class="lobby-list-block">
+        <div class="room-list-header">
+            <span class="lobby-list-label">LOBBY</span>
+
+            <div class="lobby-back-btn" ng-click="vm.leaveRoom()">
+                <i class="fa fa-arrow-left"></i>
+            </div>
+            <div class="start-game" ng-if="vm.getCurrentUser().id == vm.getLobbyLeader().id" ng-click="vm.startGame()">
+                <button>START GAME</button>
+            </div>
+            <div class="invite-friend">
+                <button ng-click="vm.inviteFriend()">INVITE FRIEND</button>
+                <div class="invite-friend-block" ng-if="vm.isInviteFriend()">
+                    <div class="invite-friend-block-header">
+                        <span>SELECT</span>
+                        <span class="close" ng-click="vm.inviteFriend()">
+                            <i class="fa fa-times"></i>
+                        </span>
+                    </div>
+                    <invite-friends on-select="vm.onUserInvite"></invite-friends>
+                </div>
+            </div>
+        </div>
+        <div class="lobby-header">
+            <span class="player-name">NAME</span>
+            <span class="player-rating">RATING</span>
+            <span class="player-actions"></span>
+        </div>
+        <div class="players">
+            <div class="player" ng-repeat="player in vm.getPlayers()">
+            <span class="player-name">
+                <span class="player-leader" ng-if="player.isLeader"><i class="fa fa-star"></i></span>
+                <span ng-bind="player.name"></span>
+            </span>
+                <span class="player-rating" ng-bind="player.rating"></span>
+            <span class="player-actions">
+                <span class="write-message">
+                    <i class="fa fa-envelope-o"></i>
+                </span>
+                <span class="remove-user">
+                    <i class="fa fa-times"></i>
+                </span>
+            </span>
+            </div>
+        </div>
+        <div class="lobby-footer">
+            <span ng-bind="vm.getPlayers().length + '/' + vm.getMaxPlayers()"></span>
+        </div>
+    </div>
+</div>

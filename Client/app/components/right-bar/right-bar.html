@@ -1,3 +1,93 @@
-<div class="right-bar">
-    some info
+<div class="right-bar" ng-controller="RightBarController as controller">
+    <div class="info-block">
+        info<br>
+        info
+    </div>
+    <div class="info-block">
+        info<br>
+        info
+    </div>
+    <div class="chat-block">
+        <div class="chat-tabs">
+            <div class="chat-tab"
+                 ng-class="{'active': controller.activeChat.id == -1 }"
+                    ng-click="controller.activateGlobalChat()">
+                <span class="chat-tab-name">GLOBAL</span>
+                <span class="chat-tab-m-count">+3</span>
+                <span class="chat-tab-close">
+                    <i class="fa fa-lock"></i>
+                </span>
+            </div>
+            <div class="chat-tab"
+                 ng-class="{'active': controller.activeChat.id == -2 }"
+                 ng-click="controller.activateLobbyChat()" >
+                <span class="chat-tab-name">LOBBY</span>
+                <span class="chat-tab-close">
+                    <i class="fa fa-lock"></i>
+                </span>
+            </div>
+            <div class="chat-tab"
+                 ng-class="{'active': chatTab.id == controller.activeChat.id}"
+                 ng-repeat="chatTab in controller.getOpenedChats()"
+                 ng-click="controller.activateChat(chatTab.id)">
+                <span class="chat-tab-name" ng-bind="chatTab.name"></span>
+                <span class="chat-tab-close" ng-click="controller.closeChat(chatTab.id, $event)">
+                    <i class="fa fa-times"></i>
+                </span>
+            </div>
+        </div>
+        <div class="chat-content">
+            <div class="chat-message">
+                <span class="message-sender">Vlad</span>
+                <span class="message-data">Hello, guys! How are you?</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+            <div class="chat-message">
+                <span class="message-sender">Ilya</span>
+                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
+            </div>
+        </div>
+        <div class="chat-actions">
+            <div class="input-wrapper">
+                <span class="input-label"></span>
+                <input type="text" ng-model="vm.roomModel.name" placeholder="Type your message here"/>
+            </div>
+            <button class="send">SEND</button>
+        </div>
+    </div>
 </div>

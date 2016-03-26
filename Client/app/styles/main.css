@@ -187,7 +187,8 @@ body {
 
 .layout-right-bar {
     display: inline-block;
-    width: 300px;
-    background: red;
+    width: 296px;
+    background: #FFFFFF;
     height: 100%;
+    border-left: 4px solid #7CB342;
 }

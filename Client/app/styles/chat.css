@@ -1,0 +1,117 @@
+.info-block {
+    background: #009688;
+    padding: 10px;
+    margin: 5px;
+}
+
+.chat-block {
+    margin: 5px;
+}
+
+.chat-tabs {
+    border-bottom: 1px solid #009688;
+    box-shadow: 1px 1px 3px #607D8B;
+    padding: 5px;
+}
+
+.chat-tabs .chat-tab {
+    display: inline-block;
+    background: white;
+    color: #009688;
+    padding: 2px 5px;
+    margin: 1px 1px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 100ms;
+}
+
+.chat-tabs .chat-tab:hover {
+    background: #B2DFDB;
+}
+
+.chat-tabs .chat-tab.active {
+    background: #009688;
+    color: white;
+}
+
+
+
+.chat-tabs .chat-tab .chat-tab-close {
+    color: #80CBC4;
+}
+
+.chat-tabs .chat-tab .chat-tab-close:hover {
+    color: #009688;
+}
+
+.chat-tabs .chat-tab.active .chat-tab-close {
+     color: #80CBC4;
+}
+
+.chat-tabs .chat-tab.active .chat-tab-close:hover {
+    color: white;
+}
+
+.chat-tabs .chat-tab .chat-tab-name {
+    max-width: 110px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 14px;
+    float: left;
+    margin: 2px 2px 0 0;
+}
+.chat-tabs .chat-tab .chat-tab-m-count {
+    font-size: 13px;
+    vertical-align: text-bottom;
+    color: #009688;
+    font-weight: bolder;
+}
+
+.chat-actions {
+    padding: 5px;
+    border-top: 1px solid #009688;
+    box-shadow: 1px -1px 3px #607D8B;
+}
+
+.chat-actions .input-wrapper {
+    width: 220px;
+}
+
+.chat-actions button.send {
+    margin: 0;
+    border: 0 solid black;
+    padding: 7px;
+    outline: none;
+    color: white;
+    background: #009688;
+    border-bottom: 3px solid #009688;
+    cursor: pointer;
+    transition: 100ms;
+}
+
+.chat-actions button.send:hover {
+    background: #26A69A;
+    border-bottom: 3px solid #26A69A;
+    box-shadow: none;
+}
+
+.chat-content {
+    padding: 5px 2px;
+    border-left: 1px solid #009688;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.chat-content .chat-message {
+    margin-bottom: 10px;
+}
+
+.chat-content .chat-message .message-sender {
+    color: #009688;
+    font-weight: bold
+}
+
+.chat-content .chat-message .message-data {
+    font-size: 14px;
+}

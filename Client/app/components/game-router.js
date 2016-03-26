@@ -96,12 +96,10 @@
                         controllerAs: 'vm'
                     }
                 },
-                requires: [
-                    ROUTE_REQUIRES.AUTH
-                ],
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
-                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                        return true;
+                        //return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
             })
@@ -121,7 +119,8 @@
                 ],
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
-                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                        return true;
+                        //return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
             })

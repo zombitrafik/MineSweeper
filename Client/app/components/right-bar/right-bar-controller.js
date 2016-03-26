@@ -3,69 +3,61 @@
         .module('app')
         .controller('RightBarController', RightBarController);
 
-    RightBarController.$inject = ['rightBarService'];
+    RightBarController.$inject = ['rightBarService', 'chatService'];
 
-    function RightBarController (rightBarService) {
+    function RightBarController(rightBarService, chatService) {
         var vm = this;
 
-        //TODO: global/lobby chat object
+        //TODO: notifications
         /*
-            tabs activate content
-            send messages
-            add new chat
-             spinners
+
          */
 
-        var chats = [
-            {
-                name: 'zombitrafik',
-                id: 1
-            },
-            {
-                name: 'kimreik',
-                id: 2
-            },
-            {
-                name: 'zombitrafik (twink)',
-                id: 3
-            },
-            {
-                name: 'kimreik (twink)',
-                id: 4
-            }
-        ];
+        vm.inputMessage = {
+            message: ''
+        };
 
-        vm.activeChat = chats[0];
+        vm.isMessagesLoaded = false;
+
+        vm.isLoadingHistory = function () {
+            return chatService.isLoadingHistory;
+        };
+
+        vm.init = function () {
+            chatService.getHistory();
+        };
+
+        vm.getActiveChat = function () {
+            return chatService.getActiveChat();
+        };
 
         vm.getOpenedChats = function () {
-            return chats;
+            return chatService.getOpenedChats();
         };
 
         vm.closeChat = function (id, $event) {
             $event.stopPropagation();
-            var index = _.findIndex(chats, function (chat) {
-                return chat.id == id;
-            });
-            chats.splice(index, 1);
+            chatService.closeChat(id);
         };
 
         vm.activateChat = function (id) {
-            vm.activeChat = _.find(chats, function (chat) {
-                return chat.id == id;
-            });
+            chatService.activateChat(id)
         };
 
         vm.activateGlobalChat = function () {
-            vm.activeChat = {
-                id: -1
-            };
+            chatService.getGlobalChat();
         };
 
         vm.activateLobbyChat = function () {
-            vm.activeChat = {
-                id: -2
-            };
+            chatService.getLobbyChat();
         };
+
+        vm.sendMessage = function () {
+            chatService.sendMessage(vm.inputMessage.message);
+            vm.inputMessage.message = '';
+        };
+
+        vm.init();
 
         return vm;
     }

@@ -101,6 +101,8 @@
     border-left: 1px solid #009688;
     overflow: auto;
     max-height: 300px;
+    min-height: 300px;
+    height: 300px;
 }
 
 .chat-content .chat-message {
@@ -114,4 +116,10 @@
 
 .chat-content .chat-message .message-data {
     font-size: 14px;
+}
+
+
+.chat-content .spinner {
+    display: block;
+    text-align: center;
 }

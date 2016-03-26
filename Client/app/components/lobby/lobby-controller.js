@@ -3,9 +3,9 @@
         .module('app')
         .controller('LobbyController', LobbyController);
 
-    LobbyController.$inject = ['$state', 'lobbyService', '$q'];
+    LobbyController.$inject = ['$state', 'lobbyService', '$q', 'chatService'];
 
-    function LobbyController ($state, lobbyService, $q) {
+    function LobbyController ($state, lobbyService, $q, chatService) {
         var vm = this;
 
         var isInvitingFriends = false;
@@ -59,6 +59,10 @@
 
         vm.refreshPlayers = function () {
             lobbyService.getPlayers(getRoomId());
+        };
+
+        vm.openChat = function (username) {
+            chatService.openChat(username);
         };
 
         return vm;

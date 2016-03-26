@@ -3,9 +3,9 @@
         .module('app')
         .service('rightBarService', rightBarService);
 
-    rightBarService.$inject = [];
+    rightBarService.$inject = ['chatService'];
 
-    function rightBarService () {
+    function rightBarService (chatService) {
 
     }
 })();

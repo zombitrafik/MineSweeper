@@ -36,7 +36,7 @@
             </span>
                 <span class="player-rating" ng-bind="player.rating"></span>
             <span class="player-actions">
-                <span class="write-message">
+                <span class="write-message" ng-click="vm.openChat(player.name)">
                     <i class="fa fa-envelope-o"></i>
                 </span>
                 <span class="remove-user">

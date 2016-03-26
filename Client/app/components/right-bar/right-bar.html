@@ -10,8 +10,8 @@
     <div class="chat-block">
         <div class="chat-tabs">
             <div class="chat-tab"
-                 ng-class="{'active': controller.activeChat.id == -1 }"
-                    ng-click="controller.activateGlobalChat()">
+                 ng-class="{'active': controller.getActiveChat().id == -1 }"
+                 ng-click="controller.activateGlobalChat()">
                 <span class="chat-tab-name">GLOBAL</span>
                 <span class="chat-tab-m-count">+3</span>
                 <span class="chat-tab-close">
@@ -19,15 +19,15 @@
                 </span>
             </div>
             <div class="chat-tab"
-                 ng-class="{'active': controller.activeChat.id == -2 }"
-                 ng-click="controller.activateLobbyChat()" >
+                 ng-class="{'active': controller.getActiveChat().id == -2 }"
+                 ng-click="controller.activateLobbyChat()">
                 <span class="chat-tab-name">LOBBY</span>
                 <span class="chat-tab-close">
                     <i class="fa fa-lock"></i>
                 </span>
             </div>
             <div class="chat-tab"
-                 ng-class="{'active': chatTab.id == controller.activeChat.id}"
+                 ng-class="{'active': chatTab.id == controller.getActiveChat().id}"
                  ng-repeat="chatTab in controller.getOpenedChats()"
                  ng-click="controller.activateChat(chatTab.id)">
                 <span class="chat-tab-name" ng-bind="chatTab.name"></span>
@@ -37,57 +37,20 @@
             </div>
         </div>
         <div class="chat-content">
-            <div class="chat-message">
-                <span class="message-sender">Vlad</span>
-                <span class="message-data">Hello, guys! How are you?</span>
+            <div class="chat-message" ng-repeat="history in controller.getActiveChat().messages" ng-if="!controller.isLoadingHistory()">
+                <span class="message-sender" ng-bind="history.sender">Vlad</span>
+                <span class="message-data" ng-bind="history.message">Hello, guys! How are you?</span>
             </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
-            <div class="chat-message">
-                <span class="message-sender">Ilya</span>
-                <span class="message-data">Another long message from Ilya. may be it will take more than one row...</span>
-            </div>
+            <span class="spinner" ng-if="controller.isLoadingHistory()">
+                <i class="fa fa-spinner fa-spin"></i>
+            </span>
         </div>
         <div class="chat-actions">
             <div class="input-wrapper">
                 <span class="input-label"></span>
-                <input type="text" ng-model="vm.roomModel.name" placeholder="Type your message here"/>
+                <input type="text" ng-model="controller.inputMessage.message" placeholder="Type your message here"/>
             </div>
-            <button class="send">SEND</button>
+            <button class="send" ng-click="controller.sendMessage()">SEND</button>
         </div>
     </div>
 </div>

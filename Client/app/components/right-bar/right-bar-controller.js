@@ -23,10 +23,6 @@
             return chatService.isLoadingHistory;
         };
 
-        vm.init = function () {
-            chatService.getHistory();
-        };
-
         vm.getActiveChat = function () {
             return chatService.getActiveChat();
         };
@@ -35,29 +31,35 @@
             return chatService.getOpenedChats();
         };
 
-        vm.closeChat = function (id, $event) {
+        vm.closeChat = function (username, $event) {
             $event.stopPropagation();
-            chatService.closeChat(id);
+            chatService.closeChat(username);
         };
 
-        vm.activateChat = function (id) {
-            chatService.activateChat(id)
+        vm.activateChat = function (username) {
+            chatService.openChat(username)
+        };
+
+        vm.getGlobalChat = function () {
+            return chatService.getGlobalChat();
+        };
+
+        vm.getLobbyChat = function () {
+            return chatService.getLobbyChat();
         };
 
         vm.activateGlobalChat = function () {
-            chatService.getGlobalChat();
+            chatService.activateGlobalChat();
         };
 
         vm.activateLobbyChat = function () {
-            chatService.getLobbyChat();
+            chatService.activateLobbyChat();
         };
 
         vm.sendMessage = function () {
             chatService.sendMessage(vm.inputMessage.message);
             vm.inputMessage.message = '';
         };
-
-        vm.init();
 
         return vm;
     }

@@ -98,7 +98,8 @@
                 },
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
-                        return true;
+                        //return true;
+                        return initCacheServiceRoute($q, cacheService);
                         //return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
@@ -119,7 +120,8 @@
                 ],
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
-                        return true;
+                        //return true;
+                        return initCacheServiceRoute($q, cacheService);
                         //return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
@@ -185,6 +187,16 @@
                 }
             });
 
+    }
+
+    function initCacheServiceRoute ($q, cacheService) {
+        var deferred = $q.defer();
+
+        cacheService.init().then(function () {
+            deferred.resolve();
+        });
+
+        return deferred.promise;
     }
 
     function checkRoute (routeService, $q, $state, cacheService, loginService, globalInitService, requires) {

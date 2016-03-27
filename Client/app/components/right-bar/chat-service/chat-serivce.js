@@ -3,48 +3,35 @@
         .module('app')
         .service('chatService', chatService);
 
-    chatService.$inject = ['$q', '$timeout'];
+    chatService.$inject = ['$q', '$timeout', '$interval', 'notificationService'];
 
-    function chatService($q, $timeout) {
+    function chatService($q, $timeout, $interval, notificationService) {
+
+
+        //TODO: get from userService or another service
+        var currentUserName = 'zombitrafik';
 
         var globalChat = {
-            id: -1,
-            messages: []
+            username: -1,
+            messages: [],
+            unreaded: 1
         };
 
         var lobbyChat = {
-            id: -2,
-            messages: []
+            username: -2,
+            messages: [],
+            unreaded: 3
         };
 
-        var chats = [
-            {
-                name: 'zombitrafik',
-                id: 0,
-                messages: []
-            },
-            {
-                name: 'kimreik',
-                id: 1,
-                messages: []
-            },
-            {
-                name: 'zombitrafik (twink)',
-                id: 2,
-                messages: []
-            },
-            {
-                name: 'kimreik (twink)',
-                id: 3,
-                messages: []
-            }
-        ];
+        var chats = [];
 
         var activeChat = globalChat;
 
         var service = {
             getGlobalChat: getGlobalChat,
             getLobbyChat: getLobbyChat,
+            activateGlobalChat: activateGlobalChat,
+            activateLobbyChat: activateLobbyChat,
             getActiveChat: getActiveChat,
             activateChat: activateChat,
             closeChat: closeChat,
@@ -55,43 +42,70 @@
             isLoadingHistory: true
         };
 
+        init();
+
+        emitter();
+
         return service;
 
-        function getGlobalChat() {
+        function init() {
+            notificationService.loadNotifications().then(function (data) {
+                var prefix = notificationService.TYPES.MESSAGE + '_';
+                for(var key in data) {
+                    chats.push({
+                        unreaded: data[key],
+                        username: key.replace(prefix, ''),
+                        messages: [],
+                        isInited: false
+                    })
+                }
+                getHistory();
+            });
+        }
+
+        function activateGlobalChat () {
             activeChat = globalChat;
             getHistory();
         }
 
-        function getLobbyChat() {
+        function activateLobbyChat () {
             activeChat = lobbyChat;
             getHistory();
+        }
+
+        function getGlobalChat() {
+            return globalChat;
+        }
+
+        function getLobbyChat() {
+            return lobbyChat;
         }
 
         function getActiveChat() {
             return activeChat;
         }
 
-        function activateChat(id) {
-            activeChat = _.find(chats, function (chat) {
-                return chat.id == id;
-            });
-            getHistory();
+        function activateChat(chat) {
+            activeChat = chat;
+            getHistory(chat);
         }
 
         function getOpenedChats() {
             return chats;
         }
 
-        function closeChat(id) {
+        function closeChat(username) {
             var index = _.findIndex(chats, function (chat) {
-                return chat.id == id;
+                return chat.username == username;
             });
             chats.splice(index, 1);
+            var TYPES = notificationService.TYPES;
+            notificationService.remove(TYPES.MESSAGE + '_' + username);
         }
 
         function sendMessage(message) {
             activeChat.messages.push({
-                sender: 'zombitrafik',
+                sender: currentUserName,
                 message: message
             });
         }
@@ -100,44 +114,85 @@
             //TODO: get it by user name
             service.isLoadingHistory = true;
 
-            if (activeChat.messages.length > 3) {
+            if (activeChat.isInited) {
                 service.isLoadingHistory = false;
+                readMessage();
             } else {
                 //TODO: find chat by ID and add new messages
+
                 $timeout(function () {
-                    activeChat.messages.push({
-                        sender: 'zombitrafik',
-                        message: Math.random()
-                    });
                     service.isLoadingHistory = false;
-                }, 1000);
+                    readMessage();
+                    activeChat.isInited = true;
+                }, 500);
 
             }
+        }
+
+        function readMessage () {
+            activeChat.unreaded = 0;
+            if(activeChat.username < 0) return;
+            var TYPES = notificationService.TYPES;
+            notificationService.set(TYPES.MESSAGE + '_' + activeChat.username, 0);
         }
 
         function openChat(username) {
             var chat = findChat(username);
-            if(!chat) {
+            if (!chat) {
                 chat = createNewChat(username);
             }
-            activateChat(chat.id);
+            activateChat(chat);
         }
 
 
-        function findChat (username) {
+        function findChat(username) {
             return _.find(chats, function (chat) {
-                return chat.name == username;
+                return chat.username == username;
             });
         }
 
-        function createNewChat (username) {
+        function createNewChat(username) {
             var chat = {
-                id: chats.length,
-                name: username,
+                username: username,
+                unreaded: 0,
                 messages: []
             };
             chats.push(chat);
             return chat;
         }
+
+        function messageHandler(data) {
+            if (data.sender == activeChat.username) {
+                activeChat.messages.push(data);
+            } else {
+                var TYPES = notificationService.TYPES;
+                notificationService.notify(TYPES.MESSAGE, data);
+
+                var chat = findChat(data.sender);
+                if(!chat) {
+                    chat = createNewChat(data.sender);
+                }
+                chat.messages.push(data);
+                chat.unreaded++;
+            }
+        }
+
+        function emitter() {
+            $interval(function () {
+                messageHandler(generateFakeData());
+            }, 1000);
+        }
+
+        function generateFakeData() {
+            return {
+                sender: 'user_name' + getRandomInt(1, 4),
+                message: Math.random()
+            }
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
     }
 })();

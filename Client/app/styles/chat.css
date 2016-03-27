@@ -29,12 +29,14 @@
     background: #B2DFDB;
 }
 
+.chat-tabs .chat-tab:hover .chat-tab-m-count {
+    background: rgba(0,0,0,0);
+}
+
 .chat-tabs .chat-tab.active {
     background: #009688;
     color: white;
 }
-
-
 
 .chat-tabs .chat-tab .chat-tab-close {
     color: #80CBC4;
@@ -66,6 +68,13 @@
     vertical-align: text-bottom;
     color: #009688;
     font-weight: bolder;
+    background: rgba(0, 150, 136, 0.15);
+    padding: 1px 2px;
+    border-radius: 2px;
+}
+
+.chat-tabs .chat-tab.active .chat-tab-m-count {
+    color: white;
 }
 
 .chat-actions {

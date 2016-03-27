@@ -10,28 +10,36 @@
     <div class="chat-block">
         <div class="chat-tabs">
             <div class="chat-tab"
-                 ng-class="{'active': controller.getActiveChat().id == -1 }"
+                 ng-class="{'active': controller.getActiveChat().username == controller.getGlobalChat().username }"
                  ng-click="controller.activateGlobalChat()">
                 <span class="chat-tab-name">GLOBAL</span>
-                <span class="chat-tab-m-count">+3</span>
+                <span class="chat-tab-m-count" ng-if="controller.getGlobalChat().unreaded > 0">
+                    <span>+<span ng-bind="controller.getGlobalChat().unreaded"></span></span>
+                </span>
                 <span class="chat-tab-close">
                     <i class="fa fa-lock"></i>
                 </span>
             </div>
             <div class="chat-tab"
-                 ng-class="{'active': controller.getActiveChat().id == -2 }"
+                 ng-class="{'active': controller.getActiveChat().username == controller.getLobbyChat().username }"
                  ng-click="controller.activateLobbyChat()">
                 <span class="chat-tab-name">LOBBY</span>
+                <span class="chat-tab-m-count" ng-if="controller.getLobbyChat().unreaded > 0">
+                    <span>+<span ng-bind="controller.getLobbyChat().unreaded"></span></span>
+                </span>
                 <span class="chat-tab-close">
                     <i class="fa fa-lock"></i>
                 </span>
             </div>
             <div class="chat-tab"
-                 ng-class="{'active': chatTab.id == controller.getActiveChat().id}"
+                 ng-class="{'active': chatTab.username == controller.getActiveChat().username}"
                  ng-repeat="chatTab in controller.getOpenedChats()"
-                 ng-click="controller.activateChat(chatTab.id)">
-                <span class="chat-tab-name" ng-bind="chatTab.name"></span>
-                <span class="chat-tab-close" ng-click="controller.closeChat(chatTab.id, $event)">
+                 ng-click="controller.activateChat(chatTab.username)">
+                <span class="chat-tab-name" ng-bind="chatTab.username"></span>
+                <span class="chat-tab-m-count" ng-if="chatTab.unreaded > 0">
+                    <span>+<span ng-bind="chatTab.unreaded"></span></span>
+                </span>
+                <span class="chat-tab-close" ng-click="controller.closeChat(chatTab.username, $event)">
                     <i class="fa fa-times"></i>
                 </span>
             </div>

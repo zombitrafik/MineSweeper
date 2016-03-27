@@ -12,8 +12,10 @@
             TYPES: {
                 MESSAGE: 'MESSAGE'
             },
+            loadNotifications: loadNotifications,
             notify: notify,
             init: init,
+            set: set,
             remove: remove
         };
 
@@ -28,8 +30,13 @@
             }
         }
 
+        function loadNotifications () {
+            return cacheService.item(ROUTE_REQUIRES.NOTIFICATION);
+        }
+
         function getNotifications () {
-            return _.toArray(service.notifications);
+            service.notifications =  cacheService.local[ROUTE_REQUIRES.NOTIFICATION] || [];
+            return service.notifications;
         }
 
         function notify (type, data) {
@@ -47,15 +54,18 @@
             }
 
             cacheService.item(PREFIX).then(function (item) {
-                item[url] = data;
+                if(!item[url]) {
+                    item[url] = 0;
+                }
+                item[url]++;
                 cacheService.item(PREFIX, item).then(function () {
-                    addLocalNotify(url, data);
+                    addLocalNotify(url, item[url]);
                 });
             }).catch(function () {
                 var item = {};
-                item[url] = data;
+                item[url] = 0;
                 cacheService.item(PREFIX, item).then(function () {
-                    addLocalNotify(url, data);
+                    addLocalNotify(url, item[url]);
                 });
             })
         }
@@ -69,6 +79,15 @@
             delete service.notifications[url];
             cacheService.item(PREFIX).then(function (item) {
                 delete item[url];
+                cacheService.item(PREFIX, item);
+            });
+        }
+
+        function set (url, value) {
+            var PREFIX = ROUTE_REQUIRES.NOTIFICATION;
+            service.notifications[url] = value;
+            cacheService.item(PREFIX).then(function (item) {
+                item[url] = value;
                 cacheService.item(PREFIX, item);
             });
         }

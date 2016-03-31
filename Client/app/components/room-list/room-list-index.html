@@ -16,8 +16,12 @@
                 <input type="text" ng-model="vm.roomModel.name" placeholder="Jacket Nine"/>
             </div>
             <div class="input-wrapper">
+                <span class="input-label">Min rating</span>
+                <input type="number" ng-model="vm.roomModel.minRating" min="0" placeholder="2350" />
+            </div>
+            <div class="input-wrapper">
                 <span class="input-label">Field width</span>
-                <input type="numbrer" ng-model="vm.roomModel.width" min="0" placeholder="30" />
+                <input type="number" ng-model="vm.roomModel.width" min="0" placeholder="30" />
             </div>
             <div class="input-wrapper">
                 <span class="input-label">Field height</span>

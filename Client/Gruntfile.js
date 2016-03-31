@@ -25,15 +25,15 @@ module.exports = function(grunt) {
         watch: {
             gruntfile: {
                 files: ['Gruntfile.js']
-            },
+            }/*,
             livereload: {
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%= mineSweeper.app %>/{,*/}*.html'
+                    '<%= mineSweeper.app %>/{,*!/}*.html'
                 ]
-            }
+            }*/
         },
 
         jshint: {

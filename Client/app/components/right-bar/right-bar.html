@@ -1,64 +1,62 @@
 <div class="right-bar" ng-controller="RightBarController as controller">
-    <div class="info-block">
-        info<br>
-        info
-    </div>
-    <div class="info-block">
-        info<br>
-        info
-    </div>
-    <div class="chat-block">
-        <div class="chat-tabs">
-            <div class="chat-tab"
-                 ng-class="{'active': controller.getActiveChat().username == controller.getGlobalChat().username }"
-                 ng-click="controller.activateGlobalChat()">
-                <span class="chat-tab-name">GLOBAL</span>
+    <div ng-if="controller.isInGame()">
+        <div class="info-block">
+            <div class="label">Mines count: <span class="label-value" ng-bind="controller.getMinesCount()">230</span></div>
+            <div class="label">Field size: <span class="label-value" ng-bind="controller.getFieldSize()">20x20</span></div>
+        </div>
+        <div class="chat-block">
+            <div class="chat-tabs">
+                <div class="chat-tab"
+                     ng-class="{'active': controller.getActiveChat().username == controller.getGlobalChat().username }"
+                     ng-click="controller.activateGlobalChat()">
+                    <span class="chat-tab-name">GLOBAL</span>
                 <span class="chat-tab-m-count" ng-if="controller.getGlobalChat().unreaded > 0">
                     <span>+<span ng-bind="controller.getGlobalChat().unreaded"></span></span>
                 </span>
                 <span class="chat-tab-close">
                     <i class="fa fa-lock"></i>
                 </span>
-            </div>
-            <div class="chat-tab"
-                 ng-class="{'active': controller.getActiveChat().username == controller.getLobbyChat().username }"
-                 ng-click="controller.activateLobbyChat()">
-                <span class="chat-tab-name">LOBBY</span>
+                </div>
+                <div class="chat-tab"
+                     ng-class="{'active': controller.getActiveChat().username == controller.getLobbyChat().username }"
+                     ng-click="controller.activateLobbyChat()">
+                    <span class="chat-tab-name">LOBBY</span>
                 <span class="chat-tab-m-count" ng-if="controller.getLobbyChat().unreaded > 0">
                     <span>+<span ng-bind="controller.getLobbyChat().unreaded"></span></span>
                 </span>
                 <span class="chat-tab-close">
                     <i class="fa fa-lock"></i>
                 </span>
-            </div>
-            <div class="chat-tab"
-                 ng-class="{'active': chatTab.username == controller.getActiveChat().username}"
-                 ng-repeat="chatTab in controller.getOpenedChats()"
-                 ng-click="controller.activateChat(chatTab.username)">
-                <span class="chat-tab-name" ng-bind="chatTab.username"></span>
+                </div>
+                <div class="chat-tab"
+                     ng-class="{'active': chatTab.username == controller.getActiveChat().username}"
+                     ng-repeat="chatTab in controller.getOpenedChats()"
+                     ng-click="controller.activateChat(chatTab.username)">
+                    <span class="chat-tab-name" ng-bind="chatTab.username"></span>
                 <span class="chat-tab-m-count" ng-if="chatTab.unreaded > 0">
                     <span>+<span ng-bind="chatTab.unreaded"></span></span>
                 </span>
                 <span class="chat-tab-close" ng-click="controller.closeChat(chatTab.username, $event)">
                     <i class="fa fa-times"></i>
                 </span>
+                </div>
             </div>
-        </div>
-        <div class="chat-content">
-            <div class="chat-message" ng-repeat="history in controller.getActiveChat().messages" ng-if="!controller.isLoadingHistory()">
-                <span class="message-sender" ng-bind="history.sender">Vlad</span>
-                <span class="message-data" ng-bind="history.message">Hello, guys! How are you?</span>
-            </div>
+            <div class="chat-content">
+                <div class="chat-message" ng-repeat="history in controller.getActiveChat().messages" ng-if="!controller.isLoadingHistory()">
+                    <span class="message-sender" ng-bind="history.sender">Vlad</span>
+                    <span class="message-data" ng-bind="history.message">Hello, guys! How are you?</span>
+                </div>
             <span class="spinner" ng-if="controller.isLoadingHistory()">
                 <i class="fa fa-spinner fa-spin"></i>
             </span>
-        </div>
-        <div class="chat-actions">
-            <div class="input-wrapper">
-                <span class="input-label"></span>
-                <input type="text" ng-model="controller.inputMessage.message" placeholder="Type your message here"/>
             </div>
-            <button class="send" ng-click="controller.sendMessage()">SEND</button>
+            <div class="chat-actions">
+                <div class="input-wrapper">
+                    <span class="input-label"></span>
+                    <input type="text" ng-model="controller.inputMessage.message" placeholder="Type your message here"/>
+                </div>
+                <button class="send" ng-click="controller.sendMessage()">SEND</button>
+            </div>
         </div>
     </div>
 </div>

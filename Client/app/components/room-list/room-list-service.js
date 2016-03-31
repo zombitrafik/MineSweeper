@@ -54,17 +54,15 @@
         return service;
 
         function init () {
-
+            getRooms();
         }
 
         function getRooms () {
-/*            var promise = roomListApiService.getRooms();
+            var promise = roomListApiService.getRooms();
             promise.then(function (response) {
                 service.rooms = response;
             });
-            return promise;*/
-
-            return rooms;
+            return promise;
         }
 
         function joinRoom (id) {

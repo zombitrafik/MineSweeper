@@ -10,7 +10,8 @@
             notifications: {},
             getNotifications: getNotifications,
             TYPES: {
-                MESSAGE: 'MESSAGE'
+                MESSAGE: 'MESSAGE',
+                INVITATION: 'INVITATION'
             },
             loadNotifications: loadNotifications,
             notify: notify,
@@ -40,18 +41,8 @@
         }
 
         function notify (type, data) {
-            var TYPES = service.TYPES;
             var PREFIX = ROUTE_REQUIRES.NOTIFICATION;
-            var url = '';
-            switch (type) {
-                case TYPES.MESSAGE: {
-                    url = TYPES.MESSAGE + '_' + data.sender;
-                    break;
-                }
-                default : {
-                    console.log('such type does not exist');
-                }
-            }
+            var url = type + '_' + data.sender;
 
             cacheService.item(PREFIX).then(function (item) {
                 if(!item[url]) {

@@ -99,8 +99,8 @@
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
                         //return true;
-                        return initCacheServiceRoute($q, cacheService);
-                        //return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                        //return initCacheServiceRoute($q, cacheService);
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
             })
@@ -121,8 +121,8 @@
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
                         //return true;
-                        return initCacheServiceRoute($q, cacheService);
-                        //return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
+                        //return initCacheServiceRoute($q, cacheService);
+                        return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
             })

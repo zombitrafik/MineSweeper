@@ -4,6 +4,21 @@
     margin: 5px;
 }
 
+.info-block .label {
+    font-family: monospace;
+    color: white;
+    text-transform: uppercase;
+    font-size: 16px;
+    text-align: center;
+}
+
+.info-block .label .label-value {
+    color: white;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: initial;
+}
+
 .chat-block {
     margin: 5px;
 }

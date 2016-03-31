@@ -12,17 +12,12 @@
 
         vm.isCreating = false;
 
-        vm.newRoomModel = {
-            width: 0,
-            height: 0,
-            minesCount: 0
-        };
-
         vm.roomModel = {
             name: '',
             width: '',
             height: '',
-            minesCount: ''
+            minesCount: '',
+            minRating: ''
         };
 
         vm.getRooms = function () {
@@ -59,7 +54,7 @@
         vm.sendCreateRequest = function () {
             var promise = roomListService.createRoom(vm.roomModel);
             promise.then(function () {
-                $state.go('game');
+                $state.go('lobby');
             });
         };
 
@@ -68,7 +63,8 @@
                 name: '',
                 width: '',
                 height: '',
-                minesCount: ''
+                minesCount: '',
+                minRating: ''
             };
         }
 

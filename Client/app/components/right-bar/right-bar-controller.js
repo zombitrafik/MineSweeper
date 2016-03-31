@@ -13,6 +13,12 @@
 
          */
 
+        var notifications = [
+            {id: 1, title: 1},
+            {id: 2, title: 2}
+        ];
+
+
         vm.inputMessage = {
             message: ''
         };
@@ -59,6 +65,18 @@
         vm.sendMessage = function () {
             chatService.sendMessage(vm.inputMessage.message);
             vm.inputMessage.message = '';
+        };
+
+        vm.isInGame = function () {
+            return (rightBarService.isThisPage('room-list') || rightBarService.isThisPage('lobby'));
+        };
+
+        vm.getMinesCount = function () {
+            return 200;
+        };
+
+        vm.getFieldSize = function () {
+            return '20x25';
         };
 
         return vm;

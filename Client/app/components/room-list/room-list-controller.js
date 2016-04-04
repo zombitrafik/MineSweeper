@@ -17,7 +17,8 @@
             width: '',
             height: '',
             minesCount: '',
-            minRating: ''
+            minRating: '',
+            playersCount: ''
         };
 
         vm.getRooms = function () {
@@ -35,9 +36,8 @@
         vm.joinRoom = function (id) {
             var promise = roomListService.joinRoom(id);
 
-            promise.then(function () {
-                $state.go('lobby', {id: id});
-            }).catch(function () {
+            promise.then(function (response) {
+                console.log(response);
                 $state.go('lobby', {id: id});
             });
         };
@@ -64,7 +64,8 @@
                 width: '',
                 height: '',
                 minesCount: '',
-                minRating: ''
+                minRating: '',
+                playersCount: ''
             };
         }
 

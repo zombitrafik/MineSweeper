@@ -1,4 +1,4 @@
-<div class="lobby-page" ng-init="vm.refreshPlayers()">
+<div class="lobby-page" ng-init="vm.getCurrentRoom()">
 
     <div class="lobby-list-block">
         <div class="room-list-header">
@@ -7,7 +7,7 @@
             <div class="lobby-back-btn" ng-click="vm.leaveRoom()">
                 <i class="fa fa-arrow-left"></i>
             </div>
-            <div class="start-game" ng-if="vm.getCurrentUser().id == vm.getLobbyLeader().id" ng-click="vm.startGame()">
+            <div class="start-game" ng-if="vm.getCurrentUser().username == vm.getLobbyLeader().username" ng-click="vm.startGame()">
                 <button>START GAME</button>
             </div>
             <div class="invite-friend">
@@ -30,16 +30,16 @@
         </div>
         <div class="players">
             <div class="player" ng-repeat="player in vm.getPlayers()">
-            <span class="player-name">
-                <span class="player-leader" ng-if="player.isLeader"><i class="fa fa-star"></i></span>
-                <span ng-bind="player.name"></span>
-            </span>
+                <span class="player-name">
+                    <span class="player-leader" ng-if="player.isLeader"><i class="fa fa-star"></i></span>
+                    <span ng-bind="player.username"></span>
+                </span>
                 <span class="player-rating" ng-bind="player.rating"></span>
-            <span class="player-actions">
-                <span class="write-message" ng-click="vm.openChat(player.name)">
+                <span class="player-actions">
+                <span class="write-message" ng-click="vm.openChat(player.name)" ng-if="vm.getCurrentUser().username != player.username">
                     <i class="fa fa-envelope-o"></i>
                 </span>
-                <span class="remove-user">
+                <span class="remove-user" ng-if="vm.getCurrentUser().username == vm.getLobbyLeader().username && vm.getCurrentUser().username != player.username">
                     <i class="fa fa-times"></i>
                 </span>
             </span>

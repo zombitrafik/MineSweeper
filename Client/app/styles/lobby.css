@@ -99,6 +99,7 @@ span.mines-count {
 
 .room-list-header .refresh-btn {
     display: inline-block;
+    cursor: pointer;
 }
 
 .create-room {

@@ -3,9 +3,9 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', 'gameEndScreenService', '$rootScope'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', '$rootScope', 'roomListService'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, gameEndScreenService, $rootScope) {
+    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, $rootScope, roomListService) {
         var service = {
             leaveRoom: leaveRoom,
             init: init,
@@ -19,9 +19,7 @@
         return service;
 
         function init () {
-            var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
-            gameEndScreenService.open = false;
-            gameApiService.joinRoom(roomId).then(function (data) {
+            roomListService.getRoom().then(function (data) {
 
                 var rows = data.game.mineField.width,
                     cols = data.game.mineField.height;
@@ -138,12 +136,7 @@
         }
 
         function showGameEndScreen () {
-            gameEndScreenService.getStats().then(
-                function () {
-                    gameEndScreenService.open = true;
-                    gameEndScreenService.leaveRoomMethod = leaveRoom;
-                }
-            );
+            //TODO:
         }
 
         function handleSocket (data) {

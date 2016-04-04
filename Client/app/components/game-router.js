@@ -96,10 +96,11 @@
                         controllerAs: 'vm'
                     }
                 },
+                requires: [
+                    ROUTE_REQUIRES.AUTH
+                ],
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {
-                        //return true;
-                        //return initCacheServiceRoute($q, cacheService);
                         return checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, this.self.requires);
                     }
                 }
@@ -221,6 +222,7 @@
                 });
             } else {
                 routeService.checkRoute(requires).then(function () {
+                    console.log(requires, globalInitService.isInit);
                     if(!globalInitService.isInit && !_.isEmpty(requires)) {
                         globalInitService.init().then(function () {
                             deferred.resolve();

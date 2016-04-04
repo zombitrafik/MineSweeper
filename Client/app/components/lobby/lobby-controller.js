@@ -3,9 +3,9 @@
         .module('app')
         .controller('LobbyController', LobbyController);
 
-    LobbyController.$inject = ['$state', 'lobbyService', '$q', 'chatService'];
+    LobbyController.$inject = ['$state', 'lobbyService', '$q', 'chatService', 'loginService', 'gameApiService'];
 
-    function LobbyController ($state, lobbyService, $q, chatService) {
+    function LobbyController ($state, lobbyService, $q, chatService, loginService, gameApiService) {
         var vm = this;
 
         var isInvitingFriends = false;
@@ -15,19 +15,21 @@
         };
 
         vm.getPlayers = function () {
-            return lobbyService.players;
+            return lobbyService.roomInfo.players;
         };
 
         vm.getMaxPlayers = function () {
-            return lobbyService.maxPlayers;
+            return lobbyService.roomInfo.playersCount;
         };
 
         vm.getLobbyLeader = function () {
-
+            return _.find(lobbyService.roomInfo.players, function (player) {
+                return player.leader == true;
+            });
         };
 
         vm.getCurrentUser = function () {
-
+            return loginService.currentUser;
         };
 
         vm.startGame = function() {
@@ -44,7 +46,9 @@
         };
 
         vm.leaveRoom = function () {
-            $state.go('room-list');
+            gameApiService.leaveRoom().finally(function () {
+                $state.go('room-list');
+            });
         };
 
         vm.onUserInvite = function (info) {
@@ -57,8 +61,8 @@
             return deferred.promise;
         };
 
-        vm.refreshPlayers = function () {
-            lobbyService.getPlayers(getRoomId());
+        vm.getCurrentRoom = function () {
+            lobbyService.getCurrentRoom();
         };
 
         vm.openChat = function (username) {

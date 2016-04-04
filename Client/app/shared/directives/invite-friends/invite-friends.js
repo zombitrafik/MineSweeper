@@ -24,32 +24,7 @@
 
             var pending = false;
 
-            ifdc.userList = [
-                {
-                    username: 'test 1',
-                    status: 'ONLINE'
-                },
-                {
-                    username: 'test 2',
-                    status: 'OFFLINE'
-                },
-                {
-                    username: 'test 3',
-                    status: 'ONLINE'
-                },
-                {
-                    username: 'test 4',
-                    status: 'ONLINE'
-                },
-                {
-                    username: 'test 5',
-                    status: 'OFFLINE'
-                },
-                {
-                    username: 'test 6',
-                    status: 'ONLINE'
-                }
-            ];
+            ifdc.userList = [];
 
             ifdc.model = {
                 username: ''

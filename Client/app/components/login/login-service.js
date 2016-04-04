@@ -14,7 +14,8 @@
             logout: logout,
             current: current,
             isLoggined: false,
-            isInit: false
+            isInit: false,
+            currentUser: {}
         };
 
 
@@ -25,6 +26,7 @@
             var credentials = { authorization: 'Basic ' + $window.btoa(model.username + ':' + model.password)};
             var promise = loginApiService.login(credentials);
             promise.then(function (user) {
+                service.currentUser = user.plain();
                 cacheService.item(ROUTE_REQUIRES.AUTH, user.plain()).then(function () {
                     service.isLoggined = true;
                     service.isInit = true;
@@ -41,9 +43,10 @@
         function current () {
             var deferred = $q.defer();
             var promise = loginApiService.current();
-            promise.then(function () {
+            promise.then(function (response) {
                 service.isInit = true;
                 deferred.resolve();
+                service.currentUser = response.plain();
             }).catch(function () {
                 $state.go('login');
                 deferred.reject();

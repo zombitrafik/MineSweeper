@@ -9,44 +9,13 @@
 
     function roomListService (roomListApiService, cacheService, $q) {
 
-        var rooms = [
-            {
-                id: 1,
-                name: 'some name 1',
-                players: {
-                    length: 3
-                },
-                rating: 1200,
-                started: true,
-                time: (new Date())
-            },{
-                id: 2,
-                name: 'some name 2',
-                players: {
-                    length: 5
-                },
-                rating: 730,
-                started: true,
-                time: (new Date())
-            },{
-                id: 3,
-                name: 'some name 3',
-                players: {
-                    length: 4
-                },
-                rating: 2200,
-                started: true,
-                time: (new Date())
-            }
-        ];
-
-
         var service = {
             getRooms: getRooms,
             joinRoom: joinRoom,
             createRoom: createRoom,
+            getRoom: getRoom,
             nextRoom: nextRoom,
-            rooms: rooms,
+            rooms: [],
             init: init
         };
 
@@ -66,13 +35,7 @@
         }
 
         function joinRoom (id) {
-            var deferred = $q.defer();
-            cacheService.item(ROUTE_REQUIRES.ROOM, id).then(function () {
-                deferred.resolve();
-            }).catch(function () {
-                deferred.reject();
-            });
-            return deferred.promise;
+            return roomListApiService.joinRoom(id);
         }
 
         function nextRoom () {
@@ -92,6 +55,10 @@
                 deferred.reject();
             });
             return deferred.promise;
+        }
+
+        function getRoom () {
+            return roomListApiService.getRoom();
         }
     }
 })();

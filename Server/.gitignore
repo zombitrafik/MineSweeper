@@ -1,0 +1,4 @@
+**/static/**
+/.idea
+/build
+**/querydsl/**

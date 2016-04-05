@@ -7,16 +7,22 @@
 
     function pageService ($state) {
 
-        var states = ['login', 'register', 'room-list'];
+        var states = ['login', 'register', 'room-list'],
+            gameState = 'game';
 
         var service = {
-            hasRightbar: hasRightbar
+            hasRightbar: hasRightbar,
+            isGameState: isGameState
         };
 
         return service;
 
         function hasRightbar () {
             return states.indexOf($state.current.name) === -1
+        }
+
+        function isGameState () {
+            return $state.current.name == gameState;
         }
     }
 })();

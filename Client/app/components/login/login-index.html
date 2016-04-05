@@ -1,6 +1,6 @@
 <div class="login-page">
     <div class="layout">
-        <div class="form-group">
+        <div class="form-group" ng-keydown="$event.keyCode == 13 && vm.login()">
             <div class="input-wrapper">
                 <span class="input-label">Username</span>
                 <input type="text" ng-model="vm.model.username" />

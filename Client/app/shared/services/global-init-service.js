@@ -11,7 +11,8 @@
             isInit: false,
             socketPrefixes: {
                 HEARTBEAT: 'HEARTBEAT',
-                MESSAGES: 'MESSAGES'
+                MESSAGES: 'MESSAGES',
+                INVITE: 'INVITE'
             },
             clearService: clearService
         };
@@ -25,6 +26,7 @@
 
                 socketService.subscribe('/user/broker/messages', chatService.messageHandler, service.socketPrefixes.MESSAGES);
                 socketService.subscribe('/broker/heartBeat', heartbeatService.handleHeartbeat, service.socketPrefixes.HEARTBEAT);
+                socketService.subscribe('/user/broker/invites', lobbyService.handleInvite, service.socketPrefixes.INVITE);
 
                 service.isInit = true;
                 deferred.resolve();

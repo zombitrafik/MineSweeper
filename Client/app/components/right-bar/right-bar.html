@@ -43,8 +43,8 @@
             </div>
             <div class="chat-content">
                 <div class="chat-message" ng-repeat="history in controller.getActiveChat().messages" ng-if="!controller.isLoadingHistory()">
-                    <span class="message-sender" ng-bind="history.sender">Vlad</span>
-                    <span class="message-data" ng-bind="history.message">Hello, guys! How are you?</span>
+                    <span class="message-sender" ng-bind="history.sender"></span>
+                    <span class="message-data" ng-bind="history.message"></span>
                 </div>
             <span class="spinner" ng-if="controller.isLoadingHistory()">
                 <i class="fa fa-spinner fa-spin"></i>

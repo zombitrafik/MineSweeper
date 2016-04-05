@@ -1,249 +1,62 @@
 .header {
     height: 60px;
     width: 100%;
-    background: silver;
+    background: #6D4C41;
     line-height: 60px;
+    color: white;
 }
-.header .menu {
-    margin-left: 15px;
-    width: 120px;
+
+.header .block-3 {
     display: inline-block;
+    width: 33.3%;
     float: left;
-}
-
-.header .menu-actions {
-    display: inline-block;
-    width: calc(100% - 135px);
-}
-
-.dark-layer {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 60px);
-    background: rgba(0, 0, 0, 0.54);
-    z-index: 10;
-}
-
-.left-bar {
-    position: absolute;
-    left: 0;
-    width: 200px;
-    background: #2A2A31;
-    height: calc(100% - 60px);
-    z-index: 15;
-}
-
-.left-bar ul li {
-    height: 40px;
-    line-height: 40px;
-    background: #2A2A31;
-    color: white;
-    border-bottom: 1px solid #151519;
-    padding-left: 15px;
-}
-
-.left-bar ul li i{
-    margin-right: 10px;
-}
-
-.left-bar ul li.active {
-    background: #1C1E21;
-    border-right: 2px solid white;
-}
-
-.left-bar ul li:first-child {
-    border-top: 1px solid #151519;
-}
-
-.notification {
-    display: inline-block;
-    text-align: center;
-    float: right;
-    position: relative;
-    width: 50px;
-}
-
-.lobby-header .notification {
-    margin-right: 45px;
-}
-
-.friends-header .tool {
-    display: inline-block;
-    width: 50px;
-    text-align: center;
-    position: initial;
-    float: right;
-}
-
-.friends-header .tool-search-field {
-    display: inline-block;
-    float: left;
-    width: calc(100% - 100px);
-}
-
-.friends-header .tool-search-field input {
-    height: 30px;
-    line-height: 30px;
-    border-radius: 5px;
-    border: 0 solid black;
-    background: rgba(138, 138, 138, 0.28);
-    color: white;
-    padding: 0 10px;
-    font-size: 15px;
-    width: calc(100% - 20px);
-}
-
-.game-header .tool {
-    display: inline-block;
-    width: 50px;
-    text-align: center;
-    float: right;
-    position: initial;
-    height: 60px;
-}
-
-.game-header .tool.active,
-.friends-header .notification.active-dropdown,
-.lobby-header .notification.active-dropdown,
-.messages-header .notification.active-dropdown,
-.game-header .notification.active-dropdown{
-    background: #5d5d5d;
-}
-
-.game-header .tool .dropdown {
-    line-height: 30px;
-    width: 130px;
-    float: right;
-    background: #5d5d5d;
-    color: white;
-    border-radius: 5px;
-    margin: 10px;
-    position: absolute;
-    right: 0;
-    z-index: 1
-}
-
-.header .dropdown-background {
-    width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 100;
 }
 
-.game-header .tool .dropdown:before {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #5d5d5d;
-    position: relative;
-    top: -10px;
-    display: block;
-    right: -107px;
-}
-
-.game-header .tool .dropdown span {
-    display: block;
-}
-
-.game-header .tool .dropdown span:first-child {
-    margin-top: -10px;
-}
-
-.friends-header .notification .dropdown,
-.lobby-header .notification .dropdown,
-.messages-header .notification .dropdown,
-.game-header .notification .dropdown {
-    line-height: 30px;
-    width: 250px;
-    float: right;
-    background: #5d5d5d;
-    color: white;
-    border-radius: 5px;
-    margin: 10px;
-    position: absolute;
-    right: 0;
-    z-index: 1;
-    font-size: 12px;
-}
-
-.friends-header .notification .dropdown:before,
-.lobby-header .notification .dropdown:before,
-.messages-header .notification .dropdown:before,
-.game-header .notification .dropdown:before {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #5d5d5d;
-    position: relative;
-    top: -10px;
-    display: block;
-    right: -225px;
-}
-
-.friends-header .notification .dropdown span.username,
-.lobby-header .notification .dropdown span.username,
-.messages-header .notification .dropdown span.username,
-.game-header .notification .dropdown span.username {
-    text-transform: uppercase;
-    color: #2196F3;
-}
-
-
-.friends-header .notification .dropdown>span,
-.lobby-header .notification .dropdown>span,
-.messages-header .notification .dropdown>span,
-.game-header .notification .dropdown>span {
-    display: block;
-    text-align: left;
-    padding-left: 10px;
-    line-height: 30px;
-    border-bottom: 1px solid white;
-}
-
-.friends-header .notification .dropdown>span:last-child,
-.lobby-header .notification .dropdown>span:last-child,
-.messages-header .notification .dropdown>span:last-child,
-.game-header .notification .dropdown>span:last-child {
-    border-bottom: 0 solid white;
-}
-
-
-
-
-.friends-header .notification .dropdown span:first-child ,
-.lobby-header .notification .dropdown span:first-child ,
-.messages-header .notification .dropdown span:first-child ,
-.game-header .notification .dropdown span:first-child {
-    margin-top: -10px;
-}
-
-.notification.active {
-    color: #f44336;
-}
-.tool.active {
-    color: #03A9F4;
-}
-
-.notification-count {
-    position: absolute;
-    bottom: -15px;
+.header .title {
     text-align: center;
-    left: 0;
-    width: 100%;
-    font-size: 12px;
+    font-size: 20px;
+    font-family: monospace;
+    letter-spacing: 2px;
 }
 
-.tool {
+.header .tools {
+    text-align: right;
+}
+
+.header .user-block {
     display: inline-block;
-    width: 30px;
-    text-align: center;
+    padding-right: 50px;
+}
+
+.header .user-block .username {
+    padding: 5px;
+    background: #5D4037;
+    border-radius: 3px;
+    border-left: 1px solid #4E342E;
+    border-top: 1px solid #4E342E;
+    text-transform: uppercase;
+    font-family: monospace;
+}
+
+.header .user-block .username .rating {
+    color: #CDDC39;
+}
+
+.header .user-block .logout {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: white;
+    transition: 100ms;
+}
+
+.header .user-block .logout:hover {
+    color: #D7CCC8;
+}
+
+.header .user-block .logout i {
     position: absolute;
-    right: 10px;
+    top: -20px;
+    left: 5px;
 }

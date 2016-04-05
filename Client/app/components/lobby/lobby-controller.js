@@ -33,8 +33,9 @@
         };
 
         vm.startGame = function() {
-            //may be do some request
-            $state.go('game');
+            lobbyService.startGame().then(function () {
+                $state.go('game');
+            });
         };
 
         vm.isInviteFriend = function () {
@@ -52,13 +53,7 @@
         };
 
         vm.onUserInvite = function (info) {
-            var deferred = $q.defer();
-
-            setTimeout(function () {
-                deferred.resolve();
-            }, 500);
-
-            return deferred.promise;
+            return lobbyService.inviteUser(info.username);
         };
 
         vm.getCurrentRoom = function () {

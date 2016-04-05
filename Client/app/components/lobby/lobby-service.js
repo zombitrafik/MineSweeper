@@ -3,15 +3,18 @@
         .module('app')
         .service('lobbyService', lobbyService);
 
-    lobbyService.$inject = ['lobbyApiService', 'roomListService', 'socketService'];
+    lobbyService.$inject = ['$rootScope', 'roomListService', 'socketService', 'chatService', '$state', 'lobbyApiService'];
 
-    function lobbyService(lobbyApiService, roomListService, socketService) {
+    function lobbyService($rootScope, roomListService, socketService, chatService, $state, lobbyApiService) {
 
         var EVENTS = {
             PLAYER_STATUS_UPDATE: 'PLAYER_STATUS_UPDATE',
             PLAYER_JOINED: 'PLAYER_JOINED',
             PLAYER_LEAVED: 'PLAYER_LEAVED',
-            ROOM_MESSAGE: 'ROOM_MESSAGE'
+            ROOM_MESSAGE: 'ROOM_MESSAGE',
+            GAME_STARTED: 'GAME_STARTED',
+            LEADER_CHANGED: 'LEADER_CHANGED',
+            INVITE: 'INVITE'
         };
 
         var SOCKET_PREFIX = 'LOBBY';
@@ -19,7 +22,10 @@
         var service = {
             roomInfo: {},
             getCurrentRoom: getCurrentRoom,
-            handleLobbyEvents: handleLobbyEvents
+            handleLobbyEvents: handleLobbyEvents,
+            handleInvite: handleInvite,
+            inviteUser: inviteUser,
+            startGame: startGame
         };
 
         return service;
@@ -49,13 +55,28 @@
                     var userIndex = _.findIndex(service.roomInfo.players, function (player) {
                         return player.username == response.data.username;
                     });
+                    console.log(userIndex);
                     if(userIndex > -1) {
                         service.roomInfo.players.splice(userIndex, 1);
                     }
+                    console.log(service.roomInfo.players);
                     break;
                 }
                 case EVENTS.ROOM_MESSAGE: {
-                    console.log(response);
+                    chatService.addLobbyMessage(response.data);
+                    break;
+                }
+                case EVENTS.GAME_STARTED: {
+                    $state.go('game');
+                    break;
+                }
+                case EVENTS.LEADER_CHANGED: {
+                    var user = _.find(service.roomInfo.players, function (player) {
+                        return player.username == response.data.newLeader;
+                    });
+                    if(user) {
+                        user.leader = true;
+                    }
                     break;
                 }
                 default:
@@ -63,6 +84,27 @@
                     break;
                 }
             }
+            $rootScope.$apply();
+        }
+
+        function handleInvite (response) {
+            switch (response.type) {
+                case EVENTS.INVITE: {
+                    console.log(response);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+
+        function inviteUser (username) {
+            return lobbyApiService.inviteUser(username);
+        }
+
+        function startGame () {
+            return lobbyApiService.startGame();
         }
     }
 })();

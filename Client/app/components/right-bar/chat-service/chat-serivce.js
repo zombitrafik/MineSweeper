@@ -3,24 +3,20 @@
         .module('app')
         .service('chatService', chatService);
 
-    chatService.$inject = ['$q', '$timeout', '$interval', 'notificationService', 'loginService', 'socketService', 'chatApiService'];
+    chatService.$inject = ['$rootScope', 'notificationService', 'loginService', 'socketService', 'chatApiService'];
 
-    function chatService($q, $timeout, $interval, notificationService, loginService, socketService, chatApiService) {
-
-
-        //TODO: get from userService or another service
-        var currentUserName = loginService.currentUser.username;
+    function chatService($rootScope, notificationService, loginService, socketService, chatApiService) {
 
         var globalChat = {
             username: -1,
             messages: [],
-            unreaded: 1
+            unreaded: 0
         };
 
         var lobbyChat = {
             username: -2,
             messages: [],
-            unreaded: 3
+            unreaded: 0
         };
 
         var chats = [];
@@ -30,6 +26,7 @@
         var service = {
             getGlobalChat: getGlobalChat,
             getLobbyChat: getLobbyChat,
+            addLobbyMessage: addLobbyMessage,
             activateGlobalChat: activateGlobalChat,
             activateLobbyChat: activateLobbyChat,
             getActiveChat: getActiveChat,
@@ -40,12 +37,10 @@
             getHistory: getHistory,
             getOpenedChats: getOpenedChats,
             openChat: openChat,
-            isLoadingHistory: true
+            isLoadingHistory: false
         };
 
         init();
-
-        emitter();
 
         return service;
 
@@ -53,6 +48,14 @@
             notificationService.loadNotifications().then(function (data) {
                 var prefix = notificationService.TYPES.MESSAGE + '_';
                 for(var key in data) {
+                    if(key.replace(prefix, '') == -2) {
+                        lobbyChat.unreaded = data[key];
+                        continue;
+                    }
+                    if(key.replace(prefix, '') == -1) {
+                        globalChat.unreaded = data[key];
+                        continue;
+                    }
                     chats.push({
                         unreaded: data[key],
                         username: key.replace(prefix, ''),
@@ -102,6 +105,7 @@
             chats.splice(index, 1);
             var TYPES = notificationService.TYPES;
             notificationService.remove(TYPES.MESSAGE + '_' + username);
+            activateChat(lobbyChat);
         }
 
         function sendMessage(message) {
@@ -121,27 +125,31 @@
         }
 
         function getHistory() {
-            //TODO: get it by user name
-            service.isLoadingHistory = true;
-
-            if (activeChat.isInited) {
-                service.isLoadingHistory = false;
+            //LOBBY
+            if(activeChat.username == -2 || activeChat.username == -1) {
                 readMessage();
             } else {
-                //TODO: find chat by ID and add new messages
+                service.isLoadingHistory = true;
 
-                $timeout(function () {
+                var chatLink = findChat(activeChat.username);
+
+                if (chatLink.isInited) {
                     service.isLoadingHistory = false;
                     readMessage();
-                    activeChat.isInited = true;
-                }, 500);
-
+                } else {
+                    //TODO: find chat by ID and add new messages
+                    chatApiService.loadChatHistory(chatLink.username).then(function (history) {
+                        service.isLoadingHistory = false;
+                        chatLink.messages = history.data.dialog.messages;
+                        readMessage();
+                        chatLink.isInited = true;
+                    });
+                }
             }
         }
 
         function readMessage () {
             activeChat.unreaded = 0;
-            if(activeChat.username < 0) return;
             var TYPES = notificationService.TYPES;
             notificationService.set(TYPES.MESSAGE + '_' + activeChat.username, 0);
         }
@@ -171,8 +179,11 @@
             return chat;
         }
 
-        function messageHandler(data) {
-            if (data.sender == activeChat.username) {
+        function messageHandler(response) {
+            var data = response.data.message;
+
+            var currentUserName = loginService.currentUser.username;
+            if (data.sender == activeChat.username || data.sender == currentUserName) {
                 activeChat.messages.push(data);
             } else {
                 var TYPES = notificationService.TYPES;
@@ -185,23 +196,19 @@
                 chat.messages.push(data);
                 chat.unreaded++;
             }
+            $rootScope.$apply();
         }
 
-        function emitter() {
-            $interval(function () {
-                messageHandler(generateFakeData());
-            }, 1000);
-        }
-
-        function generateFakeData() {
-            return {
-                sender: 'user_name' + getRandomInt(1, 4),
-                message: Math.random()
+        function addLobbyMessage (data) {
+            if (activeChat.username == lobbyChat.username) {
+                lobbyChat.messages.push(data);
+            } else {
+                var TYPES = notificationService.TYPES;
+                notificationService.notify(TYPES.MESSAGE, {sender: lobbyChat.username});
+                lobbyChat.unreaded++;
+                lobbyChat.messages.push(data);
             }
-        }
-
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
+            $rootScope.$apply();
         }
 
     }

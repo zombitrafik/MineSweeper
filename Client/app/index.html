@@ -27,7 +27,7 @@
         </div>
         <div class="layout-main" ng-class="{'full' : !pageController.hasRightbar()}">
             <div class="layout-content">
-                <div class="content" ui-view="mainView"></div>
+                <div class="content" ui-view="mainView" ng-class="{'height' : pageController.isGameState()}"></div>
             </div>
             <div class="layout-right-bar">
                 <div ng-include="'components/right-bar/right-bar.html'"></div>

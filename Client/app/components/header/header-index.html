@@ -1,3 +1,19 @@
 <div class="header" ng-controller="HeaderController as controller">
-    <span>MineSweeper Online</span>
+    <div class="block-3">
+        <!--Empty or logo-->
+    </div>
+    <div class="block-3 title">
+        <!--Main title (game name)-->
+        <span>MineSweeper Online</span>
+    </div>
+    <div class="block-3 tools">
+        <!-- Tools -->
+        <div class="user-block" ng-if="controller.getCurrentUser().username">
+            <span class="username">
+                <span class="name" ng-bind="controller.getCurrentUser().username"></span>(<span class="rating" ng-bind="controller.getCurrentUser().rating"></span>)</span>
+            <div class="logout" ng-click="controller.logout()">
+                <i class="fa fa-2x fa-sign-out"></i>
+            </div>
+        </div>
+    </div>
 </div>

@@ -7,12 +7,17 @@
 
     function chatApiService (Restuangular) {
         var service = {
-            sendLobbyMessage: sendLobbyMessage
+            sendLobbyMessage: sendLobbyMessage,
+            loadChatHistory: loadChatHistory
         };
         return service;
 
         function sendLobbyMessage (message) {
-            Restuangular.one('rooms', 'message').customPOST(message);
+            return Restuangular.one('rooms', 'message').customPOST(message);
+        }
+
+        function loadChatHistory (username) {
+            return Restuangular.one('users/dialogs', username).customGET();
         }
 
     }

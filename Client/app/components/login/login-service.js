@@ -59,6 +59,7 @@
             socketService.unsubscribeAll();
             service.isLoggined = false;
             service.isInit = false;
+            service.currentUser = {};
             return loginApiService.logout();
         }
     }

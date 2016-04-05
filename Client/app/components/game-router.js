@@ -42,8 +42,7 @@
                     }
                 },
                 requires: [
-                    ROUTE_REQUIRES.AUTH,
-                    ROUTE_REQUIRES.ROOM
+                    ROUTE_REQUIRES.AUTH
                 ],
                 resolve: {
                     auth: function (routeService, $q, $state, cacheService, loginService, globalInitService) {

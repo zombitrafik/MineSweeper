@@ -20,11 +20,6 @@ body {
     height: calc(100% - 60px);
 }
 
-.mainView .content,
-.mainView .content {
-    height: 100%;
-}
-
 .rect {
     stroke: silver;
     rx: 3;
@@ -193,6 +188,10 @@ body {
     display: inline-block;
     width: calc(100% - 300px);
     float: left;
+    height: 100%;
+}
+
+.layout-content .content.height {
     height: 100%;
 }
 

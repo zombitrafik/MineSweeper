@@ -12,6 +12,10 @@
             return pageService.hasRightbar();
         };
 
+        pageController.isGameState = function () {
+            return pageService.isGameState();
+        };
+
         return pageController;
     }
 })();

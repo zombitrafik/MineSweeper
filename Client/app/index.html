@@ -25,7 +25,7 @@
         <div class="layout-header">
             <div ng-include="'components/header/header-index.html'"></div>
         </div>
-        <div class="layout-main">
+        <div class="layout-main" ng-class="{'full' : !pageController.hasRightbar()}">
             <div class="layout-content">
                 <div class="content" ui-view="mainView"></div>
             </div>
@@ -130,6 +130,7 @@
     <!-- Right bar -->
     <script type="text/javascript" src="components/right-bar/right-bar-service.js"></script>
     <script type="text/javascript" src="components/right-bar/chat-service/chat-serivce.js"></script>
+    <script type="text/javascript" src="components/right-bar/chat-service/chat-api-service.js"></script>
 
 
 

@@ -10,7 +10,8 @@
         var EVENTS = {
             PLAYER_STATUS_UPDATE: 'PLAYER_STATUS_UPDATE',
             PLAYER_JOINED: 'PLAYER_JOINED',
-            PLAYER_LEAVED: 'PLAYER_LEAVED'
+            PLAYER_LEAVED: 'PLAYER_LEAVED',
+            ROOM_MESSAGE: 'ROOM_MESSAGE'
         };
 
         var SOCKET_PREFIX = 'LOBBY';
@@ -51,6 +52,10 @@
                     if(userIndex > -1) {
                         service.roomInfo.players.splice(userIndex, 1);
                     }
+                    break;
+                }
+                case EVENTS.ROOM_MESSAGE: {
+                    console.log(response);
                     break;
                 }
                 default:

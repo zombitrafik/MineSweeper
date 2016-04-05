@@ -31,12 +31,12 @@
         <div class="players">
             <div class="player" ng-repeat="player in vm.getPlayers()">
                 <span class="player-name">
-                    <span class="player-leader" ng-if="player.isLeader"><i class="fa fa-star"></i></span>
+                    <span class="player-leader" ng-if="player.leader"><i class="fa fa-star"></i></span>
                     <span ng-bind="player.username"></span>
                 </span>
                 <span class="player-rating" ng-bind="player.rating"></span>
                 <span class="player-actions">
-                <span class="write-message" ng-click="vm.openChat(player.name)" ng-if="vm.getCurrentUser().username != player.username">
+                <span class="write-message" ng-click="vm.openChat(player.username)" ng-if="vm.getCurrentUser().username != player.username">
                     <i class="fa fa-envelope-o"></i>
                 </span>
                 <span class="remove-user" ng-if="vm.getCurrentUser().username == vm.getLobbyLeader().username && vm.getCurrentUser().username != player.username">

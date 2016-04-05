@@ -19,10 +19,12 @@
 
         }
 
-        function controller ($scope) {
+        function controller ($scope, $timeout) {
             var ifdc = this;
 
             var pending = false;
+
+            var timeoutPromise = undefined;
 
             ifdc.userList = [];
 
@@ -39,13 +41,22 @@
             };
 
             ifdc.updateList = function () {
+                if(timeoutPromise) {
+                    $timeout.cancel(timeoutPromise);
+                    timeoutPromise = undefined;
+                }
                 if(ifdc.model.username.trim() == '') {
                     ifdc.userList = [];
                     pending = false;
-                    return;
+                } else {
+                    pending = true;
+                    timeoutPromise = $timeout(function () {
+                        ifdc.sendSearchRequest();
+                    }, 200);
                 }
+            };
 
-                pending = true;
+            ifdc.sendSearchRequest = function () {
                 userService.find(ifdc.model.username).then(function (response) {
                     ifdc.userList = response.data.userList;
                 }).finally(function () {
@@ -56,7 +67,7 @@
             ifdc.select = function (user) {
                 pending = true;
                 $scope.onSelect(user).finally(function () {
-                    ifdc.updateList();
+                    ifdc.sendSearchRequest();
                 });
             };
 

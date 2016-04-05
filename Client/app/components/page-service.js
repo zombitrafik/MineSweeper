@@ -3,18 +3,20 @@
         .module('app')
         .service('pageService', pageService);
 
-    pageService.$inject = [];
+    pageService.$inject = ['$state'];
 
-    function pageService () {
+    function pageService ($state) {
+
+        var states = ['login', 'register', 'room-list'];
+
         var service = {
-            toggleMenu: toggleMenu,
-            isShowMenu: false
+            hasRightbar: hasRightbar
         };
 
         return service;
 
-        function toggleMenu () {
-            service.isShowMenu = !service.isShowMenu;
+        function hasRightbar () {
+            return states.indexOf($state.current.name) === -1
         }
     }
 })();

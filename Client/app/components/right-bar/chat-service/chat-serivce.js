@@ -3,13 +3,13 @@
         .module('app')
         .service('chatService', chatService);
 
-    chatService.$inject = ['$q', '$timeout', '$interval', 'notificationService'];
+    chatService.$inject = ['$q', '$timeout', '$interval', 'notificationService', 'loginService', 'socketService', 'chatApiService'];
 
-    function chatService($q, $timeout, $interval, notificationService) {
+    function chatService($q, $timeout, $interval, notificationService, loginService, socketService, chatApiService) {
 
 
         //TODO: get from userService or another service
-        var currentUserName = 'zombitrafik';
+        var currentUserName = loginService.currentUser.username;
 
         var globalChat = {
             username: -1,
@@ -36,6 +36,7 @@
             activateChat: activateChat,
             closeChat: closeChat,
             sendMessage: sendMessage,
+            messageHandler: messageHandler,
             getHistory: getHistory,
             getOpenedChats: getOpenedChats,
             openChat: openChat,
@@ -104,10 +105,19 @@
         }
 
         function sendMessage(message) {
-            activeChat.messages.push({
+
+            //LOBBY CHAT
+            if(activeChat.username == -2) {
+                chatApiService.sendLobbyMessage(message);
+            } else {
+                // PERSONAL CHAT
+                socketService.send('/users/sendMessage', {recipient: activeChat.username, message: message});
+            }
+
+/*            activeChat.messages.push({
                 sender: currentUserName,
                 message: message
-            });
+            });*/
         }
 
         function getHistory() {

@@ -4,10 +4,47 @@
     margin: 200px auto;
 }
 
-.login-page .form-group {
-
+.login-page .form-group .input-wrapper,
+.register-page .form-group .input-wrapper {
+    width: 300px;
 }
 
-.login-page .form-actions {
+.login-page .form-actions button,
+.register-page .form-actions button {
+    cursor: pointer;
+    border: 0 solid black;
+    padding: 15px 30px;
+    border-radius: 2px;
+    margin: 0;
+    outline: none;
+    width: 100%;
+    border-bottom: 3px solid #009688;
+    transition: 100ms;
+    background: #009688;
+    color: white;
+}
 
+.login-page .form-actions button:hover ,
+.register-page .form-actions button:hover {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-bottom-color: #006D63;
+}
+
+.login-page .form-actions .register,
+.register-page .form-actions .register {
+    color: #9E9E9E;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-family: monospace;
+    cursor: pointer;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.login-page .form-actions .register:hover,
+.register-page .form-actions .register:hover {
+    text-decoration: underline;
+    color: #636363;
 }

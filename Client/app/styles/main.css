@@ -196,8 +196,22 @@ body {
     height: 100%;
 }
 
+.layout-main.full .layout-content {
+    display: inline-block;
+    width: 100%;
+    float: left;
+    height: 100%;
+}
+
 .layout-right-bar {
     display: inline-block;
+    width: 296px;
+    background: #FFFFFF;
+    height: 100%;
+}
+
+.layout-main.full .layout-right-bar {
+    display: none;
     width: 296px;
     background: #FFFFFF;
     height: 100%;

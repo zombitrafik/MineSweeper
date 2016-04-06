@@ -87,13 +87,13 @@ body {
 
 #field {
     position: relative;
-    overflow: auto;
-    height: 100%;
-    width: 100%;
+    display: inline-block;
 }
 
 .content .container {
     height: 100%;
+    text-align: center;
+    overflow: auto;
 }
 
 .hidden {

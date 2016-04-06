@@ -135,10 +135,6 @@
             return deferred.promise;
         }
 
-        function showGameEndScreen () {
-            //TODO:
-        }
-
         function handleSocket (data) {
 
             switch (data.type) {
@@ -153,13 +149,10 @@
                     break;
                 }
                 case 'GAME_WIN' : {
-                    console.log('win');
-                    showGameEndScreen();
                     $rootScope.$apply();
                     break;
                 }
                 case 'PRIVATE_MESSAGE': {
-                    console.log(data);
                     break;
                 }
                 case 'PLAYER_BOMBED' : {

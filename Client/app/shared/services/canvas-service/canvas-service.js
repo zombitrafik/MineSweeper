@@ -43,12 +43,25 @@
             var parent = angular.element(document.querySelector('#' + storageService.selector));
             parent.ready(function () {
                 var blocks = storageService.blocks;
+                var cellSize = gameConfigService.FIELD.CELL.SIZE;
+                var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
+
+                var fieldWidth = 0,
+                    fieldHeight = 0;
+
                 for (var i = 0; i < blocks.length; i++) {
                     canvases[i] = [];
+                    fieldWidth += (blocks[i][0].length * cellSize);
+                    fieldHeight = 0;
                     for (var j = 0; j < blocks[i].length; j++) {
+                        fieldHeight += (blocks[i][j][0].length * cellSize);
                         canvases[i][j] = createCanvas(parent, i, j, blocks[i][j].length, blocks[i][j][0].length);
                     }
                 }
+
+                parent.css('width', (fieldWidth) + 'px');
+                parent.css('height', (fieldHeight) + 'px');
+
                 deferred.resolve(canvases);
             });
 

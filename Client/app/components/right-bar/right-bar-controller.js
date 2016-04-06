@@ -3,9 +3,9 @@
         .module('app')
         .controller('RightBarController', RightBarController);
 
-    RightBarController.$inject = ['rightBarService', 'chatService'];
+    RightBarController.$inject = ['rightBarService', 'chatService', 'pageService'];
 
-    function RightBarController(rightBarService, chatService) {
+    function RightBarController(rightBarService, chatService, pageService) {
         var vm = this;
 
         //TODO: notifications
@@ -67,8 +67,8 @@
             vm.inputMessage.message = '';
         };
 
-        vm.isInGame = function () {
-            return (rightBarService.isThisPage('room-list') || rightBarService.isThisPage('lobby'));
+        vm.hasRightbar = function () {
+            return pageService.hasRightbar();
         };
 
         vm.getMinesCount = function () {

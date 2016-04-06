@@ -1,5 +1,5 @@
 <div class="right-bar" ng-controller="RightBarController as controller">
-    <div ng-if="controller.isInGame()">
+    <div ng-if="controller.hasRightbar()">
         <div class="info-block">
             <div class="label">Mines count: <span class="label-value" ng-bind="controller.getMinesCount()">230</span></div>
             <div class="label">Field size: <span class="label-value" ng-bind="controller.getFieldSize()">20x20</span></div>

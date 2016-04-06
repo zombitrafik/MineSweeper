@@ -1,3 +1,7 @@
+.container {
+    text-align: center;
+    overflow: auto;
+}
 .game-popup {
     position: absolute;
     top: 0;

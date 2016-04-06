@@ -3,9 +3,9 @@
         .module('app')
         .controller('RightBarController', RightBarController);
 
-    RightBarController.$inject = ['rightBarService', 'chatService', 'pageService'];
+    RightBarController.$inject = ['chatService', 'pageService', 'lobbyService', 'gameService', '$state'];
 
-    function RightBarController(rightBarService, chatService, pageService) {
+    function RightBarController(chatService, pageService, lobbyService, gameService, $state) {
         var vm = this;
 
         //TODO: notifications
@@ -46,16 +46,8 @@
             chatService.openChat(username)
         };
 
-        vm.getGlobalChat = function () {
-            return chatService.getGlobalChat();
-        };
-
         vm.getLobbyChat = function () {
             return chatService.getLobbyChat();
-        };
-
-        vm.activateGlobalChat = function () {
-            chatService.activateGlobalChat();
         };
 
         vm.activateLobbyChat = function () {
@@ -72,11 +64,21 @@
         };
 
         vm.getMinesCount = function () {
-            return 200;
+            if(lobbyService.roomInfo && lobbyService.roomInfo.game) {
+                return lobbyService.roomInfo.game.mineField.minesCount;
+            }
         };
 
         vm.getFieldSize = function () {
-            return '20x25';
+            if(lobbyService.roomInfo && lobbyService.roomInfo.game) {
+                return lobbyService.roomInfo.game.mineField.width + 'x' + lobbyService.roomInfo.game.mineField.height;
+            }
+        };
+
+        vm.leaveRoom = function () {
+            gameService.leaveRoom().finally(function () {
+                $state.go('room-list');
+            });
         };
 
         return vm;

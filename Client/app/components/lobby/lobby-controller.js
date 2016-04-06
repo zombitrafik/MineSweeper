@@ -3,9 +3,9 @@
         .module('app')
         .controller('LobbyController', LobbyController);
 
-    LobbyController.$inject = ['$state', 'lobbyService', '$q', 'chatService', 'loginService', 'gameApiService'];
+    LobbyController.$inject = ['$state', 'lobbyService', '$q', 'chatService', 'loginService', 'gameService'];
 
-    function LobbyController ($state, lobbyService, $q, chatService, loginService, gameApiService) {
+    function LobbyController ($state, lobbyService, $q, chatService, loginService, gameService) {
         var vm = this;
 
         var isInvitingFriends = false;
@@ -47,7 +47,7 @@
         };
 
         vm.leaveRoom = function () {
-            gameApiService.leaveRoom().finally(function () {
+            gameService.leaveRoom().finally(function () {
                 $state.go('room-list');
             });
         };

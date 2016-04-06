@@ -48,7 +48,13 @@
             <span class="players-count">PLAYERS</span>
             <span class="room-started">STARTED</span>
         </div>
-        <div class="room" ng-repeat="room in vm.getRooms()" ng-click="vm.joinRoom(room.id)">
+        <div class="room-list-pending" ng-if="vm.isPending()">
+            <i class="fa fa-spinner fa-spin fa-2x"></i>
+        </div>
+        <div class="room-list-empty" ng-if="!vm.isPending() && vm.getRooms().length == 0 && !vm.isCreate()">
+            <span>There are no available rooms. <span class="room-create" ng-click="vm.createRoom()">Click</span> for create new one.</span>
+        </div>
+        <div class="room" ng-repeat="room in vm.getRooms()" ng-click="vm.joinRoom(room.id)" ng-if="!vm.isPending()">
             <span class="room-name" ng-bind="room.name"></span>
             <span class="min-rating" ng-bind="room.minRating"></span>
             <span class="field-size" ng-bind="room.game.mineField.width + 'x' + room.game.mineField.height"></span>

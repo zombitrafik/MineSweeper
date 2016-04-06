@@ -16,6 +16,8 @@
 
         vm.errors = {};
 
+        vm.pending = false;
+
         vm.login = function () {
             $state.go('login');
         };
@@ -25,11 +27,14 @@
             if(vm.validateModel()) {
                 return;
             }
+            vm.pending = true;
             registerService.register(vm.model).then(function () {
                 $state.go('login');
             }).catch(function () {
                 vm.errors.username = 'Such user already exist';
-            });
+            }).finally(function () {
+                vm.pending = false;
+            })
         };
 
         vm.clearErrors = function () {

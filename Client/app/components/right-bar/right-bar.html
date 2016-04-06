@@ -3,20 +3,12 @@
         <div class="info-block">
             <div class="label">Mines count: <span class="label-value" ng-bind="controller.getMinesCount()">230</span></div>
             <div class="label">Field size: <span class="label-value" ng-bind="controller.getFieldSize()">20x20</span></div>
+            <div class="leave-room">
+                <button ng-click="controller.leaveRoom()">LEAVE ROOM</button>
+            </div>
         </div>
         <div class="chat-block">
             <div class="chat-tabs">
-                <div class="chat-tab"
-                     ng-class="{'active': controller.getActiveChat().username == controller.getGlobalChat().username }"
-                     ng-click="controller.activateGlobalChat()">
-                    <span class="chat-tab-name">GLOBAL</span>
-                <span class="chat-tab-m-count" ng-if="controller.getGlobalChat().unreaded > 0">
-                    <span>+<span ng-bind="controller.getGlobalChat().unreaded"></span></span>
-                </span>
-                <span class="chat-tab-close">
-                    <i class="fa fa-lock"></i>
-                </span>
-                </div>
                 <div class="chat-tab"
                      ng-class="{'active': controller.getActiveChat().username == controller.getLobbyChat().username }"
                      ng-click="controller.activateLobbyChat()">

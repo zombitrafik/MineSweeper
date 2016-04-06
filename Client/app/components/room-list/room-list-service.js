@@ -16,7 +16,8 @@
             getRoom: getRoom,
             nextRoom: nextRoom,
             rooms: [],
-            init: init
+            init: init,
+            roomsPending: false
         };
 
 
@@ -27,9 +28,12 @@
         }
 
         function getRooms () {
+            service.roomsPending = true;
             var promise = roomListApiService.getRooms();
             promise.then(function (response) {
                 service.rooms = response;
+            }).finally(function () {
+                service.roomsPending = false;
             });
             return promise;
         }
@@ -47,7 +51,7 @@
             var promise = roomListApiService.createRoom(config);
             promise.then(function (response) {
                 cacheService.item(ROUTE_REQUIRES.ROOM, response.plain().id).then(function () {
-                    deferred.resolve();
+                    deferred.resolve(response.plain().id);
                 }).catch(function () {
                     deferred.reject();
                 })

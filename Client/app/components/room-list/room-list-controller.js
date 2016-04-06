@@ -21,6 +21,10 @@
             playersCount: ''
         };
 
+        vm.isPending = function () {
+            return roomListService.roomsPending;
+        };
+
         vm.getRooms = function () {
             return roomListService.rooms;
         };
@@ -37,7 +41,6 @@
             var promise = roomListService.joinRoom(id);
 
             promise.then(function (response) {
-                console.log(response);
                 $state.go('lobby', {id: id});
             });
         };
@@ -53,8 +56,8 @@
 
         vm.sendCreateRequest = function () {
             var promise = roomListService.createRoom(vm.roomModel);
-            promise.then(function () {
-                $state.go('lobby');
+            promise.then(function (id) {
+                $state.go('lobby', {id: id});
             });
         };
 

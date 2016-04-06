@@ -21,7 +21,7 @@
 
 var ROUTE_REQUIRES = {
     AUTH: 'AUTH',
-    ROOM: 'ROOM',
     SOCKET: 'SOCKET',
+    ROOM: 'ROOM',
     NOTIFICATION: 'NOTIFICATION'
 };

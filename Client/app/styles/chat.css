@@ -19,6 +19,23 @@
     text-transform: initial;
 }
 
+.info-block .leave-room {
+    margin-top: 10px;
+}
+
+.info-block .leave-room button {
+    width: 100%;
+    margin: 0;
+    line-height: 30px;
+    color: white;
+    background: #7CB342;
+    border: 0 solid black;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 100ms;
+    outline: none;
+}
+
 .chat-block {
     margin: 5px;
 }

@@ -75,7 +75,7 @@
         function clearService () {
             service.client = {};
             service.ws = undefined;
-            service.subscriptions = []
+            service.subscriptions = [];
         }
 
     }

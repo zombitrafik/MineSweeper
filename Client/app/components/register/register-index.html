@@ -15,7 +15,10 @@
             </div>
         </div>
         <div class="form-actions">
-            <button class="login" ng-click="vm.register()">SIGN UP</button>
+            <button class="login" ng-click="vm.register()" ng-if="!vm.pending">SIGN UP</button>
+            <div class="register-pending" ng-if="vm.pending">
+                <i class="fa fa-spinner fa-spin fa-2x"></i>
+            </div>
             <div class="register" ng-click="vm.login()">
                 <span>Sign In</span>
             </div>

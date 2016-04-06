@@ -242,9 +242,25 @@
     }
 
 
-    running.$inject = ['$rootScope', 'routeService', '$q', '$state', 'cacheService', 'loginService'];
+    running.$inject = ['$rootScope', 'routeService', '$q', '$state', 'cacheService', 'loginService', 'Restangular'];
 
-    function running ($rootScope, routeService, $q, $state, cacheService, loginService) {
+    function running ($rootScope, routeService, $q, $state, cacheService, loginService, Restangular) {
+
+        Restangular.setErrorInterceptor(function (response) {
+
+            if (response.status === 401) {
+                if ($state.current.name == 'login') {
+                    return true;
+                }
+                $state.go('login');
+
+                return false;
+            }
+
+            return true;
+        });
+
+
         /*$rootScope.$on('$stateChangeStart', function(event, toState) {
 
 

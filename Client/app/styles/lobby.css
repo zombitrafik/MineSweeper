@@ -13,6 +13,33 @@
     border-bottom: 2px solid rgba(192, 192, 192, 0.38);
 }
 
+
+.room-list-pending {
+    color: #009688;
+    text-align: center;
+    padding: 15px;
+    transition: 100ms;
+}
+
+.room-list-empty {
+    padding: 15px;
+    text-align: center;
+    color: #757575;
+}
+
+.room-list-empty .room-create {
+    background: #7CB342;
+    padding: 5px;
+    color: white;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 100ms;
+}
+
+.room-list-empty .room-create:hover {
+    color: #795548;
+}
+
 .room-list-block {
     width: 80%;
     margin: 0 auto;
@@ -234,7 +261,7 @@ span.player-actions {
 }
 
 .player .write-message {
-    padding: 3px 3px 3px 7px;
+    padding: 3px 3px 3px 5px;
     border-radius: 3px;
     background: white !important;
     color: black !important;

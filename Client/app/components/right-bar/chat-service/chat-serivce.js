@@ -7,12 +7,6 @@
 
     function chatService($rootScope, notificationService, loginService, socketService, chatApiService) {
 
-        var globalChat = {
-            username: -1,
-            messages: [],
-            unreaded: 0
-        };
-
         var lobbyChat = {
             username: -2,
             messages: [],
@@ -21,13 +15,11 @@
 
         var chats = [];
 
-        var activeChat = globalChat;
+        var activeChat = lobbyChat;
 
         var service = {
-            getGlobalChat: getGlobalChat,
             getLobbyChat: getLobbyChat,
             addLobbyMessage: addLobbyMessage,
-            activateGlobalChat: activateGlobalChat,
             activateLobbyChat: activateLobbyChat,
             getActiveChat: getActiveChat,
             activateChat: activateChat,
@@ -52,10 +44,6 @@
                         lobbyChat.unreaded = data[key];
                         continue;
                     }
-                    if(key.replace(prefix, '') == -1) {
-                        globalChat.unreaded = data[key];
-                        continue;
-                    }
                     chats.push({
                         unreaded: data[key],
                         username: key.replace(prefix, ''),
@@ -67,18 +55,9 @@
             });
         }
 
-        function activateGlobalChat () {
-            activeChat = globalChat;
-            getHistory();
-        }
-
         function activateLobbyChat () {
             activeChat = lobbyChat;
             getHistory();
-        }
-
-        function getGlobalChat() {
-            return globalChat;
         }
 
         function getLobbyChat() {
@@ -126,7 +105,7 @@
 
         function getHistory() {
             //LOBBY
-            if(activeChat.username == -2 || activeChat.username == -1) {
+            if(activeChat.username == -2) {
                 readMessage();
             } else {
                 service.isLoadingHistory = true;
@@ -140,6 +119,11 @@
                     //TODO: find chat by ID and add new messages
                     chatApiService.loadChatHistory(chatLink.username).then(function (history) {
                         service.isLoadingHistory = false;
+                        if(history.data.dialog == null) {
+                            history.data.dialog = {
+                                messages: []
+                            }
+                        }
                         chatLink.messages = history.data.dialog.messages;
                         readMessage();
                         chatLink.isInited = true;

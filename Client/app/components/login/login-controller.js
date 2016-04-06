@@ -16,6 +16,8 @@
             password: ''
         };
 
+        vm.pending = false;
+
         vm.errors = {};
 
         vm.login = function () {
@@ -23,12 +25,14 @@
             if(this.validateModel()) {
                 return;
             }
-
+            vm.pending = true;
             loginService.login(vm.model).then(function () {
                 $state.go('room-list');
             }).catch(function () {
                 vm.errors.username = 'Wrong username or password';
-            });
+            }).finally(function () {
+                vm.pending = false;
+            })
 
         };
         vm.register = function () {

@@ -23,6 +23,7 @@
             roomInfo: {},
             getCurrentRoom: getCurrentRoom,
             handleLobbyEvents: handleLobbyEvents,
+            gameEventHandler: undefined,
             handleInvite: handleInvite,
             inviteUser: inviteUser,
             startGame: startGame
@@ -32,13 +33,18 @@
 
 
         function getCurrentRoom() {
-            roomListService.getRoom().then(function (response) {
+            var promise = roomListService.getRoom();
+            promise.then(function (response) {
                 service.roomInfo = response;
                 socketService.subscribe('/broker/rooms/' + service.roomInfo.id, handleLobbyEvents, SOCKET_PREFIX);
             });
+            return promise;
         }
 
         function handleLobbyEvents(response) {
+            if(service.gameEventHandler) {
+                service.gameEventHandler(response);
+            }
             switch (response.type) {
                 case EVENTS.PLAYER_JOINED:
                 {

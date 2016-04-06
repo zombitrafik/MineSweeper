@@ -3,9 +3,9 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', '$rootScope', 'roomListService'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', '$rootScope', 'lobbyService'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, $rootScope, roomListService) {
+    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, $rootScope, lobbyService) {
         var service = {
             leaveRoom: leaveRoom,
             init: init,
@@ -19,14 +19,15 @@
         return service;
 
         function init () {
-            roomListService.getRoom().then(function (data) {
+            lobbyService.gameEventHandler = handleSocket;
+            lobbyService.getCurrentRoom().then(function (data) {
 
                 var rows = data.game.mineField.width,
                     cols = data.game.mineField.height;
                 generateMap(rows, cols);
 
                 if(data.finished) {
-                    showGameEndScreen();
+                    // игра уже закончена
                 }
 
                 var user = cacheService.local[ROUTE_REQUIRES.AUTH].data;
@@ -41,19 +42,23 @@
                     }
                 }
 
-                socketService.connect('game').then(function () {
-                    //socketService.subscribe('/user/broker/messages', handleSocket, service.socketPrefixes.MESSAGES + data.id);
-                    socketService.subscribe('/broker/rooms/'+data.id, handleSocket, service.socketPrefixes.ROOM + data.id);
-                    //socketService.subscribe('/broker/heartBeat', handleSocketHeartbeat, service.socketPrefixes.HEARTBEAT + data.id);
-                    socketService.subscribe('/user/broker/game-events', handleSocket, service.socketPrefixes.GAMEEVENTS + data.id);
-                });
-                // subscribe
-
+                socketService.subscribe('/user/broker/game-events', gameEventHandler, service.socketPrefixes.GAMEEVENTS + data.id);
 
                 canvasService.init('field').then(function () {
                     canvasService.handleActions(data.game.flags);
                     canvasService.handleActions(data.game.openedField);
                 });
+
+                /*
+                socketService.connect('game').then(function () {
+                    //socketService.subscribe('/user/broker/messages', handleSocket, service.socketPrefixes.MESSAGES + data.id);
+
+                    // socketService.subscribe('/broker/rooms/' + data.id, handleSocket, service.socketPrefixes.ROOM + data.id);
+
+                    //socketService.subscribe('/broker/heartBeat', handleSocketHeartbeat, service.socketPrefixes.HEARTBEAT + data.id);
+
+                });*/
+
             });
         }
 
@@ -120,19 +125,18 @@
         }
 
         function leaveRoom () {
-            var deferred = $q.defer();
-
-            var roomId = cacheService.local[ROUTE_REQUIRES.ROOM].data;
-
-            socketService.unsubscribe(service.socketPrefixes, roomId);
-
             canvasService.unlockAllActions();
-            cacheService.remove(ROUTE_REQUIRES.ROOM).finally(function () {
-                gameApiService.leaveRoom().finally(function () {
-                    deferred.resolve();
-                });
-            });
-            return deferred.promise;
+            return gameApiService.leaveRoom();
+        }
+
+        function gameEventHandler (data) {
+            switch (data.type) {
+                case 'YOU_BOMBED': {
+                    canvasService.blockAllActions();
+                    break;
+                }
+            }
+            $rootScope.$apply();
         }
 
         function handleSocket (data) {
@@ -143,8 +147,6 @@
                     break;
                 }
                 case 'GAME_LOSE': {
-                    console.log('lose');
-                    showGameEndScreen();
                     $rootScope.$apply();
                     break;
                 }
@@ -152,14 +154,13 @@
                     $rootScope.$apply();
                     break;
                 }
-                case 'PRIVATE_MESSAGE': {
-                    break;
-                }
                 case 'PLAYER_BOMBED' : {
-                    canvasService.blockAllActions();
+                    //кто-то взорвался
                     break;
                 }
             }
+
+            $rootScope.$apply();
         }
 
     }

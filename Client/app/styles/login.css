@@ -1,6 +1,15 @@
 .login-page, .register-page {
     width: 300px;
-    margin: 200px auto;
+    margin: 200px auto 0 auto;
+}
+
+.login-pending, .register-pending {
+    height: 40px;
+    border-radius: 2px;
+    background: #009688;
+    color: white;
+    text-align: center;
+    padding-top: 8px;
 }
 
 .login-page .form-group .input-wrapper,

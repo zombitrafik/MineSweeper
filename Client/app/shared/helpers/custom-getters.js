@@ -40,8 +40,8 @@
             return map[indexes.j][indexes.i];
         }
 
-        function getCoordByMouse(e, canvas) {
-            var offsetTop = canvas[0].offsetParent.offsetParent.offsetTop,
+        function getCoordByMouse(e, canvas, i, j) {
+/*            var offsetTop = canvas[0].offsetParent.offsetParent.offsetTop,
                 offsetLeft = canvas[0].offsetParent.offsetParent.offsetLeft;
 
             var scrollLeft = e.srcElement.offsetParent.parentNode.scrollLeft,
@@ -49,7 +49,14 @@
 
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var x = (e.pageX + scrollLeft) - offsetLeft,
-                y = (e.pageY + scrollTop) - offsetTop;
+                y = (e.pageY + scrollTop) - offsetTop;*/
+            var cellSize = gameConfigService.FIELD.CELL.SIZE;
+            var cellsCount = gameConfigService.FIELD.CELLS_COUNT;
+
+            var blockLength = cellSize * cellsCount;
+
+            var x = e.offsetX + blockLength * i,
+                y = e.offsetY + blockLength * j;
             x = Math.floor(x / cellSize);
             y = Math.floor(y / cellSize);
             return {

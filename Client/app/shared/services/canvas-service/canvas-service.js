@@ -78,18 +78,18 @@
             parent.append(canvas);
             var canvasElement = canvas.find('canvas');
             var ctx = canvasElement[0].getContext('2d');
-            bindEvents(canvasElement);
+            bindEvents(canvasElement, i, j);
             initEmptyCanvas(ctx);
             return ctx;
         }
 
-        function bindEvents(canvas) {
+        function bindEvents(canvas, i, j) {
             canvas.on('click', function (e) {
-                actionManager(canvas, e);
+                actionManager(canvas, e, i, j);
                 //clickEvent(canvas, e);
             });
             canvas.on('contextmenu', function (e) {
-                actionManager(canvas, e);
+                actionManager(canvas, e, i, j);
                 //contextMenuEvent(canvas, e);
             });
         }
@@ -137,12 +137,12 @@
 
         // end drawnings block
 
-        function actionManager (canvas, e) {
+        function actionManager (canvas, e, i, j) {
             if(service.isBlockActions) {
                 return;
             }
             var actions = eventHandlerService.ACTIONS,
-                coord = customGetters.getCoordByMouse(e, canvas),
+                coord = customGetters.getCoordByMouse(e, canvas, i, j),
                 cell = customGetters.getCell(coord.x, coord.y);
             switch (e.type) {
                 case actions.CLICK: {

@@ -1,0 +1,17 @@
+<div class="invite-dialogs">
+    <div class="invitation-container">
+        <div class="invite-dialog" ng-repeat="invitation in vm.getInvitation()">
+            <span class="close-invitation">
+                <i class="fa fa-times"></i>
+            </span>
+            <span class="title">User <span class="username" ng-bind="invitation.username"></span> invited you to the game <span class="game-name" ng-bind="invitation.roomName"></span>.</span>
+            <div class="invite-info">
+                <span>Size: <span ng-bind="invitation.roomWidth + 'x' + invitation.roomHeight"></span></span>
+                <span>Bombs: <span ng-bind="invitation.roomBombs"></span></span>
+            </div>
+            <div class="actions">
+                <button class="JOIN">JOIN</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -202,3 +202,39 @@
     color: white;
     border-radius: 3px;
 }
+
+
+/* ****** */
+/* INVITATIONS */
+
+.invite-dialogs {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.invitation-container {
+    padding: 10px;
+}
+
+.invite-dialog {
+    width: 255px;
+    background: #9E9E9E;
+    border-radius: 2px;
+    position: relative;
+    padding: 4px 20px 4px 10px;
+}
+
+.invite-dialog .close-invitation {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    background: red;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: white;
+}
+/* ****** */

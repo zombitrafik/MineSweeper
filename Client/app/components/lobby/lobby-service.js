@@ -3,9 +3,9 @@
         .module('app')
         .service('lobbyService', lobbyService);
 
-    lobbyService.$inject = ['$rootScope', 'roomListService', 'socketService', 'chatService', '$state', 'lobbyApiService'];
+    lobbyService.$inject = ['$rootScope', 'roomListService', 'socketService', 'chatService', '$state', 'lobbyApiService', 'inviteService'];
 
-    function lobbyService($rootScope, roomListService, socketService, chatService, $state, lobbyApiService) {
+    function lobbyService($rootScope, roomListService, socketService, chatService, $state, lobbyApiService, inviteService) {
 
         var EVENTS = {
             PLAYER_STATUS_UPDATE: 'PLAYER_STATUS_UPDATE',
@@ -96,13 +96,14 @@
         function handleInvite (response) {
             switch (response.type) {
                 case EVENTS.INVITE: {
-                    console.log(response);
+                    inviteService.addInvitation(response.data);
                     break;
                 }
                 default: {
                     break;
                 }
             }
+            $rootScope.$apply();
         }
 
         function inviteUser (username) {

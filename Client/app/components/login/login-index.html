@@ -10,6 +10,9 @@
                 <input type="password" ng-model="vm.model.password"/>
             </div>
         </div>
+        <div class="errors" ng-if="vm.error">
+            <div class="error" ng-bind="vm.error"></div>
+        </div>
         <div class="form-actions">
             <button class="login" ng-click="vm.login()" ng-if="!vm.pending">SIGN IN</button>
             <div class="login-pending" ng-if="vm.pending">

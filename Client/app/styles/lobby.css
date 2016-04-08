@@ -46,6 +46,13 @@
     box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
 }
 
+.room-list-block .error {
+    padding: 3px;
+    background: #E57373;
+    color: white;
+    text-align: center;
+}
+
 .room {
     padding: 20px;
     color: #565656;

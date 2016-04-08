@@ -3,7 +3,7 @@
     height: 100%;
 }
 
-.messages .tab>span {
+.messages .tab > span {
     width: 33.3%;
     display: inline-block;
     float: left;
@@ -17,8 +17,7 @@
     font-size: 12px;
 }
 
-
-.messages .tab>span.active {
+.messages .tab > span.active {
     border-bottom: 4px solid #03A9F4;
 }
 
@@ -39,6 +38,7 @@
     height: 55px;
     padding-top: 5px;
 }
+
 .message-list .message .icon {
     display: inline-block;
     float: left;
@@ -203,7 +203,6 @@
     border-radius: 3px;
 }
 
-
 /* ****** */
 /* INVITATIONS */
 
@@ -218,23 +217,70 @@
 }
 
 .invite-dialog {
-    width: 255px;
-    background: #9E9E9E;
+    width: 310px;
+    background: #FAFAFA;
     border-radius: 2px;
     position: relative;
     padding: 4px 20px 4px 10px;
+    border: 2px solid #E0E0E0;
+    box-shadow: 0 0 5px #E0E0E0;
+    margin-top: 10px;
 }
 
 .invite-dialog .close-invitation {
     position: absolute;
     right: 2px;
     top: 2px;
-    background: red;
     border-radius: 50%;
     width: 20px;
     height: 20px;
     line-height: 20px;
     text-align: center;
-    color: white;
+    color: #E0E0E0;
+    cursor: pointer;
+    transition: 100ms;
 }
+
+.invite-dialog .close-invitation:hover{
+    color: white;
+    background: #795548;
+}
+
+.invite-dialog .invite-info {
+    margin-top: 6px;
+    font-family: monospace;
+}
+
+.invite-dialog .invite-info .invite-info-highlighted {
+    background: #7CB342;
+    padding: 2px;
+    border-radius: 3px;
+    color: white;
+    font-weight: bolder;
+    letter-spacing: 1px;
+}
+
+.invite-dialog .invite-info .invite-info-icon {
+    color: #7CB342;
+}
+
+.invite-dialog .username {
+    font-weight: bolder;
+    text-transform: uppercase;
+    font-family: monospace;
+    font-size: 15px;
+}
+
+.invite-dialog .actions button.join {
+    border: 0;
+    outline: 0;
+    padding: 5px 30px;
+    cursor: pointer;
+    background: #009688;
+    color: white;
+    border-radius: 2px;
+    transition: 100ms;
+    margin: 10px 0px;
+}
+
 /* ****** */

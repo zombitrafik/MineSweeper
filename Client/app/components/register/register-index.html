@@ -14,6 +14,9 @@
                 <input type="password" ng-model="vm.model.matchingPassword"/>
             </div>
         </div>
+        <div class="errors" ng-if="vm.error">
+            <div class="error" ng-bind="vm.error"></div>
+        </div>
         <div class="form-actions">
             <button class="login" ng-click="vm.register()" ng-if="!vm.pending">SIGN UP</button>
             <div class="register-pending" ng-if="vm.pending">

@@ -18,18 +18,18 @@
 
         vm.pending = false;
 
-        vm.errors = {};
+        vm.error = undefined;
 
         vm.login = function () {
-            this.clearErrors();
-            if(this.validateModel()) {
+            vm.clearErrors();
+            if(vm.validateModel()) {
                 return;
             }
             vm.pending = true;
             loginService.login(vm.model).then(function () {
                 $state.go('room-list');
             }).catch(function () {
-                vm.errors.username = 'Wrong username or password';
+                vm.error = ERRORS_KEYS.WRONG_USERNAME_OR_PASSWORD;
             }).finally(function () {
                 vm.pending = false;
             })
@@ -49,18 +49,18 @@
         };
 
         vm.clearErrors = function () {
-            this.errors = {};
+            vm.error = undefined;
         };
 
         vm.validateModel = function () {
             var hasError = false;
             if(vm.model.username.trim() === '') {
                 hasError = true;
-                this.errors.username = 'Username is required';
+                vm.error = 'Wrong username or password';
             }
             if(vm.model.password.trim() === '') {
                 hasError = true;
-                this.errors.password = 'Password is required';
+                vm.error = 'Wrong username or password';
             }
             return hasError;
         }

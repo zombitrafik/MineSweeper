@@ -40,6 +40,7 @@
                 <button class="cancel" ng-click="vm.cancelCreate()">CANCEL</button>
             </div>
         </div>
+        <div class="error" ng-if="vm.error" ng-bind="vm.error"></div>
         <div class="room-header">
             <span class="room-name">NAME</span>
             <span class="min-rating">MIN RATING</span>

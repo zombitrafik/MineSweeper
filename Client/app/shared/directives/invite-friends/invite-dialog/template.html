@@ -1,16 +1,19 @@
 <div class="invite-dialogs">
     <div class="invitation-container">
         <div class="invite-dialog" ng-repeat="invitation in vm.getInvitation()">
-            <span class="close-invitation">
+            <span class="close-invitation" ng-click="vm.removeInvitation(invitation.hash)">
                 <i class="fa fa-times"></i>
             </span>
-            <span class="title">User <span class="username" ng-bind="invitation.username"></span> invited you to the game <span class="game-name" ng-bind="invitation.roomName"></span>.</span>
+            <span class="title"><span class="username" ng-bind="invitation.username"></span> invited you to the game <span class="game-name" ng-bind="invitation.roomName"></span>.</span>
             <div class="invite-info">
-                <span>Size: <span ng-bind="invitation.roomWidth + 'x' + invitation.roomHeight"></span></span>
-                <span>Bombs: <span ng-bind="invitation.roomBombs"></span></span>
+                <span class="invite-info-icon">
+                    <i class="fa fa-gears"></i>
+                </span>
+                <span>Size: <span class="invite-info-highlighted" ng-bind="invitation.roomWidth + 'x' + invitation.roomHeight"></span></span>
+                <span>Mines: <span class="invite-info-highlighted" ng-bind="invitation.roomBombs"></span></span>
             </div>
             <div class="actions">
-                <button class="JOIN">JOIN</button>
+                <button class="join" ng-click="vm.acceptInvitation(invitation.hash)">JOIN</button>
             </div>
         </div>
     </div>

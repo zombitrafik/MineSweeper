@@ -25,3 +25,13 @@ var ROUTE_REQUIRES = {
     ROOM: 'ROOM',
     NOTIFICATION: 'NOTIFICATION'
 };
+
+
+var ERRORS_KEYS = {
+    USERNAME_ALREADY_EXIST: 'Username already exist',
+    PASSWORDS_DONT_MATCH: 'Passwords doesn\'t match',
+    WRONG_USERNAME_OR_PASSWORD: 'Wrong username or password',
+    ROOM_MIN_RATING_MUST_BE_LOWER_THAN_LEADER_RATING: 'Room min rating must be lower than leader rating',
+    USER_ALREADY_IN_SOME_ROOM: 'User already in some room',
+    ROOM_WITH_THIS_NAME_ALREADY_EXIST: 'Room with this name already exist'
+};

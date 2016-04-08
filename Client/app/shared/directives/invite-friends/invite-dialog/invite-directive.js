@@ -26,6 +26,14 @@
                 return inviteService.invitations;
             };
 
+            vm.removeInvitation = function (hash) {
+                inviteService.removeInvitation(hash);
+            };
+
+            vm.acceptInvitation = function (hash) {
+                inviteService.acceptInvitation(hash);
+            };
+
             return vm;
         }
 

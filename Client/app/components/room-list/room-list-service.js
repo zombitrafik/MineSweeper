@@ -55,8 +55,8 @@
                 }).catch(function () {
                     deferred.reject();
                 })
-            }).catch(function () {
-                deferred.reject();
+            }).catch(function (response) {
+                deferred.reject(response);
             });
             return deferred.promise;
         }

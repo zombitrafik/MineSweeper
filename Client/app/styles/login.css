@@ -3,6 +3,20 @@
     margin: 200px auto 0 auto;
 }
 
+.login-page .errors,
+.register-page .errors {
+    margin: 5px 0;
+}
+
+.login-page .errors .error,
+.register-page .errors .error {
+    background: #E57373;
+    color: white;
+    padding: 3px;
+    border-radius: 2px;
+    text-align: center;
+}
+
 .login-pending, .register-pending {
     height: 40px;
     border-radius: 2px;

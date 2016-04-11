@@ -9,12 +9,43 @@
         var service = {
             play: play,
             reset: reset,
-            clearCellAnimation: clearCellAnimation
+            clearCellAnimation: clearCellAnimation,
+            animations: [],
+            init: init
         };
+
         return service;
+
+        function init () {
+            setInterval(function () {
+                service.animations.forEach(function (animation) {
+                    animation.draw();
+                });
+            }, 100);
+        }
+
+        function Animation (data, cb) {
+            this.data = data;
+            this.cb = cb;
+            this.stop = function () {
+
+            };
+            this.draw = function () {
+
+            };
+        }
 
         function play(type, cell, cb) {
             var data = getAnimationData(type, cell, cb);
+
+
+            // ****
+
+            service.animations.push(new Animation(data, cb));
+
+            // ****
+
+
 
             if(pendingService.exist(data.key)) {
                 var currentAnim = pendingService.get(data.key);
@@ -80,7 +111,6 @@
             if(currentAnim) {
                 clearInterval(currentAnim.interval);
                 pendingService.remove(key);
-                console.log('removed');
             }
         }
     }

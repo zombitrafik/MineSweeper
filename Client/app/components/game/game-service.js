@@ -45,8 +45,8 @@
                 socketService.subscribe('/user/broker/game-events', gameEventHandler, service.socketPrefixes.GAMEEVENTS + data.id);
 
                 canvasService.init('field').then(function () {
-                    canvasService.handleActions(data.game.flags);
-                    canvasService.handleActions(data.game.openedField);
+                    canvasService.handleActions(data.game.flags, true);
+                    canvasService.handleActions(data.game.openedField, true);
                 });
 
                 /*

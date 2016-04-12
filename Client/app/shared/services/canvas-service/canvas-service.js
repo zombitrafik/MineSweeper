@@ -24,6 +24,8 @@
             spriteService.Sprite('images/sprites.png').then(function (image) {
                 storageService.sprites = image.split(gameConfigService.SPRITES, gameConfigService.SPRITE_KEYS);
 
+                animationService.init();
+
                 createCanvases().then(function (canvases) {
                     storageService.canvases = canvases;
                     deferred.resolve();
@@ -115,24 +117,28 @@
             ctx.putImageData(image, x * cellSize, y * cellSize);
         }
 
-        function drawFlagCell(ctx, x, y, cell) {
+        function drawFlagCell(ctx, x, y, cell, withoutAnimation) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
             var image = getImageDataByKey('flag')[0];
-            animationService.play('closed', cell, function () {
+            animationService.play('closed', cell, withoutAnimation, function () {
                 ctx.putImageData(image, x * cellSize, y * cellSize);
             });
         }
 
-        function drawOpenedCell(ctx, x, y, value, cell) {
+        function drawOpenedCell(ctx, x, y, value, cell, withoutAnimation) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
 
-            animationService.play('closed', cell, function () {
+            animationService.play('closed', cell, withoutAnimation, function () {
                 ctx.putImageData(getImageByValue(value), x * cellSize, y * cellSize);
             });
         }
 
-        function drawMineCell (cell) {
-            animationService.play('mine', cell);
+        function drawMineCell (ctx, x, y, cell, withoutAnimation) {
+            var cellSize = gameConfigService.FIELD.CELL.SIZE;
+            var image = getImageDataByKey('mine')[1];
+            animationService.play('mine', cell, withoutAnimation, function () {
+                ctx.putImageData(image, x * cellSize, y * cellSize);
+            });
         }
 
         // end drawnings block
@@ -160,10 +166,9 @@
             //open
             if(isValidForOpen(cell)) {
                 eventHandlerService.openCell(cell);
-                animationService.play('click_left', cell, function () {
+                animationService.play('click_left', cell, false, function () {
                     animationService.play('pending_open_one', cell);
                 });
-
                 return;
             }
             // click on opened cell
@@ -176,7 +181,7 @@
             //set flag state
             if(isValidForFlag(cell)) {
                 eventHandlerService.setFlag(cell);
-                animationService.play('click_right', cell, function () {
+                animationService.play('click_right', cell, false, function () {
                     animationService.play('pending_flag', cell);
                 });
                 window.navigator.vibrate(80);
@@ -184,7 +189,7 @@
             }
         }
 
-        function handleActions (info) {
+        function handleActions (info, withoutAnimation) {
             var data, username = '';
             if(_.isArray(info)) {
                 data = info;
@@ -208,7 +213,7 @@
                 switch (cell.value) {
                     case symbols.FLAG:
                     {
-                        drawFlagCell(cellData.ctx, cellData.x, cellData.y, cell);
+                        drawFlagCell(cellData.ctx, cellData.x, cellData.y, cell, withoutAnimation);
                         break;
                     }
                     case symbols.EMPTY:
@@ -217,12 +222,12 @@
                         break;
                     }
                     case symbols.MINE: {
-                        drawMineCell(cell);
+                        drawMineCell(cellData.ctx, cellData.x, cellData.y, cell, withoutAnimation);
                         break;
                     }
                     default:
                     {
-                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value, cell);
+                        drawOpenedCell(cellData.ctx, cellData.x, cellData.y, cell.value, cell, withoutAnimation);
                     }
                 }
             });

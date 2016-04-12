@@ -21,7 +21,7 @@
             },
             SPRITES: {
                 closed: [
-                    {x: 0, y: 64, step: 0, next: 1, speed: 100},
+                    {x: 0, y: 64, step: 0, next: 1, speed: 1000/60 },
                     {x: 96, y: 96, step: 1, next: 2},
                     {x: 32, y: 96, step: 2, next: 3},
                     {x: 64, y: 96, step: 3, next: 4},
@@ -50,13 +50,13 @@
                     {x: 224, y: 0, value: 8}
                 ],
                 pending_open_one: [
-                    {x: 0, y: 128, step: 0, next: 1, speed: 8},
+                    {x: 0, y: 128, step: 0, next: 1, speed: 1000/10 },
                     {x: 32, y: 128, step: 1, next: 2},
                     {x: 64, y: 128, step: 2, next: 3},
                     {x: 96, y: 128, step: 3, next: 0}
                 ],
                 pending_flag: [
-                    {x: 0, y: 160, step: 0, next: 1, speed: 8},
+                    {x: 0, y: 160, step: 0, next: 1, speed: 1000/10 },
                     {x: 32, y: 160, step: 1, next: 2},
                     {x: 64, y: 160, step: 2, next: 3},
                     {x: 96, y: 160, step: 3, next: 0}
@@ -70,10 +70,12 @@
                     {x: 32, y: 32, step: 5, next: null}
                 ],
                 click_left: [
-                    {x: 128, y: 128, step: 0, next: null, speed: 10}
+                    {x: 128, y: 128, step: 0, next: 1, speed: 1000/10},
+                    {x: 128, y: 128, step: 1, next: null}
                 ],
                 click_right: [
-                    {x: 128, y: 160, step: 0, next: null, speed: 10}
+                    {x: 128, y: 160, step: 0, next: 1, speed: 1000/10},
+                    {x: 128, y: 160, step: 1, next: null}
                 ]
             },
             SPRITE_KEYS: {

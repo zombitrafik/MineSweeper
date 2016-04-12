@@ -10,41 +10,75 @@
             play: play,
             reset: reset,
             clearCellAnimation: clearCellAnimation,
-            animations: [],
+            animations: {},
             init: init
         };
+
+        var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
         return service;
 
         function init () {
-            setInterval(function () {
-                service.animations.forEach(function (animation) {
-                    animation.draw();
-                });
-            }, 100);
+            animationStep();
+        }
+
+        function animationStep () {
+            requestAnimationFrame(animationStep);
+            for(var key in service.animations) {
+                if(!service.animations.hasOwnProperty(key)) {continue;}
+
+                var animation = service.animations[key];
+                animation.draw((new Date()).getTime());
+            }
         }
 
         function Animation (data, cb) {
             this.data = data;
             this.cb = cb;
+
+            var x = data.x % data.cellsCount,
+                y = data.y % data.cellsCount;
+            var pointer = Object.keys(data.sprites)[0];
+            var animSpeed = data.sprites[pointer].speed;
+
+            var lastUpdateTime;
+
             this.stop = function () {
-
+                delete service.animations[this.data.key];
             };
-            this.draw = function () {
 
+            this.draw = function (time) {
+                if(animSpeed > time - lastUpdateTime ) {
+                    return;
+                } else {
+                    lastUpdateTime = time;
+                }
+                data.ctx.putImageData(data.sprites[pointer], x * data.cellSize, y * data.cellSize);
+                pointer = data.sprites[pointer].next;
+                if(pointer === null) {
+                    this.stop();
+                    if( typeof cb === 'function') {
+                        cb();
+                    }
+                }
             };
         }
 
-        function play(type, cell, cb) {
+        function play(type, cell, withoutAnimation, cb) {
             var data = getAnimationData(type, cell, cb);
 
 
             // ****
-
-            service.animations.push(new Animation(data, cb));
+            if(withoutAnimation) {
+                if( typeof cb === 'function') {
+                    cb();
+                }
+            } else {
+                service.animations[data.key] = new Animation(data, cb);
+            }
 
             // ****
-
+            return;
 
 
             if(pendingService.exist(data.key)) {

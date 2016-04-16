@@ -3,9 +3,9 @@
         .module('app')
         .service('lobbyService', lobbyService);
 
-    lobbyService.$inject = ['$rootScope', 'roomListService', 'socketService', 'chatService', '$state', 'lobbyApiService', 'inviteService'];
+    lobbyService.$inject = ['$rootScope', 'roomListService', 'socketService', 'chatService', '$state', 'lobbyApiService', 'inviteService', 'gameApiService'];
 
-    function lobbyService($rootScope, roomListService, socketService, chatService, $state, lobbyApiService, inviteService) {
+    function lobbyService($rootScope, roomListService, socketService, chatService, $state, lobbyApiService, inviteService, gameApiService) {
 
         var EVENTS = {
             PLAYER_STATUS_UPDATE: 'PLAYER_STATUS_UPDATE',
@@ -37,6 +37,14 @@
             promise.then(function (response) {
                 service.roomInfo = response;
                 socketService.subscribe('/broker/rooms/' + service.roomInfo.id, handleLobbyEvents, SOCKET_PREFIX);
+                if(service.roomInfo.started && !service.roomInfo.finished) {
+                    $state.go('game');
+                }
+                if(service.roomInfo.finished) {
+                    gameApiService.leaveRoom().finally(function () {
+                        $state.go('room-list');
+                    });
+                }
             });
             return promise;
         }

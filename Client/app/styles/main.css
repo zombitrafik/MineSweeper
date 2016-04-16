@@ -95,6 +95,7 @@ body {
     height: 100%;
     text-align: center;
     overflow: auto;
+    background: #3E2720;
 }
 
 .hidden {
@@ -215,4 +216,43 @@ body {
     width: 296px;
     background: #FFFFFF;
     height: 100%;
+}
+
+
+/* game borders */
+
+.middle-wall-container {
+    padding: 32px;
+}
+
+.middle-wall-container .wall {
+    background: url('../images/game-border.png');
+}
+
+.middle-wall-container .top-wall {
+    width: calc(100% + 64px);
+    height: 32px;
+    margin-top: -32px;
+    margin-left: -32px;
+}
+
+.middle-wall-container .left-wall {
+    width: 32px;
+    height: 100%;
+    margin-left: -32px;
+    float: left;
+}
+
+.middle-wall-container .right-wall {
+    width: 32px;
+    height: 100%;
+    margin-right: -32px;
+    float: right;
+}
+
+.middle-wall-container .bottom-wall {
+    height: 32px;
+    width: calc(100% + 64px);
+    margin-top: 100%;
+    margin-left: -32px;
 }

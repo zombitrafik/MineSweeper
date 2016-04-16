@@ -45,8 +45,11 @@
             var promise = loginApiService.current();
             promise.then(function (response) {
                 service.isInit = true;
-                deferred.resolve();
+                deferred.resolve(response);
                 service.currentUser = response.plain();
+/*                if(service.currentUser.currentRoomid != 0) {
+                    $state.go('lobby', {id: service.currentUser.currentRoomid});
+                }*/
             }).catch(function () {
                 $state.go('login');
                 deferred.reject();

@@ -3,9 +3,9 @@
         .module('app')
         .service('gameService', gameService);
 
-    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', '$rootScope', 'lobbyService'];
+    gameService.$inject = ['gameConfigService', 'canvasService', 'socketService', 'storageService', 'gameApiService', 'cacheService', '$q', '$rootScope', 'lobbyService', 'gameEndService'];
 
-    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, $rootScope, lobbyService) {
+    function gameService (gameConfigService, canvasService, socketService, storageService, gameApiService, cacheService, $q, $rootScope, lobbyService, gameEndService) {
         var service = {
             leaveRoom: leaveRoom,
             init: init,
@@ -28,6 +28,11 @@
 
                 if(data.finished) {
                     // игра уже закончена
+                    if(data.win) {
+                        gameEndService.gameWin(data.players);
+                    } else {
+                        gameEndService.gameLose(data.players);
+                    }
                 }
 
                 var user = cacheService.local[ROUTE_REQUIRES.AUTH].data;
@@ -147,15 +152,22 @@
                     break;
                 }
                 case 'GAME_LOSE': {
+                    gameEndService.gameLose(data.data);
                     $rootScope.$apply();
                     break;
                 }
                 case 'GAME_WIN' : {
+                    gameEndService.gameWin(data.data);
                     $rootScope.$apply();
                     break;
                 }
                 case 'PLAYER_BOMBED' : {
                     //кто-то взорвался
+                    var user = cacheService.local[ROUTE_REQUIRES.AUTH].data;
+
+                    if(data.data.username.toUpperCase() === user.username.toUpperCase()) {
+                        canvasService.blockAllActions();
+                    }
                     break;
                 }
             }

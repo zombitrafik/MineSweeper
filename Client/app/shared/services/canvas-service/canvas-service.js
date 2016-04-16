@@ -3,9 +3,9 @@
         .module('app')
         .service('canvasService', canvasService);
 
-    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q', 'popupService', 'cacheService'];
+    canvasService.$inject = ['gameConfigService', 'eventHandlerService', 'spriteService', 'animationService', 'storageService', 'customGetters', 'pendingService', '$q', 'popupService', 'cacheService', 'lobbyService'];
 
-    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q, popupService, cacheService) {
+    function canvasService(gameConfigService, eventHandlerService, spriteService, animationService, storageService, customGetters, pendingService, $q, popupService, cacheService, lobbyService) {
         var service = {
             init: init,
             handleActions: handleActions,
@@ -119,9 +119,9 @@
 
         function drawFlagCell(ctx, x, y, cell, withoutAnimation) {
             var cellSize = gameConfigService.FIELD.CELL.SIZE;
-            var image = getImageDataByKey('flag')[0];
+            var flag = getImageDataByKey('flag')[0];
             animationService.play('closed', cell, withoutAnimation, function () {
-                ctx.putImageData(image, x * cellSize, y * cellSize);
+                ctx.putImageData(flag, x * cellSize, y * cellSize);
             });
         }
 
@@ -213,11 +213,13 @@
                 switch (cell.value) {
                     case symbols.FLAG:
                     {
+                        lobbyService.roomInfo.game.mineField.minesCount--;
                         drawFlagCell(cellData.ctx, cellData.x, cellData.y, cell, withoutAnimation);
                         break;
                     }
                     case symbols.EMPTY:
                     {
+                        lobbyService.roomInfo.game.mineField.minesCount++;
                         drawEmptyCell(cellData.ctx, cellData.x, cellData.y, cell);
                         break;
                     }

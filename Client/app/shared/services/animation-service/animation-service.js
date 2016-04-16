@@ -141,11 +141,7 @@
 
         function clearCellAnimation (cell) {
             var key = cell.x + '_' + cell.y;
-            var currentAnim = pendingService.get(key);
-            if(currentAnim) {
-                clearInterval(currentAnim.interval);
-                pendingService.remove(key);
-            }
+            delete service.animations[key];
         }
     }
 

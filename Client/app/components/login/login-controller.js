@@ -27,7 +27,11 @@
             }
             vm.pending = true;
             loginService.login(vm.model).then(function () {
-                $state.go('room-list');
+                if(loginService.currentUser.currentRoomid != 0) {
+                    $state.go('lobby', {id: loginService.currentUser.currentRoomid});
+                } else {
+                    $state.go('room-list');
+                }
             }).catch(function () {
                 vm.error = ERRORS_KEYS.WRONG_USERNAME_OR_PASSWORD;
             }).finally(function () {

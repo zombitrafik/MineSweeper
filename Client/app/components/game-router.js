@@ -189,7 +189,7 @@
 
     }
 
-    function initCacheServiceRoute ($q, cacheService) {
+    function initCacheServiceRoute($q, cacheService) {
         var deferred = $q.defer();
 
         cacheService.init().then(function () {
@@ -199,16 +199,19 @@
         return deferred.promise;
     }
 
-    function checkRoute (routeService, $q, $state, cacheService, loginService, globalInitService, requires) {
+    function checkRoute(routeService, $q, $state, cacheService, loginService, globalInitService, requires) {
         var deferred = $q.defer();
 
         cacheService.init().then(function () {
 
-            if(!loginService.isInit && !_.isEmpty(requires)) {
+            if (!loginService.isInit && !_.isEmpty(requires)) {
 
-                loginService.current().then(function () {
-                    if(!globalInitService.isInit) {
+                loginService.current().then(function (response) {
+                    if (!globalInitService.isInit) {
                         globalInitService.init().then(function () {
+                            if (loginService.currentUser.currentRoomid != 0) {
+                                $state.go('lobby', {id: loginService.currentUser.currentRoomid});
+                            }
                             deferred.resolve();
                         });
                     } else {
@@ -221,8 +224,7 @@
                 });
             } else {
                 routeService.checkRoute(requires).then(function () {
-                    console.log(requires, globalInitService.isInit);
-                    if(!globalInitService.isInit && !_.isEmpty(requires)) {
+                    if (!globalInitService.isInit && !_.isEmpty(requires)) {
                         globalInitService.init().then(function () {
                             deferred.resolve();
                         })
@@ -244,7 +246,7 @@
 
     running.$inject = ['$rootScope', 'routeService', '$q', '$state', 'cacheService', 'loginService', 'Restangular'];
 
-    function running ($rootScope, routeService, $q, $state, cacheService, loginService, Restangular) {
+    function running($rootScope, routeService, $q, $state, cacheService, loginService, Restangular) {
 
         Restangular.setErrorInterceptor(function (response) {
 
@@ -261,10 +263,9 @@
         });
 
 
-        /*$rootScope.$on('$stateChangeStart', function(event, toState) {
+        /* $rootScope.$on('$stateChangeStart', function(event, toState) {
 
-
-        });*/
+         });*/
     }
 
 })();

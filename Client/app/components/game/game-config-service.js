@@ -12,7 +12,7 @@
                     SIZE: 32,
                     PADDING: 4
                 },
-                CELLS_COUNT: 10
+                CELLS_COUNT: 64
             },
             SYMBOLS: {
                 FLAG: -2,

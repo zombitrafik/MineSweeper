@@ -33,6 +33,11 @@ public class User
 	private long			lastHeartBeat;
 
 	@JsonIgnore
+	private int				summaryRating;
+
+	private int				playedGamesCount;
+
+	@JsonIgnore
 	@ElementCollection
 	private List<String>	friends;
 
@@ -163,5 +168,25 @@ public class User
 	public void setRating(int rating)
 	{
 		this.rating = rating;
+	}
+
+	public int getSummaryRating()
+	{
+		return summaryRating;
+	}
+
+	public void setSummaryRating(int summaryRating)
+	{
+		this.summaryRating = summaryRating;
+	}
+
+	public int getPlayedGamesCount()
+	{
+		return playedGamesCount;
+	}
+
+	public void setPlayedGamesCount(int playedGamesCount)
+	{
+		this.playedGamesCount = playedGamesCount;
 	}
 }

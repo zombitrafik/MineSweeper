@@ -32,12 +32,42 @@ public class RoomValidator implements Validator
 		{
 			error.rejectValue("playersCount", ResponseMessage.ROOM_PLAYERS_COUNT_MUST_BE_POSITIVE.getError());
 		}
-		
+
 		Player leader = newRoom.getPlayers().get(0);
 
-		if(newRoom.getMinRating()>leader.getRating()){
+		if (newRoom.getMinRating() > leader.getRating())
+		{
 			error.rejectValue("minRating", ResponseMessage.ROOM_MIN_RATING_MUST_BE_LOWER_THAN_LEADER_RATING.getError());
 		}
-
+		if (isTooEasy(newRoom))
+		{
+			error.reject(ResponseMessage.ROOM_IS_TOO_EASY.getError());
+		}
+		if (isTooHard(newRoom))
+		{
+			error.reject(ResponseMessage.ROOM_IS_TOO_HARD.getError());
+		}
 	}
+
+	private boolean isTooEasy(Room newRoom)
+	{
+		double minesCoefficient = getMinesCoefficient(newRoom);
+		return minesCoefficient < 0.1;
+	}
+
+	private boolean isTooHard(Room newRoom)
+	{
+		double minesCoefficient = getMinesCoefficient(newRoom);
+		return minesCoefficient > 228.0 / 900;
+	}
+
+	private double getMinesCoefficient(Room newRoom)
+	{
+		int height = newRoom.getGame().getMineField().getHeight();
+		int width = newRoom.getGame().getMineField().getWidth();
+		int minesCount = newRoom.getGame().getMineField().getMinesCount();
+
+		return (double)minesCount / (height * width);
+	}
+
 }

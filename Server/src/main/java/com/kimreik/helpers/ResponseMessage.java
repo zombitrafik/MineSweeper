@@ -7,9 +7,9 @@ import java.util.HashMap;
 public class ResponseMessage
 {
 
-	public static final ResponseMessage	NOT_JOINED_TO_ROOM									= error("NOT_JOINED_TO_ROOM");
-	public static final ResponseMessage	USER_ALREADY_IN_SOME_ROOM							= error("USER_ALREADY_IN_SOME_ROOM");
-	public static final ResponseMessage	YOU_BOMBED											= error("YOU_BOMBED");
+	public static final ResponseMessage	NOT_JOINED_TO_ROOM									= new ResponseMessage("NOT_JOINED_TO_ROOM");
+	public static final ResponseMessage	USER_ALREADY_IN_SOME_ROOM							= new ResponseMessage("USER_ALREADY_IN_SOME_ROOM");
+	public static final ResponseMessage	YOU_BOMBED											= new ResponseMessage("YOU_BOMBED");
 
 	public static final ResponseMessage	USERNAME_ALREADY_EXIST								= error("USERNAME_ALREADY_EXIST");
 	public static final ResponseMessage	PASSWORDS_DONT_MATCH								= error("PASSWORDS_DONT_MATCH");
@@ -17,6 +17,8 @@ public class ResponseMessage
 	public static final ResponseMessage	ROOM_WITH_THIS_NAME_ALREADY_EXIST					= error("ROOM_WITH_THIS_NAME_ALREADY_EXIST");
 	public static final ResponseMessage	ROOM_PLAYERS_COUNT_MUST_BE_POSITIVE					= error("ROOM_PLAYERS_COUNT_MUST_BE_POSITIVE");
 	public static final ResponseMessage	ROOM_MIN_RATING_MUST_BE_LOWER_THAN_LEADER_RATING	= error("ROOM_MIN_RATING_MUST_BE_LOWER_THAN_LEADER_RATING");
+	public static final ResponseMessage	ROOM_IS_TOO_EASY									= error("ROOM_IS_TOO_EASY");
+	public static final ResponseMessage	ROOM_IS_TOO_HARD									= error("ROOM_IS_TOO_HARD");
 
 	public static final ResponseMessage	FIELD_UPDATE										= new ResponseMessage("FIELD_UPDATE");
 

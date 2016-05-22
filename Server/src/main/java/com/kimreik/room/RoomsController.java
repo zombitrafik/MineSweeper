@@ -36,8 +36,8 @@ public class RoomsController
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> getRooms(Principal principal)
-	{ //principal for Aspect
-		return roomsService.getRooms();
+	{
+		return roomsService.getRooms(principal.getName());
 	}
 
 	@RequestMapping(value = "/current", method = RequestMethod.GET)
@@ -92,5 +92,9 @@ public class RoomsController
 	public void invitePlayer(Principal principal, @RequestBody String invitedPlayerName)
 	{
 		roomsService.invitePlayer(principal.getName(), invitedPlayerName);
+	}
+
+	public void kickPlayer(Principal principal, @RequestBody String kickedPlayerName){
+		roomsService.kickPlayer(principal.getName(), kickedPlayerName);
 	}
 }

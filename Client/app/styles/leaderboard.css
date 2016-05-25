@@ -1,53 +1,80 @@
-.leaderboard {
-    height: 100%;
+.leaderboard .leaderboard-header {
+    padding: 10px;
+    line-height: 40px;
     overflow: auto;
+    height: auto;
+    background: #43A047;
+    color: white;
+    border-bottom: 2px solid rgba(46, 111, 49, 0.67);
 }
 
-.leaderboard .game-line {
-    width: 100%;
+.leaderboard .leaderboard-header > div {
+    display: inline-block;
+    float: left;
+}
+
+.leaderboard .leaderboard-header .username {
+    width: 60%;
+}
+
+.leaderboard .leaderboard-header .score {
+    width: 40%;
+}
+
+.leaderboard .content .row {
+    line-height: 50px;
+    position: relative;
     height: 50px;
-    background: #101013;
-    border-bottom: 1px solid black;
+    background: white;
+    cursor: pointer;
+    transition: 100ms;
+}
+
+.leaderboard .content .row:hover {
+    background: #EEEEEE;
+    color: #43A047;
+    font-weight: bold;
+}
+
+.leaderboard .content .row > div {
+    display: inline-block;
+    float: left;
+}
+
+
+.leaderboard .content .position {
+    position: absolute;
+    left: -15px;
+    top: 10px;
+    z-index: 400;
+    width: 30px;
+    height: 30px;
+    background: white;
+    color: #43A047;
+    line-height: 31px;
+    border-radius: 50%;
+    border: 1px solid #43A047;
+}
+
+.leaderboard .content .position.top_1 {
     color: white;
+    background: #43A047;
 }
 
-.leaderboard .game-line .game-name {
-    line-height: 50px;
-    margin-left: 15px;
-}
-
-.leaderboard .game-line .expand {
-    float: right;
-    line-height: 50px;
-    margin-right: 20px;
-    width: 50px;
-    text-align: center;
-}
-
-.leaderboard .game-line .score {
-    float: right;
-    line-height: 50px;
-}
-
-.leaderboard .players {
-    display: block;
-    width: 100%;
-    background: #1B1B1B;
+.leaderboard .content .position.top_2 {
     color: white;
-    height: 25px;
-    line-height: 25px;
-    border-bottom: 1px solid #565656;
+    background: #4CAF50;
 }
 
-.leaderboard .players:last-child {
-    border-bottom: 0 solid #565656;
+.leaderboard .content .position.top_3 {
+    color: white;
+    background: #A5D6A7;
 }
 
-.leaderboard .players .username {
-    margin-left: 15px;
+.leaderboard .content .username {
+    width: 60%;
 }
 
-.leaderboard .players .score {
-    float: right;
-    width: 150px;
+.leaderboard .content .score {
+    width: 40%;
 }

@@ -19,6 +19,7 @@
         return service;
 
         function init () {
+            canvasService.unlockAllActions();
             lobbyService.gameEventHandler = handleSocket;
             lobbyService.getCurrentRoom().then(function (data) {
 

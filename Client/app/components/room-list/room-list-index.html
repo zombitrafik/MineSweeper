@@ -7,7 +7,7 @@
                 <i class="fa fa-plus"></i>
             </div>
             <div class="refresh-btn" ng-click="vm.refreshRooms()">
-                <i class="fa fa-refresh"></i>
+                <i class="fa fa-refresh" ng-class="{'fa-spin': vm.isRefreshing}"></i>
             </div>
         </div>
         <div class="create-room" ng-if="vm.isCreate()">

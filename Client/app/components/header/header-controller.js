@@ -18,6 +18,10 @@
             });
         };
 
+        vm.goLeaderBoard = function () {
+            $state.go('leaderboard');
+        };
+
         return vm;
     }
 })();

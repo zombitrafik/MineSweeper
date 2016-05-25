@@ -6,11 +6,20 @@
 
             </div>
             <div class="dialog-content">
-
+                <div ng-include="'components/leaderboard/leaderboard-template.html'"></div>
+                <div class="total-score">
+                    <span class="title">Total score: </span>
+                    <span class="value" ng-bind="controller.getData().score"></span>
+                </div>
             </div>
-            <div class="dialog-actions">
-                <button>NEXT GAME</button>
-                <button>EXIT</button>
+            <div class="dialog-actions" ng-if="!controller.pending">
+                <button class="next-game" ng-click="controller.goNextRoom()">NEXT GAME</button>
+                <button class="exit" ng-click="controller.exit()">EXIT</button>
+            </div>
+            <div class="dialog-actions" ng-if="controller.pending">
+                <span class="spinner">
+                    <i class="fa fa-2x fa-spinner fa-spin"></i>
+                </span>
             </div>
         </div>
     </div>

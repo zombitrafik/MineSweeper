@@ -5,14 +5,16 @@
         .module('app')
         .controller('RoomListController', RoomListController);
 
-    RoomListController.$inject = ['roomListService', '$state'];
+    RoomListController.$inject = ['roomListService', '$state', '$timeout'];
 
-    function RoomListController (roomListService, $state) {
+    function RoomListController (roomListService, $state, $timeout) {
         var vm = this;
 
         vm.isCreating = false;
 
         vm.error = undefined;
+
+        vm.isRefreshing = false;
 
         vm.roomModel = {
             name: '',
@@ -40,7 +42,12 @@
         };
 
         vm.refreshRooms = function () {
-            roomListService.getRooms();
+            vm.isRefreshing = true;
+            roomListService.getRooms().finally(function () {
+                $timeout(function () {
+                    vm.isRefreshing = false;
+                }, 100);
+            });
         };
 
         vm.joinRoom = function (id) {

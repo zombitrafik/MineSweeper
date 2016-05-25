@@ -60,3 +60,16 @@
     top: -20px;
     left: 5px;
 }
+
+.header .user-block .leaderboard-head button {
+    padding: 5px 20px;
+    border: 0 solid black;
+    border-radius: 2px;
+    color: white;
+    background: #D81B60;
+    font-family: monospace;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 100ms;
+    outline: none;
+}

@@ -39,11 +39,10 @@
         function acceptInvitation (hash) {
             var invitation = find(hash).invitation;
             removeInvitation(hash);
-
             var promise = roomListService.joinRoom(invitation.roomId);
 
             promise.then(function (response) {
-                $state.go('lobby', {id: id});
+                $state.go('lobby', {id: invitation.roomId});
             }).catch(function (errorPayload) {
                 console.error(errorPayload);
             });

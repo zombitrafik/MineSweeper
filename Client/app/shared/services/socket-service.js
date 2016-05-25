@@ -41,10 +41,18 @@
         }
 
         function subscribe (url, cb, sub_key) {
+            unsubscribeOne(sub_key);
             var subscription = service.client.subscribe(url, function (data) {
                 cb(JSON.parse(data.body));
             });
             service.subscriptions[sub_key] = subscription;
+        }
+
+        function unsubscribeOne (sub_key) {
+            if(service.subscriptions[sub_key]) {
+                service.subscriptions[sub_key].unsubscribe();
+                service.subscriptions[sub_key] = undefined;
+            }
         }
 
         function unsubscribe (prefixes, additionalPrefix) {

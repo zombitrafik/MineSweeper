@@ -1,3 +1,5 @@
+
+
 .leaderboard .leaderboard-header {
     padding: 10px;
     line-height: 40px;
@@ -77,4 +79,57 @@
 
 .leaderboard .content .score {
     width: 40%;
+}
+
+.leaderboard.main {
+    text-align: center;
+}
+
+.leaderboard .lb-head {
+    padding: 20px;
+    line-height: 20px;
+    background: #7CB342;
+    color: white;
+    font-size: 18px;
+    width: 400px;
+    margin: 20px auto 0 auto;
+}
+
+.leaderboard .lb-head .back {
+    float: left;
+    cursor: pointer;
+}
+
+.leaderboard .lb-content {
+    width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.leaderboard .lb-content .player-row {
+    line-height: 50px;
+    cursor: pointer;
+}
+
+
+.leaderboard .lb-content .player-row .position {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #009688;
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+    color: white;
+}
+
+.leaderboard .lb-content .player-row .username {
+    display: inline-block;
+    width: 200px;
+}
+
+.leaderboard .lb-content .player-row .rating {
+    display: inline-block;
+    width: 150px;
+    text-align: center;
 }

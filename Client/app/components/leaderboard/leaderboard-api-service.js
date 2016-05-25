@@ -14,7 +14,7 @@
         return service;
 
         function getLeaderboard () {
-            return Restangular.one('leaderboard').customGET('', {
+            return Restangular.one('leaderboard/users').customGET('', {
                 page: 1,
                 size: 100
             });

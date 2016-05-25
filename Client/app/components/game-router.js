@@ -172,9 +172,7 @@
                 url: '/leaderboard',
                 views: {
                     'mainView': {
-                        templateUrl: 'components/leaderboard/leaderboard-index.html',
-                        controller: 'LeaderboardController',
-                        controllerAs: 'vm'
+                        templateUrl: 'components/leaderboard/leaderboard-index.html'
                     }
                 },
                 requires: [

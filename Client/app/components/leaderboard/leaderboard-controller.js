@@ -3,9 +3,9 @@
         .module('app')
         .controller('LeaderboardController', LeaderboardController);
 
-    LeaderboardController.$inject = ['leaderboardService'];
+    LeaderboardController.$inject = ['leaderboardService', '$state'];
 
-    function LeaderboardController (leaderboardService) {
+    function LeaderboardController (leaderboardService, $state) {
         var vm = this;
 
         vm.currentExpand = undefined;
@@ -29,6 +29,10 @@
 
         vm.getItems = function () {
             return leaderboardService.items;
+        };
+
+        vm.back = function () {
+            $state.go('room-list');
         };
 
         return vm;

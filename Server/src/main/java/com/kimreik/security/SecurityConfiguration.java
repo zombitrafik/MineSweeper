@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 		http.httpBasic()
 				.and()
 				.authorizeRequests()
-				.antMatchers("/index.html", "/", "/components/**", "/styles/**", "/shared/**", "/images/**", "/bower_components/**", "/app.js",
+				.antMatchers("/index.html", "/", "/components/**", "/styles/**", "/shared/**", "/images/**","/scripts/**","/fonts/**", "/bower_components/**", "/app.js",
 						"/app-config.js", "/newUser").permitAll().anyRequest().authenticated().and().csrf().disable();
 		/*csrfTokenRepository(csrfTokenRepository()).and()
 		.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);

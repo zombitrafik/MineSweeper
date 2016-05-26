@@ -39,6 +39,26 @@ public class RoomValidator implements Validator
 		{
 			error.rejectValue("minRating", ResponseMessage.ROOM_MIN_RATING_MUST_BE_LOWER_THAN_LEADER_RATING.getError());
 		}
+
+		int height = newRoom.getGame().getMineField().getHeight();
+		int width = newRoom.getGame().getMineField().getWidth();
+		int minesCount = newRoom.getGame().getMineField().getMinesCount();
+
+		if (height == 0)
+		{
+			error.rejectValue("height", "0");
+		}
+
+		if (width == 0)
+		{
+			error.rejectValue("width", "0");
+		}
+
+		if (minesCount == 0)
+		{
+			error.rejectValue("minesCount", "0");
+		}
+
 		if (isTooEasy(newRoom))
 		{
 			error.reject(ResponseMessage.ROOM_IS_TOO_EASY.getError());
@@ -67,7 +87,7 @@ public class RoomValidator implements Validator
 		int width = newRoom.getGame().getMineField().getWidth();
 		int minesCount = newRoom.getGame().getMineField().getMinesCount();
 
-		return (double)minesCount / (height * width);
+		return (double) minesCount / (height * width);
 	}
 
 }

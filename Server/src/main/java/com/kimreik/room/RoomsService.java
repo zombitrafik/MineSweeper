@@ -24,225 +24,256 @@ import java.util.stream.Collectors;
 //TODO refactor by getCurrentRoom()
 
 @Service
-public class RoomsService {
+public class RoomsService
+{
 
-    Logger logger = Logger.getLogger(RoomsService.class);
+	Logger							logger	= Logger.getLogger(RoomsService.class);
 
-    @Autowired
-    RoomsRepository roomRepo;
+	@Autowired
+	RoomsRepository					roomRepo;
 
-    @Autowired
-    UsersRepository userRepo;
+	@Autowired
+	UsersRepository					userRepo;
 
-    @Autowired
-    StatisticsService statService;
+	@Autowired
+	StatisticsService				statService;
 
-    @Autowired
-    private SocketMessagingService socketMessagingService;
+	@Autowired
+	private SocketMessagingService	socketMessagingService;
 
-    public ResponseEntity<?> createRoom(String username, RoomDTO roomDTO, BindingResult result) {
+	public ResponseEntity<?> createRoom(String username, RoomDTO roomDTO, BindingResult result)
+	{
 
-        User user = userRepo.findOne(username);
+		User user = userRepo.findOne(username);
 
-        if (user.getCurrentRoomid() != 0) {
-            return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
-        }
+		if (user.getCurrentRoomid() != 0)
+		{
+			return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
+		}
 
-        Room newRoom = new Room();
-        BeanUtils.copyProperties(roomDTO, newRoom);
-        Game newGame = new Game();
-        MineField mineField = new MineField();
-        BeanUtils.copyProperties(roomDTO, mineField);
-        newGame.setMineField(mineField);
-        newRoom.setGame(newGame);
+		Room newRoom = new Room();
+		BeanUtils.copyProperties(roomDTO, newRoom);
+		Game newGame = new Game();
+		MineField mineField = new MineField();
+		BeanUtils.copyProperties(roomDTO, mineField);
+		newGame.setMineField(mineField);
+		newRoom.setGame(newGame);
 
-        Player newPlayer = new Player();
-        BeanUtils.copyProperties(user, newPlayer);
-        newPlayer.setLeader(true);
-        newRoom.getPlayers().add(newPlayer);
+		Player newPlayer = new Player();
+		BeanUtils.copyProperties(user, newPlayer);
+		newPlayer.setLeader(true);
+		newRoom.getPlayers().add(newPlayer);
 
-        RoomValidator validator = new RoomValidator(roomRepo);
+		if (newRoom.getPlayersCount() == 0)
+		{
+			newRoom.setPlayersCount(10);
+		}
 
-        validator.validate(newRoom, result);
+		RoomValidator validator = new RoomValidator(roomRepo);
 
-        if (result.hasErrors()) {
-            String errStr = "";
-            for (ObjectError err : result.getAllErrors()) {
-                errStr += err.getCode();
-            }
-            return new ResponseEntity<>(ResponseMessage.error(errStr), HttpStatus.BAD_REQUEST);
-        }
+		validator.validate(newRoom, result);
 
-        newRoom = roomRepo.save(newRoom);
-        user.setCurrentRoomid(newRoom.getId());
-        userRepo.save(user);
+		if (result.hasErrors())
+		{
+			String errStr = "";
+			for (ObjectError err : result.getAllErrors())
+			{
+				errStr += err.getCode();
+			}
+			return new ResponseEntity<>(ResponseMessage.error(errStr), HttpStatus.BAD_REQUEST);
+		}
 
-        return ResponseWrapper.wrap(newRoom, HttpStatus.OK);
-    }
+		newRoom = roomRepo.save(newRoom);
+		user.setCurrentRoomid(newRoom.getId());
+		userRepo.save(user);
 
-    public ResponseEntity<?> getRooms(String username) {
-        //room.isStarted();
-        return ResponseWrapper.wrap(
-                roomRepo.findAll()
-                        .stream()
-                        .filter(room -> !room.isFinished()
-                                && (!room.isStarted() || room.getPlayers().stream().map(Player::getUsername).filter(s -> s.equals(username)).count() == 0))
-                        .collect(Collectors.toList()), HttpStatus.OK);
-    }
+		return ResponseWrapper.wrap(newRoom, HttpStatus.OK);
+	}
 
-    public ResponseEntity<?> joinRoom(Integer id, String username) {
-        User user = userRepo.findOne(username);
+	public ResponseEntity<?> getRooms(String username)
+	{
+		//room.isStarted();
+		return ResponseWrapper.wrap(
+				roomRepo.findAll()
+						.stream()
+						.filter(room -> !room.isFinished()
+								&& (!room.isStarted() || room.getPlayers().stream().map(Player::getUsername).filter(s -> s.equals(username)).count() == 0))
+						.collect(Collectors.toList()), HttpStatus.OK);
+	}
 
-        if (user.getCurrentRoomid() != 0 && user.getCurrentRoomid() != id) {
-            return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
-        }
+	public ResponseEntity<?> joinRoom(Integer id, String username)
+	{
+		User user = userRepo.findOne(username);
 
-        Room joinedRoom = roomRepo.findOne(id);
+		if (user.getCurrentRoomid() != 0 && user.getCurrentRoomid() != id)
+		{
+			return ResponseWrapper.wrap(ResponseMessage.USER_ALREADY_IN_SOME_ROOM, HttpStatus.BAD_REQUEST);
+		}
 
-        if (joinedRoom == null) {
-            //TODO responseMessage
-            return null;
-        }
+		Room joinedRoom = roomRepo.findOne(id);
 
-        Optional<Player> optional = joinedRoom.getPlayers().stream().filter(player -> player.getUsername().equals(username)).findFirst();
-        if (optional.isPresent()) {
-            Player leavedPlayer = optional.get();
-            leavedPlayer.setLeaved(false);
-        } else {
-            Player newPlayer = new Player();
-            BeanUtils.copyProperties(user, newPlayer);
-            joinedRoom.getPlayers().add(newPlayer);
-        }
-        user.setCurrentRoomid(joinedRoom.getId());
+		if (joinedRoom == null)
+		{
+			//TODO responseMessage
+			return null;
+		}
 
-        ResponseMessage message = ResponseMessage.PLAYER_JOINED;
-        message.add("username", user.getUsername());
-        message.add("rating", user.getRating());
-        socketMessagingService.sendToRoom(joinedRoom.getId(), message);
+		Optional<Player> optional = joinedRoom.getPlayers().stream().filter(player -> player.getUsername().equals(username)).findFirst();
+		if (optional.isPresent())
+		{
+			Player leavedPlayer = optional.get();
+			leavedPlayer.setLeaved(false);
+		}
+		else
+		{
+			Player newPlayer = new Player();
+			BeanUtils.copyProperties(user, newPlayer);
+			joinedRoom.getPlayers().add(newPlayer);
+		}
+		user.setCurrentRoomid(joinedRoom.getId());
 
-        userRepo.save(user);
+		ResponseMessage message = ResponseMessage.PLAYER_JOINED;
+		message.add("username", user.getUsername());
+		message.add("rating", user.getRating());
+		socketMessagingService.sendToRoom(joinedRoom.getId(), message);
 
-        return ResponseWrapper.wrap(roomRepo.save(joinedRoom), HttpStatus.OK);
-    }
+		userRepo.save(user);
 
-    public void/* Principal */disconnect(String username) {
-        // �������� ��������� ��� ��� ���
-    }
+		return ResponseWrapper.wrap(roomRepo.save(joinedRoom), HttpStatus.OK);
+	}
 
-    public void leaveRoom(String username) {
+	public void/* Principal */disconnect(String username)
+	{
+		// �������� ��������� ��� ��� ���
+	}
 
-        User user = userRepo.findOne(username);
-        if (user == null || user.getCurrentRoomid() == 0) {
-            return;
-        }
-        Room leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
+	public void leaveRoom(String username)
+	{
 
-        Player player = leavedRoom.getPlayers().stream().filter(player1 -> player1.getUsername().equals(username)).findFirst().get();
-        player.setLeaved(true);
-        if (player.isLeader()) {
-            Optional<Player> optional = leavedRoom.getPlayers().stream().filter(player1 -> !player1.isLeader() && !player1.isLeaved()).findFirst();
-            if (optional.isPresent()) {
-                Player newLeader = optional.get();
-                newLeader.setLeader(true);
+		User user = userRepo.findOne(username);
+		if (user == null || user.getCurrentRoomid() == 0)
+		{
+			return;
+		}
+		Room leavedRoom = roomRepo.findOne(user.getCurrentRoomid());
 
-                ResponseMessage responseMessage = ResponseMessage.LEADER_CHANGED;
-                responseMessage.add("newLeader", newLeader.getUsername());
-            }
-            player.setLeader(false);
-        }
+		Player player = leavedRoom.getPlayers().stream().filter(player1 -> player1.getUsername().equals(username)).findFirst().get();
+		player.setLeaved(true);
+		if (player.isLeader())
+		{
+			Optional<Player> optional = leavedRoom.getPlayers().stream().filter(player1 -> !player1.isLeader() && !player1.isLeaved()).findFirst();
+			if (optional.isPresent())
+			{
+				Player newLeader = optional.get();
+				newLeader.setLeader(true);
 
-        user.setCurrentRoomid(0);
+				ResponseMessage responseMessage = ResponseMessage.LEADER_CHANGED;
+				responseMessage.add("newLeader", newLeader.getUsername());
+			}
+			player.setLeader(false);
+		}
 
-        leavedRoom = roomRepo.save(leavedRoom);
+		user.setCurrentRoomid(0);
 
-        boolean isRoomEmpty = leavedRoom.getPlayers().stream().filter(player1 -> !player1.isLeaved()).count() == 0;
+		leavedRoom = roomRepo.save(leavedRoom);
 
-        if (isRoomEmpty) {
-            if (!leavedRoom.isFinished() && leavedRoom.isStarted()) {
-                statService.appendGameToStat(leavedRoom);
-            }
-            roomRepo.delete(leavedRoom);
-        }
+		boolean isRoomEmpty = leavedRoom.getPlayers().stream().filter(player1 -> !player1.isLeaved()).count() == 0;
 
-        ResponseMessage message = ResponseMessage.PLAYER_LEAVED;
-        message.add("username", player.getUsername());
+		if (isRoomEmpty)
+		{
+			if (!leavedRoom.isFinished() && leavedRoom.isStarted())
+			{
+				statService.appendGameToStat(leavedRoom);
+			}
+			roomRepo.delete(leavedRoom);
+		}
 
-        socketMessagingService.sendToRoom(leavedRoom.getId(), message);
+		ResponseMessage message = ResponseMessage.PLAYER_LEAVED;
+		message.add("username", player.getUsername());
 
-    }
+		socketMessagingService.sendToRoom(leavedRoom.getId(), message);
 
-    public Room getCurrentRoom(String username) {
-        User user = userRepo.findOne(username);
-        if (user == null) return null;
-        return roomRepo.findOne(user.getCurrentRoomid());
-    }
+	}
 
-    public int nextRoom(String username) {
-        Room room = getCurrentRoom(username);
-        User user = userRepo.findOne(username);
+	public Room getCurrentRoom(String username)
+	{
+		User user = userRepo.findOne(username);
+		if (user == null) return null;
+		return roomRepo.findOne(user.getCurrentRoomid());
+	}
 
-        if (room == null || !room.isFinished()) return 0;
-        if (room.getNextRoomId() != 0) return room.getNextRoomId();
+	public int nextRoom(String username)
+	{
+		Room room = getCurrentRoom(username);
+		User user = userRepo.findOne(username);
 
-        Room newRoom = copyRoomSettings(room);
+		if (room == null || !room.isFinished()) return 0;
+		if (room.getNextRoomId() != 0) return room.getNextRoomId();
 
-        Player newPlayer = new Player();
-        BeanUtils.copyProperties(user, newPlayer);
-        newPlayer.setLeader(true);
-        newRoom.getPlayers().add(newPlayer);
+		Room newRoom = copyRoomSettings(room);
 
-        room.setNextRoomId(roomRepo.save(newRoom).getId());
+		Player newPlayer = new Player();
+		BeanUtils.copyProperties(user, newPlayer);
+		newPlayer.setLeader(true);
+		newRoom.getPlayers().add(newPlayer);
 
-        roomRepo.save(room);
+		room.setNextRoomId(roomRepo.save(newRoom).getId());
 
-        return room.getNextRoomId();
-    }
+		roomRepo.save(room);
 
-    public void sendMessage(String username, String message) {
-        Room room = getCurrentRoom(username);
-        if (room == null) return;
+		return room.getNextRoomId();
+	}
 
-        ResponseMessage responseMessage = ResponseMessage.ROOM_MESSAGE;
-        responseMessage.add("sender", username);
-        responseMessage.add("message", message);
-        socketMessagingService.sendToRoom(room.getId(), responseMessage);
-    }
+	public void sendMessage(String username, String message)
+	{
+		Room room = getCurrentRoom(username);
+		if (room == null) return;
 
-    public void startGame(String username) {
-        Room room = getCurrentRoom(username);
-        if (room == null || room.isStarted()) return;
+		ResponseMessage responseMessage = ResponseMessage.ROOM_MESSAGE;
+		responseMessage.add("sender", username);
+		responseMessage.add("message", message);
+		socketMessagingService.sendToRoom(room.getId(), responseMessage);
+	}
 
-        if (room.getPlayers().stream().filter(player -> player.isLeader() && player.getUsername().equals(username)).count() != 0) {
-            ResponseMessage responseMessage = ResponseMessage.GAME_STARTED;
-            socketMessagingService.sendToRoom(room.getId(), responseMessage);
-        }
-        room.setStarted(true);
-        roomRepo.save(room);
-    }
+	public void startGame(String username)
+	{
+		Room room = getCurrentRoom(username);
+		if (room == null || room.isStarted()) return;
 
-    public void invitePlayer(String username, String invitedPlayerName) {
-        Room room = getCurrentRoom(username);
-        if (room == null) return;
+		if (room.getPlayers().stream().filter(player -> player.isLeader() && player.getUsername().equals(username)).count() != 0)
+		{
+			ResponseMessage responseMessage = ResponseMessage.GAME_STARTED;
+			socketMessagingService.sendToRoom(room.getId(), responseMessage);
+		}
+		room.setStarted(true);
+		roomRepo.save(room);
+	}
 
-        User invitedUser = userRepo.findOne(invitedPlayerName);
+	public void invitePlayer(String username, String invitedPlayerName)
+	{
+		Room room = getCurrentRoom(username);
+		if (room == null) return;
 
-        if (invitedUser == null) return;
+		User invitedUser = userRepo.findOne(invitedPlayerName);
 
-        ResponseMessage message = ResponseMessage.INVITE;
-        message.add("username", username);
-        message.add("roomId", room.getId());
-        message.add("roomName", room.getName());
-        message.add("roomHeight", room.getGame().getMineField().getWidth());
-        message.add("roomWidth", room.getGame().getMineField().getHeight());
-        message.add("roomBombs", room.getGame().getMineField().getMinesCount());
+		if (invitedUser == null) return;
 
-        socketMessagingService.sendInviteToUser(invitedPlayerName, message);
-    }
+		ResponseMessage message = ResponseMessage.INVITE;
+		message.add("username", username);
+		message.add("roomId", room.getId());
+		message.add("roomName", room.getName());
+		message.add("roomHeight", room.getGame().getMineField().getWidth());
+		message.add("roomWidth", room.getGame().getMineField().getHeight());
+		message.add("roomBombs", room.getGame().getMineField().getMinesCount());
 
-    public void kickPlayer(String username, String kickedPlayerName) {
+		socketMessagingService.sendInviteToUser(invitedPlayerName, message);
+	}
+
+	public void kickPlayer(String username, String kickedPlayerName)
+	{
 
 		/*Room room = getCurrentRoom(username);
-        if (room.getPlayers().stream().filter(player -> player.isLeader() && player.getUsername().equals(username)).count() == 0)
+		if (room.getPlayers().stream().filter(player -> player.isLeader() && player.getUsername().equals(username)).count() == 0)
 		{
 			return;
 		}
@@ -253,16 +284,17 @@ public class RoomsService {
 		room.setStarted(true);
 		roomRepo.save(room);*/
 
-    }
+	}
 
-    private Room copyRoomSettings(Room source) {
-        Room target = new Room();
-        BeanUtils.copyProperties(source, target, "id", "game", "players", "started", "finished", "win", "nextRoomId");
-        Game targetGame = new Game();
-        MineField targetMineField = new MineField();
-        BeanUtils.copyProperties(source.getGame().getMineField(), targetMineField, "field");
-        targetGame.setMineField(targetMineField);
-        target.setGame(targetGame);
-        return target;
-    }
+	private Room copyRoomSettings(Room source)
+	{
+		Room target = new Room();
+		BeanUtils.copyProperties(source, target, "id", "game", "players", "started", "finished", "win", "nextRoomId");
+		Game targetGame = new Game();
+		MineField targetMineField = new MineField();
+		BeanUtils.copyProperties(source.getGame().getMineField(), targetMineField, "field");
+		targetGame.setMineField(targetMineField);
+		target.setGame(targetGame);
+		return target;
+	}
 }

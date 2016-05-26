@@ -11,7 +11,7 @@
         //var url = 'http://169.254.130.181:8080/';
         //var url = '/';
         //var url = 'http://192.168.2.33:8090/';
-        var url = 'http://localhost:8090/';
+        var url = 'http://localhost:8080/';
         RestangularProvider.setBaseUrl(url);
         RestangularProvider.setDefaultHeaders({
             'X-Requested-With': 'XMLHttpRequest'

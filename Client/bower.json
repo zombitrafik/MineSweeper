@@ -17,5 +17,8 @@
     "restangular": "~1.5.1",
     "sockjs-client": "~1.0.3",
     "stomp-websocket": "2.3.4"
+  },
+  "resolutions": {
+    "localforage": "1.2.10"
   }
 }

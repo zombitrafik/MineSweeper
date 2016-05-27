@@ -7,7 +7,7 @@
 
     function pageService ($state) {
 
-        var states = ['login', 'register', 'room-list'],
+        var states = ['login', 'register', 'room-list', 'leaderboard'],
             gameState = 'game';
 
         var service = {

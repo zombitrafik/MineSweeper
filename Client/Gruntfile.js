@@ -58,7 +58,8 @@ module.exports = function(grunt) {
                         '**/*.html',
                         'images/**/*',
                         '!bower_components/**',
-                        '!shared/**'
+                        '!shared/**',
+                        'shared/**/*.html'
                     ]
                 },
                     {
